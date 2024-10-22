@@ -1,28 +1,30 @@
 import Image from 'next/image'
-
+import Link from 'next/link'
+import { FaDiscord } from "react-icons/fa";
 const WhoAmI: React.FC = () => {
   return (
-    <div id='whoami' className='dark:bg-dark bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1]'>
+    <div className='dark:bg-dark bg-white'>
       <div className="container mx-auto px-5 py-16 md:px-8 ">
         <div>
-          <p className="z-50 mb-5 text-center uppercase tracking-wider text-2xl sm:text-4xl font-semibold dark:text-white text-gray-800">
-            WHOAMI
-          </p>
-          
+          <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
+            <h4 className="sm:text-4xl text-2xl font-medium title-font uppercase">
+              Who am I
+            </h4>
+            <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">codebhaiya.com/abhinayjangde</h6>
+          </div>
+        
+
           <div className="mx-auto flex flex-col-reverse items-center justify-center gap-10 md:w-10/12 lg:flex-row">
             <div className="flex-1 md:p-5">
-              <p className="mb-4 text-center leading-[1.5] text-black dark:text-gray-300 md:text-left md:text-xl">
-                Hi👋, I&apos;m Abhinay - a <span className='text-blue-700'>passionate Full Stack Developer</span>, educator, and content creator based in Chhattisgarh, India. With a background in Computer Science Engineering, I thrive on the dynamic intersection of coding, technology, and education.
-              </p>
-              <p className="mb-4 text-center leading-[1.5] text-black dark:text-gray-300 md:text-left md:text-xl">
-                💻As a Full Stack Developer, I specialize in a diverse range of technologies, including JavaScript, HTML, CSS, and frameworks like Express.js and React.js. My expertise extends to backend technologies like Node.js, as well as database management systems such as MongoDB, MySQL, and PostgreSQL. Whether it&apos;s crafting responsive web interfaces or architecting robust backend systems, I love diving deep into every layer of the development stack.
-              </p>
-              <p className="mb-4 text-center leading-[1.5] text-black dark:text-gray-300 md:text-left md:text-xl">
-                🎓Beyond coding, I&apos;m deeply passionate about sharing knowledge and empowering others to embark on their coding journey.Through my YouTube channel, &quot;Abhinay Jangde,&quot; I offer tutorials, walkthroughs, and courses on a wide array of topics, from beginner-friendly introductions to advanced techniques in programming and web development.
-              </p>
-              <p className="mb-4 text-center leading-[1.5] text-red-700 dark:text-green-700 md:text-left md:text-xl">
-                🚀Let&apos;s code, learn, and grow together!
-              </p>
+              <p className="text-3xl md:text-5xl font-semibold">Yes, I'm a <span className="text-blue-700">Software Engineer.</span></p>
+              <p className="my-4 md:text-lg">Hi👋, I'm Abhinay - a passionate Full Stack Developer, educator, and content creator. I thrive on the dynamic intersection of coding, technology, and education.</p>
+              <p className="my-4 md:text-lg">In my free time I love watching movies.</p>
+
+              <Link href={"https://discord.gg/CxPBRSZut7"} target="_blank" className="flex gap-2 px-2 py-1 items-center border bg-gray-100 hover:bg-[#cdd1ff] dark:bg-[#5865F2]  dark:hover:bg-[#4a56da] w-fit rounded-md" >
+                <FaDiscord className='text-3xl' />
+                <span className="font-semibold">Join Discord</span>
+              </Link>
+
             </div>
             <div className="flex flex-[0.7] items-center justify-center md:p-5">
               <div className="flex items-center justify-center">
