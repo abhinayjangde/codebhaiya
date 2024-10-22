@@ -16,8 +16,8 @@ const WhoAmI: React.FC = () => {
 
           <div className="mx-auto flex flex-col-reverse items-center justify-center gap-10 md:w-10/12 lg:flex-row">
             <div className="flex-1 md:p-5">
-              <p className="text-3xl md:text-5xl font-semibold">Yes, I'm a <span className="text-blue-700">Software Engineer.</span></p>
-              <p className="my-4 md:text-lg">Hi👋, I'm Abhinay - a passionate Full Stack Developer, educator, and content creator. I thrive on the dynamic intersection of coding, technology, and education.</p>
+              <p className="text-3xl md:text-5xl font-semibold">Yes, I&apos;m a <span className="text-blue-700">Software Engineer.</span></p>
+              <p className="my-4 md:text-lg">Hi👋, I&apos;m Abhinay - a passionate Full Stack Developer, educator, and content creator. I thrive on the dynamic intersection of coding, technology, and education.</p>
               <p className="my-4 md:text-lg">In my free time I love watching movies.</p>
 
               <Link href={"https://discord.gg/CxPBRSZut7"} target="_blank" className="flex gap-2 px-2 py-1 items-center border bg-gray-100 hover:bg-[#cdd1ff] dark:bg-[#5865F2]  dark:hover:bg-[#4a56da] w-fit rounded-md" >
