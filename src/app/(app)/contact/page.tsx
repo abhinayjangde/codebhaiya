@@ -65,7 +65,7 @@ const Contact = () => {
                   alt="contact"
                   width={160}
                   height={100}
-                  className="rounded-full my-5 mx-auto py-2"
+                  className="rounded-[50%] my-5 mx-auto py-2"
                   src="https://codebhaiya.s3.ap-south-1.amazonaws.com/images/contact.jpg"
                 />
               </div>
