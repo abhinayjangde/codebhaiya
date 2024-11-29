@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ToastContainer, toast } from "react-toastify"
@@ -10,45 +10,14 @@ import { FaYoutube } from "react-icons/fa";
 import { FaSquareInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
-import axios from "axios"
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
-const Contact = () => {
-  const [message, setMessage] = useState("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
+
+const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false)
-  const sendMessage = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    try {
-      setLoading(true)
-      const data = {
-        name: name,
-        email: email,
-        message: message,
-      }
-      if (name.length <= 0 || email.length <= 0 || message.length <= 0) {
-        toast("Please fill all the fileds.")
-        setLoading(false)
-      }
-      else {
-        const res = await axios.post("/api/contact", data)
-        toast("Message send successfully")
-        setName("")
-        setEmail("")
-        setMessage("")
-        setLoading(false)
-      }
-    } catch (error: any) {
-      toast(error.message)
-    }
-  }
-  useEffect(() => {
-    document.title = "Contact Us - The right way to learn coding"
-  }, [])
-  
   return (
     <div>
-      <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark"/>
+      <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
 
       {/* Feel free to contact me! */}
       <div className="sm:h-[60rem] h-[30rem] w-full dark:bg-dark bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1]  ">
@@ -58,9 +27,12 @@ const Contact = () => {
           <div className="sm:mt-20 max-w-screen-xl px-4 md:px-8 lg:px-12 xl:px-26 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg dark:bg-dark/[0.9] dark:text-white">
             <div className="flex flex-col justify-center items-center">
               <div>
-                <h2 className=" text-center text-xl sm:text-3xl font-semibold leading-tight uppercase">
-                  Feel free to contact us!
-                </h2>
+                <div className="flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
+                  <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
+                    feel free to contact us
+                  </h2>
+                  <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">https://codebhaiya.com/handles</h6>
+                </div>
                 <Image
                   alt="contact"
                   width={160}
@@ -78,7 +50,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaSquareXTwitter className="text-3xl md:text-4xl" />
+                <FaSquareXTwitter className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
               <Link
                 className="cursor-pointer mx-3 md:mx-6"
@@ -86,7 +58,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaSquareInstagram className="text-3xl md:text-4xl" />
+                <FaSquareInstagram className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
               <Link
                 className="cursor-pointer mx-3 md:mx-6"
@@ -94,7 +66,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaGithub className="text-3xl md:text-4xl" />
+                <FaGithub className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
               <Link
                 className="cursor-pointer mx-3 md:mx-6"
@@ -102,7 +74,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaYoutube className="text-3xl md:text-4xl" />
+                <FaYoutube className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
               <Link
                 className="cursor-pointer mx-3 md:mx-6"
@@ -110,7 +82,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaLinkedin className="text-3xl md:text-4xl" />
+                <FaLinkedin className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
               <Link
                 className="cursor-pointer mx-3 md:mx-6"
@@ -118,7 +90,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <BsDiscord className="text-3xl md:text-4xl" />
+                <BsDiscord className="text-3xl hover:animate-shake md:text-4xl" />
               </Link>
             </div>
           </div>
@@ -128,13 +100,11 @@ const Contact = () => {
       {/* Contact Us  */}
       <section className="sm:h-[50rem] text-gray-600 dark:text-white dark:bg-dark body-font relative">
         <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-col text-center w-full mb-12">
-            <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 dark:text-white text-gray-900">
-              CONTACT US
-            </h1>
-            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-              Connect with Us: Your Gateway to Support, Solutions, and Success!
-            </p>
+          <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
+            <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
+              Contact Us
+            </h2>
+            <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">feel free to contact us :)</h6>
           </div>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap -m-2">
@@ -144,8 +114,6 @@ const Contact = () => {
                     Name
                   </label>
                   <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     type="text"
                     id="name"
                     name="name"
@@ -159,8 +127,6 @@ const Contact = () => {
                     Email
                   </label>
                   <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     id="email"
                     name="email"
@@ -177,8 +143,6 @@ const Contact = () => {
                     Message
                   </label>
                   <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
                     id="message"
                     name="message"
                     className="w-full bg-transparent rounded border border-gray-300 focus:border-indigo-500 dark:focus:bg-dark focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none dark:text-white text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
@@ -186,21 +150,13 @@ const Contact = () => {
                   />
                 </div>
               </div>
-              <div className="p-2 w-full">
+              <div className="p-2 w-full text-center">
                 {
                   loading ? (
-                    <button disabled className="flex mx-auto uppercase transition duration-150 ease-in-out disabled:opacity-70 text-black dark:text-white border dark:border-white border-black py-2 px-8 focus:outline-none  rounded text-lg">
-                      <div
-                        className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] mt-[0.45rem]"
-                        role="status"></div>
-                      <span className="ml-3 text-lg">Loading...</span>
-                    </button>
+                    <RainbowButton>LOADING...</RainbowButton>
 
                   ) : (
-
-                    <button onClick={(e) => sendMessage(e)} className="flex mx-auto text-black dark:text-white border dark:border-white border-black py-2 px-8 focus:outline-none  rounded text-lg">
-                      Submit
-                    </button>
+                    <RainbowButton className="dark:text-white border border-white px-2">SUBMIT</RainbowButton>
                   )
                 }
               </div>

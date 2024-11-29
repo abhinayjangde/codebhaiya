@@ -6,5 +6,6 @@
 
 ## Future Courses
 
-- Babu Bhaiya DSA Course
-- Raju GenAI Course
+- Git & GitHub Course
+- Docker Course
+- GenAI Course

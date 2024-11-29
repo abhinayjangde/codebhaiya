@@ -1,22 +1,24 @@
-import Link from "next/link"
-
-const Footer = () => {
+import Link from 'next/link'
+const Footer: React.FC = () => {
   return (
-    <footer className="flex flex-col justify-center items-center border dark:border-none h-[8rem] dark:bg-dark dark:text-white w-full sm:px-10 pb-10 pt-10 md:pb-4">
-      <div className="flex flex-wrap justify-center items-center md:flex-row gap-2">
+    <footer className="px-2 py-2 dark:border-none h-fit dark:bg-dark dark:text-white w-full">
 
-        <Link href="/terms" className="hover:text-blue-600">Terms of Services |</Link>
-        <Link href="/privacy" className="hover:text-blue-600">Privacy Policy |</Link>
-        <Link href="/refund" className="hover:text-blue-600">Refund Policy |</Link>
-        <Link href="/support" className="hover:text-blue-600">Support Us</Link>
+      <div className="flex justify-between">
+        <div>
+        <div className="flex flex-col">
+          <p> &copy; 2024 <span className="dark:text-white text-black ">CodeBhaiya™</span> | All rights reserved. </p>
+        </div>
+        <div className="flex flex-wrap md:flex-row gap-2 pb-1">
+          <Link href="/terms" className=" hover:text-blue-600 underline">Terms of Services</Link>
+          <Link href="/privacy" className=" hover:text-blue-600 underline">Privacy Policy</Link>
+          <Link href="/refund" className=" hover:text-blue-600 underline">Refund Policy</Link>
+          {/* <Link href="/support" className=" hover:text-blue-600 underline">Support Us</Link> */}
 
-      </div>
-
-      <p>&copy; 2024 <span className="dark:text-white text-black">CodeBhaiya™</span> | All Rights Reserved. </p>
-      <div className="flex gap-2 justify-center items-center">
-        <p className="">Happy Coding</p>
-        <p className="pt-1">🥳</p>
-        <p className="text-blue-500 tracking-normal">#RightWayToLearnCoding</p>
+        </div>
+        </div>
+        <div className="hidden md:flex md:items-center">
+          <p className="">Happy Coding :)</p>
+        </div>
 
       </div>
     </footer>

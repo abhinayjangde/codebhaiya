@@ -5,15 +5,17 @@ import Link from 'next/link'
 const RecommendedCourses: React.FC = () => {
     return (
         <>
-
             <div className="sm:h-[60rem] w-full dark:bg-dark bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1] flex items-center justify-center">
                 <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-dark bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_100%,black)]">
                 </div>
                 {/* Recommended Courses  */}
                 <div className="container mx-auto lg:my-2">
-                    <h2 className="sm:text-4xl text-2xl font-medium title-font text-black my-10 text-center dark:text-white uppercase">
+                    <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
+                    <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
                         Recommended Courses
                     </h2>
+                    <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">explore a selection of courses designed to help you enhance your skills.</h6>
+                    </div>
 
                     <div className="flex flex-wrap justify-between">
                         <div className="py-4 md:p-4 md:w-1/3 flex justify-center">
@@ -52,7 +54,7 @@ const RecommendedCourses: React.FC = () => {
                             <div className="max-w-sm rounded-2xl overflow-hidden shadow-lg dark:bg-black/[0.5] bg-white/[0.8]">
                                 <Image
                                     className="object-contain w-full object-center"
-                                    src="https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/python.jpg"
+                                    src="https://i.ytimg.com/vi/9ebZqJOAtzk/hq720.jpg?sqp=-oaymwEpCNAFEJQDSFryq4qpAxsIARUAAIhCGAHYAQHiAQwIHBACGAYgATgBQAE=&rs=AOn4CLCQvsA4QufOUdb-73tYqIhz0_OEJg"
                                     width={384}
                                     height={216}
                                     alt="Image"
