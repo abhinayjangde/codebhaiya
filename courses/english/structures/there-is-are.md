@@ -1,10 +1,10 @@
-# There + is/are
+# There + is/are/was
 
-Kisi jagah par kuch hai<br> ya kuch nahi hai usko describe karne ke liye **"There is"** ya **"There are"** ka use hota hai.
+Kisi jagah par kuch hai, kuch tha<br> ya kuch nahi hai, kuch nhi that, usko describe karne ke liye **"There is"**  **"There are"** and **There was** ka use karte hai.
 
 
 <details>
-<summary>Example 1</summary>
+<summary>Example 1 - There is</summary>
 There is a book on the table.<br>
 There is a cat sleeping on the couch.<br>
 There is a lot of traffic on the road today.<br>
@@ -40,19 +40,20 @@ There is a problem with the car that needs to be fixed.<br>
 ---
 
 <details>
-<summary>Example 2</summary>
-There are two apples on the table.<br>
-There are three cats sleeping on the couch.<br>
-There are four people waiting in line at the bank.<br>
-There are five cars parked in front of the building.<br>
-There are 29 states in India.<br>
-There are 50 students in my class.<br>
-There are 100 people at the party.<br>
-There are 365 days in a year.<br>
-There are 7 days in a week.<br>
-There are 12 months in a year.<br>
-There are 24 hours in a day.<br>
-There are no more seats available for the concert.<br>
-There are many reasons why I can't go.<br>
-There are a lot of things to do before the trip.<br>
-<details>
+<summary>Example 2 - There was</summary>
+There was an apple on the table.<br>
+There was a cat sleeping on the couch.<br>
+There was a person waiting in line at the bank.<br>
+There was a car parked in front of the building.<br>
+There was a time when India had fewer states.<br>
+There was a student missing from my class.<br>
+There was a big crowd at the party.<br>
+There was a leap year four years ago.<br>
+There was a day when we all worked together.<br>
+There was a month when it rained every day.<br>
+There was an hour when I couldn’t find my keys.<br>
+There was no more space left in the concert hall.<br>
+There was a reason why I didn’t go.<br>
+There was a task I had forgotten to do before the trip.<br>
+</details>
+
