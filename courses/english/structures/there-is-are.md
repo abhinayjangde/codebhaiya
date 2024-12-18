@@ -40,7 +40,27 @@ There is a problem with the car that needs to be fixed.<br>
 ---
 
 <details>
-<summary>Example 2 - There was</summary>
+<summary>Example 2 - There are</summary>
+There are two apples on the table.<br>
+There are three cats sleeping on the couch.<br>
+There are four people waiting in line at the bank.<br>
+There are five cars parked in front of the building.<br>
+There are 29 states in India.<br>
+There are 50 students in my class.<br>
+There are 100 people at the party.<br>
+There are 365 days in a year.<br>
+There are 7 days in a week.<br>
+There are 12 months in a year.<br>
+There are 24 hours in a day.<br>
+There are no more seats available for the concert.<br>
+There are many reasons why I can't go.<br>
+There are a lot of things to do before the trip.<br>
+</details>
+
+---
+
+<details>
+<summary>Example 3 - There was</summary>
 There was an apple on the table.<br>
 There was a cat sleeping on the couch.<br>
 There was a person waiting in line at the bank.<br>
