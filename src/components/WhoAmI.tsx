@@ -20,7 +20,7 @@ const WhoAmI: React.FC = () => {
               <p className="my-4 md:text-lg">Hi👋, I&apos;m Abhinay - a passionate Full Stack Developer, educator, and content creator. I thrive on the dynamic intersection of coding, technology, and education.</p>
               <p className="my-4 md:text-lg">In my free time I love watching movies.</p>
               {/* TODO : process.env.DISCORD_SERVER! */}
-              <Link href={"/"} target="_blank" className="flex gap-2 px-2 py-1 items-center border bg-gray-100 hover:bg-[#cdd1ff] dark:bg-[#5865F2]  dark:hover:bg-[#4a56da] w-fit rounded-md" >
+              <Link href={"https://discord.com/invite/CxPBRSZut7"} target="_blank" className="flex gap-2 px-2 py-1 items-center border bg-gray-100 hover:bg-[#cdd1ff] dark:bg-[#5865F2]  dark:hover:bg-[#4a56da] w-fit rounded-md" >
                 <FaDiscord className='text-3xl' />
                 <span className="font-semibold">Join Discord</span>
               </Link>
