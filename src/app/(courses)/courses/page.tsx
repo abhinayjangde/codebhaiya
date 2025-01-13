@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-import gitgithub from "@/../public/courses/gitandgithub.jpg"
 
 const Courses:React.FC = () => {
   const courses = [
@@ -30,7 +29,7 @@ const Courses:React.FC = () => {
     },
   ]
   return (
-    <div className="h-full md:h-full w-full dark:bg-dark bg-white dark:bg-grid-white/[0.1] bg-grid-black/[0.1] flex items-center justify-center">
+    <div className="h-full md:h-full w-full dark:bg-dark bg-white dark:bg-grid-white/[0.1] bg-grid-black/[0.1] flex items-center justify-center py-10">
       <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-dark bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_100%,black)]"></div>
 
       <div className="container mx-auto md:my-14 my-10">
