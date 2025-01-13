@@ -1,58 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { VscColorMode } from "react-icons/vsc";
 import { IoMdMenu } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
-
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import { RootState } from "@/store/store";
-import { setTheme, toggleTheme } from "@/store/themeSlice";
+import { useTheme } from "next-themes"
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   const { data: session } = useSession()
-  const theme = useAppSelector((state: RootState) => state.theme.theme)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    // Initialize theme from localStorage or system preference
-    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-    if (storedTheme) {
-      dispatch(setTheme(storedTheme))
-      document.documentElement.classList.toggle('dark', storedTheme === 'dark')
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      dispatch(setTheme(prefersDark ? 'dark' : 'light'))
-      document.documentElement.classList.toggle('dark', prefersDark)
-    }
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem('theme')) {
-        const newTheme = e.matches ? 'dark' : 'light'
-        dispatch(setTheme(newTheme))
-        document.documentElement.classList.toggle('dark', newTheme === 'dark')
-      }
-    }
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange)
-    } else {
-      // For older browsers
-      mediaQuery.addListener(handleChange)
-    }
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleChange)
-      } else {
-        mediaQuery.removeListener(handleChange)
-      }
-    }
-  }, [])
-
-
+  const { setTheme } = useTheme()
+  const [mode, setMode] = useState("dark");
 
   // Toggle Navbar
   const toggleNavbar = () => {
@@ -160,10 +119,7 @@ const Navbar: React.FC = () => {
  
             {/* Toggle Theme  */}
             <div className="flex">
-              <VscColorMode title="Change Theme" onClick={() => {
-                dispatch(toggleTheme())
-                document.documentElement.classList.toggle('dark', theme === 'light')
-              }} className="w-8 h-8 cursor-pointer dark:text-gray-200" />
+            <VscColorMode onClick={() => { if (mode === "dark") { setTheme("light"); setMode("light"); } else { setTheme("dark"); setMode("dark"); } }} className="text-3xl cursor-pointer" />
             </div>
 
             {/* Dropdown Sections  */}

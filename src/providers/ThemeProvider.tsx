@@ -1,14 +1,11 @@
 "use client"
-import { store } from "@/store/store";
-import { Provider } from "react-redux";
 
-const ThemeProvider = ({ children }: Readonly<{ children: React.ReactNode}>) => {
+import * as React from "react"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-  return (
-    <Provider store={store} >
-      {children}
-    </Provider>
-  );
-};
-
-export default ThemeProvider
+export function ThemeProvider({
+  children,
+  ...props
+}: React.ComponentProps<typeof NextThemesProvider>) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
