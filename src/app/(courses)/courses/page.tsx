@@ -21,14 +21,6 @@ const Courses:React.FC = () => {
       buttonColor: "bg-blue-700",
     },
     {
-      title: "Git & GitHub Course",
-      description: "Learn the core concepts of version control, explore essential commands, and branching, merging, and collaboration. This course also covers behind-the-scenes mechanisms like Git's object model and internal data storage.",
-      imageUrl: gitgithub,
-      link: "/github",
-      buttonText: "Start Watching",
-      buttonColor: "bg-blue-700",
-    },
-    {
       title: "Matrix Web Dev Course",
       description: "This is one of my favorite courses. In this series, you'll learn about HTML, CSS, JavaScript, and everything needed to be a job-ready web developer. Just hop on, man.",
       imageUrl: "https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/matrix.jpg",
