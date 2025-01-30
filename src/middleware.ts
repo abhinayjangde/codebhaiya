@@ -12,15 +12,33 @@ export async function middleware(request: NextRequest) {
     if (url.pathname.startsWith('/notes') || url.pathname.startsWith('/abhinayjangde')) {
         return NextResponse.redirect(new URL('/', request.url));
     }
-    if(token?.role !== "CREATOR" && url.pathname.startsWith('/creator')) {
+    if (token?.role !== "CREATOR" && url.pathname.startsWith('/creator')) {
         return NextResponse.redirect(new URL('/', request.url));
     }
-    if(token?.role !== "ADMIN" && url.pathname.startsWith('/admin')) {
+    if (token?.role !== "ADMIN" && url.pathname.startsWith('/admin')) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    if(!token && (url.pathname.startsWith("/verification") || url.pathname.startsWith("/dashboard")) ){
+    if (!token && (url.pathname.startsWith("/verification") || url.pathname.startsWith("/dashboard"))) {
         return NextResponse.redirect(new URL('/', request.url))
+    }
+    if (url.pathname === '/discord') {
+        return NextResponse.redirect(process.env.DISCORD_INVITE!);
+    }
+    if (url.pathname === '/youtube') {
+        return NextResponse.redirect(process.env.YOUTUBE_CHANNEL!);
+    }
+    if (url.pathname === '/instagram') {
+        return NextResponse.redirect(process.env.INSTAGRAM!);
+    }
+    if (url.pathname === '/linkedin') {
+        return NextResponse.redirect(process.env.LINKEDIN!);
+    }
+    if (url.pathname === '/x') {
+        return NextResponse.redirect(process.env.X!);
+    }
+    if (url.pathname === '/github') {
+        return NextResponse.redirect(process.env.GITHUB!);
     }
     return NextResponse.next();
 }
@@ -32,7 +50,13 @@ export const config = {
         '/creator/:path*',
         '/signin',
         '/signup',
-        '/verification/:path*', 
+        '/verification/:path*',
         '/dashboard/:path*',
-        '/admin/:path*'],
+        '/admin/:path*',
+        '/discord',
+        '/youtube',
+        '/instagram',
+        '/linkedin',
+        '/x',
+        '/github',],
 };

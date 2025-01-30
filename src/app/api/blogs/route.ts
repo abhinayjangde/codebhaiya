@@ -59,7 +59,7 @@ export const POST = async (request: Request) => {
         return NextResponse.json({
           success: true,
           msg: "Blog added successfully",
-        },{status: 201})
+        }, { status: 201 })
       } else {
         return NextResponse.json({ success: false, msg: "slug already exists" })
       }
@@ -77,7 +77,7 @@ export const GET = async (request: Request) => {
   try {
     await db()
     const url = request.url
-    console.log("This is url", url)
+    // console.log("This is url", url)
     if (
       url === "http://localhost:3000/api/blogs" ||
       url === "https://codebhaiya.com/api/blogs"
