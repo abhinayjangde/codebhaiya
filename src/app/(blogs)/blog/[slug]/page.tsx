@@ -12,8 +12,7 @@ import { MdPictureAsPdf } from "react-icons/md";
 import { FaYoutube } from "react-icons/fa6";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaRegCopy } from "react-icons/fa6";
+
 
 interface Blog {
   title: string;
@@ -58,10 +57,6 @@ const BlogSlug = ({ params }: { params: { slug: string } }) => {
     return <p>Loading...</p>; 
   }
 
-  const handleCopy = () => {
-    setButtonColor('text-green-500');
-    setTimeout(() => setButtonColor('text-white'), 2000);
-  };
 
   return (
     <>
@@ -89,7 +84,7 @@ const BlogSlug = ({ params }: { params: { slug: string } }) => {
                 <Link href="https://codebhaiya.com/#whoami" className="block w-full h-full">
                   <Image
                     alt="abhinayjangde"
-                    src={blog.createdBy.avatar}
+                    src={"https://avatars.githubusercontent.com/u/64852930?v=4"}
                     className="w-full h-full object-cover"
                     width={100}
                     height={100}

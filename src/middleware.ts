@@ -19,9 +19,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    if (!token && (url.pathname.startsWith("/verification") || url.pathname.startsWith("/dashboard"))) {
-        return NextResponse.redirect(new URL('/', request.url))
-    }
+    // if (!token && (url.pathname.startsWith("/verification") || url.pathname.startsWith("/dashboard"))) {
+    //     return NextResponse.redirect(new URL('/', request.url))
+    // }
     if (url.pathname === '/discord') {
         return NextResponse.redirect(process.env.DISCORD_INVITE!);
     }

@@ -43,6 +43,7 @@ const SignUp = () => {
       toast("User registered successfully. Please verify your email.");
       setFormData({ username: "", email: "", password: "" });
       setTimeout(() => {
+        console.log("username", formData.username)
         router.push(`/verification/${formData.username}`);
       }, 3000);
       setLoading(false)
