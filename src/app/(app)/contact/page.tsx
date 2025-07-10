@@ -11,7 +11,7 @@ import { FaSquareInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-
+import contactImage from "@/../public/images/contact.jpg"
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false)
@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
                   width={160}
                   height={100}
                   className="rounded-[50%] my-5 mx-auto py-2"
-                  src="https://codebhaiya.s3.ap-south-1.amazonaws.com/images/contact.jpg"
+                  src={contactImage}
                 />
               </div>
             </div>

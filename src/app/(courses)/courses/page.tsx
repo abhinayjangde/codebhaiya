@@ -6,7 +6,7 @@ const Courses:React.FC = () => {
     {
       title: "Deployment, Hosting & DevOps",
       description: "Deployment is transferring software to a live environment; hosting provides the infrastructure to run applications; and DevOps combines development and operations practices to enhance deployment ...",
-      imageUrl: "https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/deployment.jpg",
+      imageUrl: "https://i.ytimg.com/vi/LOAwc5XDxzg/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBMSnsL3a3g3uKUPcPfsgVuHepULg",
       link: "/devops",
       buttonText: "Start Watching",
       buttonColor: "bg-blue-700",

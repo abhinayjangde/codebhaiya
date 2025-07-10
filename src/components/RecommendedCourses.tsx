@@ -22,7 +22,7 @@ const RecommendedCourses: React.FC = () => {
                             <div className="max-w-sm rounded-2xl overflow-hidden shadow-lg dark:bg-black/[0.5] bg-white/[0.8]">
                                 <Image
                                     className="object-contain w-full object-center"
-                                    src="https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/deployment.jpg"
+                                    src="https://i.ytimg.com/vi/LOAwc5XDxzg/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBMSnsL3a3g3uKUPcPfsgVuHepULg"
                                     width={384}
                                     height={216}
                                     alt="Image"

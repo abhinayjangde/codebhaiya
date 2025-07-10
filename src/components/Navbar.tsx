@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
             <Link href={"/"} className="flex title-font font-medium items-center text-gray-900 mb-1 md:mb-0">
               <Image
                 alt="logo"
-                src="https://codebhaiya.s3.ap-south-1.amazonaws.com/images/logo.png"
+                src="https://avatars.githubusercontent.com/u/166032907?v=4"
                 width={100}
                 height={100}
                 decoding="async"

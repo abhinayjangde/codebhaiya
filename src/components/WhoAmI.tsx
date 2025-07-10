@@ -29,7 +29,7 @@ const WhoAmI: React.FC = () => {
             <div className="flex flex-[0.7] items-center justify-center md:p-5">
               <div className="flex items-center justify-center">
                 <Image
-                  src="https://codebhaiya.s3.ap-south-1.amazonaws.com/images/contact.jpg"
+                  src="https://avatars.githubusercontent.com/u/64852930?v=4"
                   alt="abhinay"
                   loading="lazy"
                   width={950}

@@ -29,16 +29,16 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(process.env.YOUTUBE_CHANNEL!);
     }
     if (url.pathname === '/instagram') {
-        return NextResponse.redirect(process.env.INSTAGRAM!);
+        return NextResponse.redirect(process.env.INSTAGRAM_URL!);
     }
     if (url.pathname === '/linkedin') {
-        return NextResponse.redirect(process.env.LINKEDIN!);
+        return NextResponse.redirect(process.env.LINKEDIN_URL!);
     }
     if (url.pathname === '/x') {
-        return NextResponse.redirect(process.env.X!);
+        return NextResponse.redirect(process.env.TWITTER_URL!);
     }
     if (url.pathname === '/github') {
-        return NextResponse.redirect(process.env.GITHUB!);
+        return NextResponse.redirect(process.env.GITHUB_URL!);
     }
     return NextResponse.next();
 }
