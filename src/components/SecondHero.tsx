@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { IoIosArrowRoundForward } from "react-icons/io"
+import blogImageTemplate from "@/../public/images/blog.jpeg"
 
 const SecondHero: React.FC = () => {
   useEffect(() => {
@@ -51,7 +52,7 @@ const SecondHero: React.FC = () => {
                 <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
                   <Image
                     className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
-                    src={blog.image}
+                    src={blog.image || blogImageTemplate}
                     alt="Image"
                     width={1280}
                     height={720}
