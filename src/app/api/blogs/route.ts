@@ -76,18 +76,13 @@ export const POST = async (request: Request) => {
 export const GET = async (request: Request) => {
   try {
     await db()
-    const url = request.url
-    // console.log("This is url", url)
-    if (
-      url === "https://www.codebhaiya.com/api/blogs"||
-      url === "http://localhost:3000/api/blogs" 
-    ) {
-      const allBlogs = await BlogModel.find().sort({ date: -1 })
-      return NextResponse.json({ success: true, data: allBlogs })
+    const allBlogs = await BlogModel.find().sort({ date: -1 })
+    if (allBlogs.length === 0) {
+      return NextResponse.json({ success: true, msg: "No blogs found" })
     }
 
-    // const blogs = await BlogModel.find().sort({ date: -1 })
-    // return NextResponse.json({ success: true, data: "blogs" })
+    return NextResponse.json({ success: true, data: allBlogs })
+
   } catch (error: any) {
     console.log(error.message)
     return NextResponse.json({ success: false, msg: "Blogs are not found" })
