@@ -79,8 +79,8 @@ export const GET = async (request: Request) => {
     const url = request.url
     // console.log("This is url", url)
     if (
-      url === "http://localhost:3000/api/blogs" ||
-      url === "https://codebhaiya.com/api/blogs"
+      url === "https://codebhaiya.com/api/blogs"||
+      url === "http://localhost:3000/api/blogs" 
     ) {
       const allBlogs = await BlogModel.find().sort({ date: -1 })
       return NextResponse.json({ success: true, data: allBlogs })

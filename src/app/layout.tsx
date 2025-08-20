@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import AuthProvider from "@/providers/AuthProvider"
 import { ThemeProvider } from "@/providers/ThemeProvider"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "The right way to learn coding",
@@ -23,6 +24,7 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
           >
             <Navbar />
             {children}
+            <SpeedInsights />
             <Footer />
           </ThemeProvider>
         </body>

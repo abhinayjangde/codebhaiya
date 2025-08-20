@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
 import blogImageTemplate from "@/../public/images/blog.jpeg"
+
 const Blogs = () => {
   const [blogposts, setBlogPosts] = useState([])
   const [searchQuery, setSearchQuery] = useState("")

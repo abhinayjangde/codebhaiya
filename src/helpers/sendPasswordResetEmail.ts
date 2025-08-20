@@ -12,7 +12,7 @@ export async function sendPasswordResetEmail(
             from: 'onboarding@resend.dev',
             to: email,
             subject: 'CodeBhaiya | Password Reset Code',
-            react: PasswordResetEmail({username:username, otp:verifyCode})
+            react: PasswordResetEmail({ username: username, otp: verifyCode })
         });
         return { success: true, message: "Password reset email send successfully." }
     } catch (error) {
