@@ -79,7 +79,7 @@ export const GET = async (request: Request) => {
     const url = request.url
     // console.log("This is url", url)
     if (
-      url === "https://codebhaiya.com/api/blogs"||
+      url === "https://www.codebhaiya.com/api/blogs"||
       url === "http://localhost:3000/api/blogs" 
     ) {
       const allBlogs = await BlogModel.find().sort({ date: -1 })
@@ -90,7 +90,7 @@ export const GET = async (request: Request) => {
     // return NextResponse.json({ success: true, data: "blogs" })
   } catch (error: any) {
     console.log(error.message)
-    return NextResponse.json({ success: false, msg: "Blog not found" })
+    return NextResponse.json({ success: false, msg: "Blogs are not found" })
   }
 }
 
