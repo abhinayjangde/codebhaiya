@@ -87,7 +87,7 @@ const Matrix = () => {
             <div className="max-w-sm rounded-xl overflow-hidden shadow-lg dark:bg-black/[0.5] bg-white/[0.8]">
               <Image
                 className="object-contain w-full object-center"
-                src="https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/matrix.jpg"
+                src=""
                 width={384}
                 height={216}
                 alt="Image"

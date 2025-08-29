@@ -22,7 +22,7 @@ const Courses:React.FC = () => {
     {
       title: "Matrix Web Dev Course",
       description: "This is one of my favorite courses. In this series, you'll learn about HTML, CSS, JavaScript, and everything needed to be a job-ready web developer. Just hop on, man.",
-      imageUrl: "https://codebhaiya.s3.ap-south-1.amazonaws.com/courses/matrix.jpg",
+      imageUrl: "",
       link: "/matrix",
       buttonText: "Coming Soon ...",
       buttonColor: "bg-green-700",
