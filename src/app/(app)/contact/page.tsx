@@ -6,18 +6,29 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { FaGithub } from "react-icons/fa"
 import { FaSquareXTwitter } from "react-icons/fa6"
-import { FaYoutube } from "react-icons/fa";
-import { FaSquareInstagram } from "react-icons/fa6";
-import { BsDiscord } from "react-icons/bs";
-import { FaLinkedin } from "react-icons/fa";
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { FaYoutube } from "react-icons/fa"
+import { FaSquareInstagram } from "react-icons/fa6"
+import { BsDiscord } from "react-icons/bs"
+import { FaLinkedin } from "react-icons/fa"
+import { RainbowButton } from "@/components/ui/rainbow-button"
 import contactImage from "@/../public/images/contact.jpg"
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false)
   return (
     <div>
-      <ToastContainer position="bottom-left" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
       {/* Feel free to contact me! */}
       <div className="sm:h-[60rem] h-[30rem] w-full dark:bg-dark bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1]  ">
@@ -31,7 +42,9 @@ const Contact: React.FC = () => {
                   <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
                     feel free to contact us
                   </h2>
-                  <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">https://codebhaiya.com/handles</h6>
+                  <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">
+                    https://abhinayjangde.dev
+                  </h6>
                 </div>
                 <Image
                   alt="contact"
@@ -104,13 +117,18 @@ const Contact: React.FC = () => {
             <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
               Contact Us
             </h2>
-            <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">feel free to contact us :)</h6>
+            <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">
+              feel free to contact us :)
+            </h6>
           </div>
           <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap -m-2">
               <div className="p-2 w-1/2">
                 <div className="relative">
-                  <label htmlFor="name" className="leading-7 text-sm dark:text-white text-gray-600">
+                  <label
+                    htmlFor="name"
+                    className="leading-7 text-sm dark:text-white text-gray-600"
+                  >
                     Name
                   </label>
                   <input
@@ -123,7 +141,10 @@ const Contact: React.FC = () => {
               </div>
               <div className="p-2 w-1/2">
                 <div className="relative">
-                  <label htmlFor="email" className="leading-7 text-sm dark:text-white text-gray-600">
+                  <label
+                    htmlFor="email"
+                    className="leading-7 text-sm dark:text-white text-gray-600"
+                  >
                     Email
                   </label>
                   <input
@@ -151,16 +172,14 @@ const Contact: React.FC = () => {
                 </div>
               </div>
               <div className="p-2 w-full text-center">
-                {
-                  loading ? (
-                    <RainbowButton>LOADING...</RainbowButton>
-
-                  ) : (
-                    <RainbowButton className="dark:text-white border border-white px-2">SUBMIT</RainbowButton>
-                  )
-                }
+                {loading ? (
+                  <RainbowButton>LOADING...</RainbowButton>
+                ) : (
+                  <RainbowButton className="dark:text-white border border-white px-2">
+                    SUBMIT
+                  </RainbowButton>
+                )}
               </div>
-
             </div>
           </div>
         </div>
