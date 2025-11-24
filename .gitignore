@@ -43,3 +43,6 @@ next-env.d.ts
 tips.md
 references.md
 design.excalidraw
+/generated/prisma
+
+/generated/prisma
