@@ -1,6 +1,8 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
+import { registerSchema, RegisterSchema } from "@/schemas/register-schema";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -11,27 +13,32 @@ const Register = () => {
     e.preventDefault();
 
     if (!name || !email || !password) {
-      alert("Please fill all fields");
+      toast.error("All fields are required");
       return;
     }
+
     try {
-      const { data, error } = await authClient.signUp.email({
-        name,
-        email,
-        password,
-      });
-      if (error) {
-        console.error("Registration error:", error);
-        alert("Registration failed: " + error);
-      } else {
-        console.log("Registration successful:", data);
-        alert(
-          "Registration successful! Please check your email to verify your account."
-        );
-      }
+      const { data, error } = await authClient.signUp.email(
+        {
+          name,
+          email,
+          password,
+          callbackURL: "/dashboard",
+        },
+        {
+          onRequest: () => {
+            // Optional: loading state handled above
+          },
+          onSuccess: () => {
+            toast.success("Account created successfully!");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        }
+      );
     } catch (err) {
       console.error("Unexpected error:", err);
-      alert("An unexpected error occurred. Please try again later.");
     }
   };
   return (

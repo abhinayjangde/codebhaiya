@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "The right way to learn coding",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Toaster position="top-center" />
         <Navbar />
         {children}
         <Footer />
