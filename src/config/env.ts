@@ -9,6 +9,8 @@ const _config = {
   linkedin: process.env.LINKEDIN || "",
   x: process.env.X || "",
   instagram: process.env.INSTAGRAM || "",
+  betterAuthSecret: process.env.BETTER_AUTH_SECRET || "secret",
+  betterAuthUrl: process.env.BETTER_AUTH_URL || "http://localhost:3000",
 };
 
 const env = Object.freeze(_config);
