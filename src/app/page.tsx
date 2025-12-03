@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
+
+import RecommendedCourses from "@/components/recommended-courses";
+import WhoAmI from "@/components/whoami";
 
 export default function Home() {
   return (
     <>
-      <p>codebhaiya</p>
-      <Button>Click Me</Button>
+      <RecommendedCourses />
+      <WhoAmI />
     </>
   );
 }
