@@ -16,11 +16,11 @@ const Contact: React.FC = () => {
         <div>
 
             {/* Feel free to contact me! */}
-            <div className="sm:h-[60rem] h-[30rem] w-full dark:bg-background bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1]  ">
+            <div className="sm:h-240 h-120 w-full dark:bg-background bg-white  dark:bg-grid-white/[0.1] bg-grid-black/[0.1]  ">
                 <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-background bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_100%,black)]"></div>
 
                 <div className="min-h-screen pt-10 md:pt-24">
-                    <div className="sm:mt-20 max-w-screen-xl px-4 md:px-8 lg:px-12 xl:px-26 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg dark:bg-background/[0.9] dark:text-white">
+                    <div className="sm:mt-20 max-w-7xlpx-4 md:px-8 lg:px-12 xl:px-26 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg dark:bg-background/[0.9] dark:text-white">
                         <div className="flex flex-col justify-center items-center">
                             <div>
                                 <div className="flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
