@@ -9,7 +9,7 @@ const Courses: React.FC = () => {
         "Deployment is transferring software to a live environment; hosting provides the infrastructure to run applications; and DevOps combines development and operations practices to enhance deployment ...",
       imageUrl:
         "https://i.ytimg.com/vi/LOAwc5XDxzg/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBMSnsL3a3g3uKUPcPfsgVuHepULg",
-      link: "/devops",
+      link: "/courses/devops",
       buttonText: "Start Watching",
       buttonColor: "bg-blue-700",
     },
@@ -19,7 +19,7 @@ const Courses: React.FC = () => {
         "Python stands out as one of the most sought-after programming languages in today's job market. Let's embark on this exciting journey together as we unravel the fascinating world of Python programming!",
       imageUrl:
         "https://i.ytimg.com/vi/9ebZqJOAtzk/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBy-hFiXOYa78FOnMbdEdxk2_z9FA",
-      link: "/python",
+      link: "/courses/python",
       buttonText: "Start Watching",
       buttonColor: "bg-blue-700",
     },
@@ -29,7 +29,7 @@ const Courses: React.FC = () => {
         "This is one of my favorite courses. In this series, you'll learn about HTML, CSS, JavaScript, and everything needed to be a job-ready web developer. Just hop on, man.",
       imageUrl:
         "https://i.ytimg.com/vi/g8j2mlygJMc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBwCxdZRvXIspa1i2ogT9XCei5wUQ",
-      link: "/matrix",
+      link: "/courses/matrix",
       buttonText: "Coming Soon ...",
       buttonColor: "bg-green-700",
     },
