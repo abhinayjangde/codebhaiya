@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { useTheme } from "next-themes";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import { Button } from "@/components/ui/button";
@@ -72,6 +73,8 @@ const CodeEditor = () => {
     const [activeTab, setActiveTab] = useState<TabKey>("javascript");
     const [displayedCode, setDisplayedCode] = useState("");
     const [isTyping, setIsTyping] = useState(true);
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
 
     useEffect(() => {
         setDisplayedCode("");
@@ -105,9 +108,9 @@ const CodeEditor = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="w-full max-w-xl"
         >
-            <div className="rounded-xl overflow-hidden bg-[#1e1e1e] border border-neutral-700 shadow-2xl">
+            <div className={`rounded-xl overflow-hidden border shadow-2xl ${isDark ? "bg-[#1e1e1e] border-neutral-700" : "bg-white border-neutral-200"}`}>
                 {/* Window controls & tabs */}
-                <div className="bg-[#2d2d2d] px-4 py-2 flex items-center gap-2 border-b border-neutral-700">
+                <div className={`px-4 py-2 flex items-center gap-2 border-b ${isDark ? "bg-[#2d2d2d] border-neutral-700" : "bg-neutral-100 border-neutral-200"}`}>
                     {/* Window dots */}
                     <div className="flex gap-2 mr-4">
                         <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -122,8 +125,12 @@ const CodeEditor = () => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`px-3 py-1.5 text-sm rounded-t-md transition-all ${activeTab === tab.id
+                                    ? isDark
                                         ? "bg-[#1e1e1e] text-white"
-                                        : "bg-[#2d2d2d] text-neutral-400 hover:text-neutral-200"
+                                        : "bg-white text-gray-900"
+                                    : isDark
+                                        ? "bg-[#2d2d2d] text-neutral-400 hover:text-neutral-200"
+                                        : "bg-neutral-100 text-neutral-500 hover:text-neutral-700"
                                     }`}
                             >
                                 <span className={activeTab === tab.id ? tab.color : ""}>
@@ -136,14 +143,14 @@ const CodeEditor = () => {
 
                 {/* Code area */}
                 <div className="p-4 font-mono text-sm h-[350px] overflow-hidden">
-                    <pre className="text-neutral-300 leading-relaxed">
+                    <pre className={`leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
                         <code>
                             {displayedCode}
                             {isTyping && (
                                 <motion.span
                                     animate={{ opacity: [1, 0] }}
                                     transition={{ duration: 0.5, repeat: Infinity }}
-                                    className="inline-block w-2 h-4 bg-white ml-0.5 align-middle"
+                                    className={`inline-block w-2 h-4 ml-0.5 align-middle ${isDark ? "bg-white" : "bg-gray-900"}`}
                                 />
                             )}
                         </code>
@@ -153,7 +160,7 @@ const CodeEditor = () => {
                 {/* Status bar */}
                 <div className="bg-[#007acc] px-4 py-1 flex items-center justify-between text-xs text-white">
                     <div className="flex items-center gap-4">
-                        <span>CodeBhaiya Editor</span>
+                        <span>codebhaiya</span>
                         <span className="opacity-70">UTF-8</span>
                     </div>
                     <div className="flex items-center gap-4">
@@ -171,14 +178,21 @@ const CodeEditor = () => {
 };
 
 const HeroSection = () => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+
     return (
-        <div className="min-h-screen bg-neutral-900 flex items-center justify-center relative w-full overflow-hidden">
-            {/* Background effects */}
-            <ShootingStars />
-            <StarsBackground />
+        <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-900 flex items-center justify-center relative w-full overflow-hidden">
+            {/* Background effects - only show in dark mode */}
+            {isDark && (
+                <>
+                    <ShootingStars />
+                    <StarsBackground />
+                </>
+            )}
 
             {/* Main content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20">
+            <div className="relative z-0 w-full max-w-7xl mx-auto px-6 py-20">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     {/* Left side - Text content */}
                     <motion.div
@@ -198,29 +212,29 @@ const HeroSection = () => {
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                                 </span>
-                                Start Learning Today
+                                modern way of learning
                             </span>
                         </motion.div>
 
                         {/* Main heading */}
-                        <motion.h1
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
-                            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
+                            className=""
                         >
-                            Learn to Code{" "}
-                            <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                                The Right Way
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">CODEBHAIYA</h1>
+                            <span className="opacity-70 text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-800 dark:text-white leading-tight">
+                                The right way to learn coding
                             </span>
-                        </motion.h1>
+                        </motion.div>
 
                         {/* Subheading */}
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.4 }}
-                            className="text-lg md:text-xl text-neutral-400 max-w-lg"
+                            className="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-lg"
                         >
                             Master programming with hands-on projects, expert tutorials,
                             and a supportive community. From beginner to pro, we&apos;ve got you covered.
@@ -234,15 +248,15 @@ const HeroSection = () => {
                             className="flex gap-8 py-4"
                         >
                             {[
-                                { value: "10K+", label: "Students" },
-                                { value: "50+", label: "Courses" },
-                                { value: "100+", label: "Projects" },
+                                { value: "10+", label: "Students" },
+                                { value: "2+", label: "Courses" },
+                                { value: "10+", label: "Projects" },
                             ].map((stat, index) => (
                                 <div key={index} className="text-center">
-                                    <div className="text-2xl md:text-3xl font-bold text-white">
+                                    <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                                         {stat.value}
                                     </div>
-                                    <div className="text-sm text-neutral-500">{stat.label}</div>
+                                    <div className="text-sm text-neutral-600 dark:text-neutral-500">{stat.label}</div>
                                 </div>
                             ))}
                         </motion.div>
@@ -261,7 +275,7 @@ const HeroSection = () => {
                                 </Button>
                             </Link>
                             <Link href="/tutorials">
-                                <Button size="lg" variant="outline" className="gap-2 text-base border-neutral-700 hover:bg-neutral-800">
+                                <Button size="lg" variant="outline" className="gap-2 text-base border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800">
                                     <Play className="w-4 h-4" />
                                     Watch Tutorials
                                 </Button>
