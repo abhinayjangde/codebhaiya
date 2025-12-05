@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
       {
         hostname: "i.ytimg.com",
         protocol: "https",
+      },
+      {
+        hostname: "drive.google.com",
+        protocol: "https",
       }
     ]
   }

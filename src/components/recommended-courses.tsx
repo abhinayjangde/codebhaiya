@@ -28,8 +28,7 @@ const RecommendedCourses: React.FC = () => {
       title: "Matrix Web Dev Course",
       description:
         "This is one of my favorite courses. In this series, you'll learn about HTML, CSS, JavaScript, and everything needed to be a job-ready web developer. Just hop on, man.",
-      imageUrl:
-        "https://i.ytimg.com/vi/g8j2mlygJMc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBwCxdZRvXIspa1i2ogT9XCei5wUQ",
+      imageUrl: "/matrix.png",
       link: "/courses/matrix",
       buttonText: "Coming Soon ...",
       buttonColor: "bg-green-700",
