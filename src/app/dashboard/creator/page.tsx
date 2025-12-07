@@ -23,8 +23,15 @@ export default async function CreatorDashboard() {
     }
 
     const user = session.user;
-    // @ts-ignore
-    if (user.role !== "CREATOR" && user.role !== "ADMIN") {
+
+    const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true }
+    });
+
+    const role = dbUser?.role;
+
+    if (role !== "CREATOR" && role !== "ADMIN") {
         redirect("/dashboard");
     }
 

@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import prisma from "@/lib/prisma";
+
 export default async function NewPostPage() {
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -13,8 +15,15 @@ export default async function NewPostPage() {
     }
 
     const user = session.user;
-    // @ts-ignore
-    if (user.role !== "CREATOR" && user.role !== "ADMIN") {
+
+    const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true }
+    });
+
+    const role = dbUser?.role;
+
+    if (role !== "CREATOR" && role !== "ADMIN") {
         redirect("/dashboard");
     }
 
