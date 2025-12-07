@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import "./globals.css";
+import "@/styles/code-highlight.css";
 
 export const metadata: Metadata = {
   title: "The right way to learn coding",
@@ -24,7 +25,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-
           <Toaster position="top-center" />
           <Navbar />
           {children}

@@ -24,8 +24,16 @@ export async function POST(req: Request) {
     }
 
     const user = session.user;
-    // @ts-ignore - role is added via config but types might not be updated yet
-    if (user.role !== "CREATOR" && user.role !== "ADMIN") {
+
+    // Fetch role from database to ensure accuracy
+    const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { role: true }
+    });
+
+    const role = dbUser?.role;
+
+    if (role !== "CREATOR" && role !== "ADMIN") {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

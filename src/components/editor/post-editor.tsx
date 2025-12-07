@@ -18,13 +18,22 @@ const postSchema = z.object({
     content: z.string().min(1, "Content is required"),
     featuredImg: z.string().optional(),
     tags: z.string().optional(), // Comma separated string for input
-    published: z.boolean().default(false),
+    published: z.boolean().optional(),
 });
 
 type PostFormData = z.infer<typeof postSchema>;
 
 interface PostEditorProps {
-    initialData?: Partial<PostFormData> & { id?: string; tags?: string[] };
+    initialData?: {
+        id?: string;
+        title?: string;
+        slug?: string;
+        excerpt?: string;
+        content?: string;
+        featuredImg?: string;
+        tags?: string[];
+        published?: boolean;
+    };
 }
 
 export default function PostEditor({ initialData }: PostEditorProps) {
