@@ -37,7 +37,7 @@ const Courses: React.FC = () => {
     <div className="h-full md:h-full w-full dark:bg-background bg-white flex items-center justify-center md:py-10 px-5">
       <div className="container mx-auto md:my-14 my-10">
         <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
-          <h2 className="sm:text-4xl text-xl font-medium title-font uppercase">
+          <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
             Recommended Courses
           </h2>
           <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">
