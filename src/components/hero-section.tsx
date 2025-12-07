@@ -74,7 +74,13 @@ const CodeEditor = () => {
   const [displayedCode, setDisplayedCode] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === "dark";
 
   useEffect(() => {
     setDisplayedCode("");
@@ -132,15 +138,14 @@ const CodeEditor = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 text-sm rounded-t-md transition-all ${
-                  activeTab === tab.id
+                className={`px-3 py-1.5 text-sm rounded-t-md transition-all ${activeTab === tab.id
                     ? isDark
                       ? "bg-[#1e1e1e] text-white"
                       : "bg-white text-gray-900"
                     : isDark
                       ? "bg-[#2d2d2d] text-neutral-400 hover:text-neutral-200"
                       : "bg-neutral-100 text-neutral-500 hover:text-neutral-700"
-                }`}
+                  }`}
               >
                 <span className={activeTab === tab.id ? tab.color : ""}>
                   {tab.label}
@@ -190,7 +195,13 @@ const CodeEditor = () => {
 
 const HeroSection = () => {
   const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-900 flex items-center justify-center relative w-full overflow-hidden">

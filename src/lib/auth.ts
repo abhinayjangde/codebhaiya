@@ -11,4 +11,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  callbacks: {
+    session: async ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          role: (user as any).role,
+        },
+      };
+    },
+  },
 });

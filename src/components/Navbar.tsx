@@ -103,12 +103,12 @@ const Navbar: React.FC = () => {
                 >
                   <Image
                     alt="avatar"
-                    src="https://codebhaiya.s3.ap-south-1.amazonaws.com/images/avatar.png"
+                    src={session?.user?.image || "https://avatars.githubusercontent.com/u/64852930?v=4"}
                     width={100}
                     height={100}
                     decoding="async"
                     data-nimg={1}
-                    className="w-8 rounded-full mx-2"
+                    className="w-8 rounded-full mx-2 object-cover"
                     loading="lazy"
                     style={{ color: "transparent" }}
                   />
@@ -131,30 +131,30 @@ const Navbar: React.FC = () => {
                 </button>
 
                 {/* Dropdown menu */}
-                <div className={`absolute right-0 top-full mt-2 z-50 ${showDropdown ? "" : "hidden"} bg-white rounded-lg shadow-lg w-44 dark:bg-gray-900 dark:divide-gray-600`}>
+                <div className={`absolute -right-2 top-full mt-4 z-50 ${showDropdown ? "" : "hidden"} bg-white rounded-lg shadow-lg w-44 dark:bg-background dark:divide-gray-600`}>
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div className="font-medium">{session?.user?.name}</div>
                     <div className="truncate">{session?.user?.email}</div>
                   </div>
                   <ul className="text-sm border-t text-gray-700 dark:text-gray-200">
                     <li>
-                      <Link href={`/u/@${session?.user?.email?.split("@")[0]}`} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <Link href={`/creator/${session?.user?.id}`} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-black dark:hover:text-white">
                         You
                       </Link>
                     </li>
                     <li>
-                      <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-black dark:hover:text-white">
                         Dashboard
                       </Link>
                     </li>
                     <li>
-                      <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-black dark:hover:text-white">
                         Settings
                       </Link>
                     </li>
                   </ul>
                   <div className="border-t">
-                    <button onClick={() => { authClient.signOut() }} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                    <button onClick={() => { authClient.signOut() }} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-black dark:text-gray-200 dark:hover:text-white">
                       Logout
                     </button>
                   </div>
