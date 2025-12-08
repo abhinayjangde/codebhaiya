@@ -43,8 +43,12 @@ export default async function AdminDashboard() {
     });
 
     return (
-        <div className="container mx-auto py-10 space-y-10">
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="min-h-screen dark:bg-background py-5 bg-gray-50 md:p-4 lg:p-12">
+      <div className="max-w-screen-lg mx-auto bg-white dark:bg-black/[0.3] rounded-lg shadow-md p-6 lg:p-10 z-0 relative">
+        <h1 className="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex border-b pb-2">
+          Admin Dashboard
+        </h1>
+            
 
             <div>
                 <h2 className="text-2xl font-semibold mb-4">Recent Users</h2>
@@ -97,6 +101,7 @@ export default async function AdminDashboard() {
                     </table>
                 </div>
             </div>
+        </div>
         </div>
     );
 }
