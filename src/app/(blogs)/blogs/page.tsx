@@ -34,40 +34,49 @@ export default async function BlogsPage() {
 
   return (
     <div className="flex flex-col justify-center items-center sm:h-full w-full min-h-screen dark:bg-background bg-white ">
-      <h1 className="text-4xl font-bold mb-8 text-center">Latest Blogs</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center mt-4">Latest Blogs</h1>
       <div className="md:container md:w-[90rem] sm:p-4">
-        {/* {posts.map((post) => (
-          <Link
-            href={`/blogs/${post.slug}`}
+        {posts.map((post) => (
+          <div
             key={post.id}
-            className="hover:no-underline"
+            className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
           >
-            <Card className="h-full hover:shadow-lg transition-shadow duration-200 flex flex-col">
-              {post.featuredImg && (
-                <div className="w-full h-48 overflow-hidden rounded-t-xl">
-                  <img
+            <div className="">
+              <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
+                {post.featuredImg && (
+                  <Image
+                    className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
                     src={post.featuredImg}
                     alt={post.title}
-                    className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
+                    width={1280}
+                    height={720}
                   />
-                </div>
-              )}
-              <CardHeader>
-                <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                <div className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
-                  <span>{post.author.name}</span>
-                  <span>•</span>
-                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                </div>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-muted-foreground line-clamp-3">
-                  {post.excerpt ||
-                    post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) +
-                      "..."}
-                </p>
-              </CardContent>
-              <CardFooter className="flex flex-wrap gap-2">
+                )}
+                <Link
+                  href={`blog/${post.slug}`}
+                  className="md:flex-grow mx-3 md:px-3"
+                >
+                  <div className="flex flex-row mr-4 text-sm">
+                    <span className="hidden md:block dark:text-gray-300 text-black underline ">
+                      {post.author.name} |{" "}
+                      {new Date(post.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <h2 className="sm:text-2xl mx-4 md:mx-auto font-semibold text-xl dark:text-white text-black title-font mb-2">
+                    {post.title}
+                  </h2>
+                  <p className="hidden md:block leading-relaxed dark:text-gray-300 text-black">
+                    {post.excerpt ||
+                      post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) +
+                        "..."}
+                  </p>
+                </Link>
+              </div>
+              {/* <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
@@ -76,46 +85,7 @@ export default async function BlogsPage() {
                     {tag}
                   </span>
                 ))}
-              </CardFooter>
-            </Card>
-          </Link>
-        ))} */}
-        {posts.map((post) => (
-          <div
-            key={post.slug}
-            className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
-          >
-            <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
-              {post.featuredImg && (
-                <Image
-                  className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
-                  src={post.featuredImg}
-                  alt={post.title}
-                  width={1280}
-                  height={720}
-                />
-              )}
-              <Link
-                href={`blog/${post.slug}`}
-                className="md:flex-grow mx-3 md:px-3"
-              >
-                <div className="flex flex-row mr-4 text-sm">
-                  <span className="hidden md:block dark:text-gray-300 text-black underline ">
-                    {post.author.name} |{" "}
-                    {new Date(post.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div>
-                <h2 className="sm:text-2xl mx-4 md:mx-auto font-semibold text-xl dark:text-white text-black title-font mb-2">
-                  {post.title}
-                </h2>
-                <p className="hidden md:block leading-relaxed dark:text-gray-300 text-black">
-                  {post.excerpt}
-                </p>
-              </Link>
+              </div> */}
             </div>
           </div>
         ))}
