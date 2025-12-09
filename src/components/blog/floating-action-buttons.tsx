@@ -3,7 +3,9 @@
 import { AiOutlineLike } from "react-icons/ai";
 import { PiShareFat } from "react-icons/pi";
 import { MdPictureAsPdf } from "react-icons/md";
+import { PiChatTeardropBold } from "react-icons/pi";
 import { toast } from "sonner";
+import { useChat } from "./chat-context";
 
 interface FloatingActionButtonsProps {
   postId: string;
@@ -40,8 +42,18 @@ export default function FloatingActionButtons({
     toast("PDF download coming soon!");
   };
 
+  const { toggleChat } = useChat();
+
+  const toggleChatComponent = () => {
+    toggleChat();
+  };
   return (
     <div className="hidden md:block absolute top-0 -right-14 px-2 mx-2 bg-white text-black dark:text-white dark:bg-gray-900 rounded-lg shadow-md">
+      <PiChatTeardropBold
+        onClick={toggleChatComponent}
+        title="Chat with post"
+        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors`}
+      />
       <AiOutlineLike
         onClick={handleLike}
         title="I like this"
