@@ -86,13 +86,15 @@ export default async function BlogsPage() {
             className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
           >
             <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
-              <Image
-                className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
-                src={post.featuredImg || ""}
-                alt="Image"
-                width={1280}
-                height={720}
-              />
+              {post.featuredImg && (
+                <Image
+                  className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
+                  src={post.featuredImg}
+                  alt={post.title}
+                  width={1280}
+                  height={720}
+                />
+              )}
               <Link
                 href={`blog/${post.slug}`}
                 className="md:flex-grow mx-3 md:px-3"

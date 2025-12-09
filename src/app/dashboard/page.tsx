@@ -65,7 +65,7 @@ export default async function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {userData?.likes.map((like) => (
                   <Link
-                    href={`/blogs/${like.post.slug}`}
+                    href={`/blog/${like.post.slug}`}
                     key={like.id}
                     className="hover:no-underline"
                   >

@@ -11,6 +11,11 @@ const _config = {
   instagram: process.env.INSTAGRAM || "",
   betterAuthSecret: process.env.BETTER_AUTH_SECRET || "secret",
   betterAuthUrl: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+  },
 };
 
 const env = Object.freeze(_config);
