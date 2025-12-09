@@ -171,35 +171,34 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {/* Floating Action Buttons - Desktop Only */}
             <FloatingActionButtons postId={post.id} isLiked={isLiked} />
           </div>
+          {/* Thank You Section */}
+          <div className="dark:bg-background py-5 bg-gray-50">
+            <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">
+              <p>Thank you for reading our blog!</p>
+              <p>
+                We have a{" "}
+                <a
+                  className="underline"
+                  href="https://discord.com/invite/CxPBRSZut7"
+                  target="_blank"
+                >
+                  Discord community
+                </a>{" "}
+                where you can ask questions and get help from the community.
+              </p>
+            </div>
+          </div>
+
+          {/* Comments Section */}
+          <div className="dark:bg-background py-5 bg-gray-50">
+            <div className="max-w-5xl mx-auto bg-white dark:bg-black rounded-lg shadow-md p-6 lg:p-10">
+              <h2 className="text-2xl font-bold mb-6">
+                Comments ({post._count.comments})
+              </h2>
+              <CommentSection postId={post.id} />
+            </div>
+          </div>
         </BlogPostWrapper>
-
-        {/* Thank You Section */}
-        <div className="dark:bg-background py-5 bg-gray-50">
-          <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">
-            <p>Thank you for reading our blog!</p>
-            <p>
-              We have a{" "}
-              <a
-                className="underline"
-                href="https://discord.com/invite/CxPBRSZut7"
-                target="_blank"
-              >
-                Discord community
-              </a>{" "}
-              where you can ask questions and get help from the community.
-            </p>
-          </div>
-        </div>
-
-        {/* Comments Section */}
-        <div className="dark:bg-background py-5 bg-gray-50">
-          <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">
-            <h2 className="text-2xl font-bold mb-6">
-              Comments ({post._count.comments})
-            </h2>
-            <CommentSection postId={post.id} />
-          </div>
-        </div>
       </div>
     </div>
   );

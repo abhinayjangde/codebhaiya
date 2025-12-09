@@ -15,8 +15,8 @@ function BlogPostContent({ children, postId }: BlogPostWrapperProps) {
   return (
     <div className="max-w-5xl mx-auto relative group">
       <div
-        className={`absolute top-0 w-[400px] h-[500px] bg-white dark:bg-black rounded-lg shadow-md p-6 lg:p-10 z-0 transition-all duration-700 ease-in-out ${
-          isChatOpen ? "-left-[210px] opacity-100" : "left-0 opacity-0 -z-10"
+        className={`absolute top-0 w-[500px] h-[700px] bg-white dark:bg-black rounded-lg shadow-md p-6 lg:p-10 z-0 transition-all duration-700 ease-in-out ${
+          isChatOpen ? "-left-[310px] opacity-100" : "left-0 opacity-0 -z-10"
         }`}
       >
         <ChatInterface postId={postId} />
