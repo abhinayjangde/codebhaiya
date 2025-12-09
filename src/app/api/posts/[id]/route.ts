@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { deleteImageFromCloudinary } from "@/lib/cloudinary";
 import { z } from "zod";
 
 const updatePostSchema = z.object({
@@ -47,6 +48,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
         // Destructure contentFormat from validatedData to handle it separately
         const { contentFormat: requestedFormat, ...otherFields } = validatedData;
+
+        if (otherFields.featuredImg && post.featuredImg && otherFields.featuredImg !== post.featuredImg) {
+             // Delete old image if it's different and exists
+             await deleteImageFromCloudinary(post.featuredImg);
+        }
 
         const updatedPost = await prisma.post.update({
             where: { id },

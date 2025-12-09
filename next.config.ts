@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
       {
         hostname: "drive.google.com",
         protocol: "https",
+      },
+      {
+        hostname: "res.cloudinary.com",
+        protocol: "https", 
       }
     ]
   }

@@ -12,6 +12,7 @@ import RichTextEditor from "./rich-text-editor";
 import MarkdownEditor from "./markdown-editor";
 import { toast } from "sonner";
 import { FileText, Code2 } from "lucide-react";
+import ImageUpload from "../image-upload";
 
 type EditorMode = "richtext" | "markdown";
 
@@ -219,11 +220,12 @@ export default function PostEditor({ initialData }: PostEditorProps) {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="featuredImg">Featured Image URL</Label>
-          <Input
-            id="featuredImg"
-            {...register("featuredImg")}
-            placeholder="https://..."
+          <Label htmlFor="featuredImg">Featured Image</Label>
+          <ImageUpload
+            value={watch("featuredImg") || ""}
+            onChange={(url) => setValue("featuredImg", url)}
+            onRemove={() => setValue("featuredImg", "")}
+            disabled={isSubmitting}
           />
         </div>
 
