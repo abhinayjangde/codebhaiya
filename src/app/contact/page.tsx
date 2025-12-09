@@ -12,6 +12,52 @@ import { BackgroundLines } from "@/components/ui/background-lines";
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setStatus({ type: null, message: "" });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      setStatus({ type: "success", message: "Message sent successfully!" });
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error: any) {
+      setStatus({
+        type: "error",
+        message: error.message || "Failed to send message",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const socials = [
     {
       icon: FaSquareXTwitter,
@@ -93,6 +139,8 @@ const Contact: React.FC = () => {
                     type="text"
                     id="name"
                     name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     className="w-full bg-transparent bg-opacity-50 rounded border border-gray-300 dark:focus:bg-dark focus:border-indigo-500 focus:bg-white focus:ring-2 dark:text-white focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                   />
                 </div>
@@ -109,6 +157,8 @@ const Contact: React.FC = () => {
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full bg-transparent bg-opacity-50 rounded border border-gray-300 dark:focus:bg-dark focus:border-indigo-500 focus:bg-white focus:ring-2 dark:text-white focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                   />
                 </div>
@@ -124,18 +174,33 @@ const Contact: React.FC = () => {
                   <textarea
                     id="message"
                     name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     className="w-full bg-transparent rounded border border-gray-300 focus:border-indigo-500 dark:focus:bg-dark focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none dark:text-white text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
-                    defaultValue={""}
                   />
                 </div>
               </div>
               <div className="p-2 w-full text-center">
+                {status.message && (
+                  <div
+                    className={`mb-4 p-2 rounded ${
+                      status.type === "success"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {status.message}
+                  </div>
+                )}
                 {loading ? (
                   <h2>LOADING...</h2>
                 ) : (
-                  <h2 className="dark:text-white border border-white px-2">
+                  <button
+                    onClick={handleSubmit}
+                    className="dark:text-white border border-white px-2 py-1 hover:bg-white hover:text-black transition-colors"
+                  >
                     SUBMIT
-                  </h2>
+                  </button>
                 )}
               </div>
             </div>
