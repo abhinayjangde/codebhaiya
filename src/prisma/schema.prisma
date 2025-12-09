@@ -12,6 +12,11 @@ enum Role {
   ADMIN
 }
 
+enum ContentFormat {
+  HTML
+  MARKDOWN
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -41,11 +46,12 @@ model Profile {
 }
 
 model Post {
-  id          String    @id @default(cuid())
-  title       String
-  slug        String    @unique
-  content     String
-  excerpt     String?
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  content       String
+  contentFormat ContentFormat @default(HTML)
+  excerpt       String?
   published   Boolean   @default(false)
   publishedAt DateTime?
   authorId    String

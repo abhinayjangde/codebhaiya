@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import CommentSection from "@/components/blog/comment-section";
 import FloatingActionButtons from "@/components/blog/floating-action-buttons";
 import CodeBlockRenderer from "@/components/blog/code-block-renderer";
+import MarkdownRenderer from "@/components/blog/markdown-renderer";
 import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineRead } from "react-icons/ai";
@@ -91,10 +92,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <div className="dark:bg-background py-5 bg-gray-50 md:p-4 lg:p-12">
       <div className="max-w-screen-lg mx-auto bg-white dark:bg-black/[0.3] rounded-lg shadow-md p-6 lg:p-10 z-0 relative">
+        {/* Post Title  */}
         <h1 className="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex">
           {post.title}
         </h1>
 
+        {/* Post Metadata Section */}
         <div className="flex pt-5 items-center mb-6 flex-col md:flex-row md:justify-start border-b pb-2">
           <div className="image flex justify-center items-center">
             <div className="h-8 w-8 mb-1 overflow-hidden rounded-full">
@@ -154,11 +157,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         )}
 
-        <CodeBlockRenderer htmlContent={post.content} />
+        {/* Content Rendering - Conditional based on format */}
+        {post.contentFormat === "MARKDOWN" ? (
+          <MarkdownRenderer content={post.content} />
+        ) : (
+          <CodeBlockRenderer htmlContent={post.content} />
+        )}
 
         {/* Floating Action Buttons - Desktop Only */}
         <FloatingActionButtons postId={post.id} isLiked={isLiked} />
       </div>
+
       {/* Thank You Section */}
       <div className="dark:bg-background py-5 bg-gray-50 md:p-4">
         <div className="max-w-screen-lg mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">
@@ -176,6 +185,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </p>
         </div>
       </div>
+
       {/* Comments Section */}
       <div className="dark:bg-background py-5 bg-gray-50 md:p-4">
         <div className="max-w-screen-lg mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">

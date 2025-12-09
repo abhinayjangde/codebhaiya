@@ -12,6 +12,7 @@ const postSchema = z.object({
     featuredImg: z.string().optional(),
     tags: z.array(z.string()).optional(),
     published: z.boolean().optional(),
+    contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -39,20 +40,43 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
+        console.log("Received post body:", JSON.stringify(body, null, 2));
+        
         const validatedData = postSchema.parse(body);
 
+        // Create post without contentFormat (uses DB default: HTML)
         const post = await prisma.post.create({
             data: {
-                ...validatedData,
+                title: validatedData.title,
+                content: validatedData.content,
+                slug: validatedData.slug,
+                excerpt: validatedData.excerpt || null,
+                featuredImg: validatedData.featuredImg || null,
+                tags: validatedData.tags || [],
+                published: validatedData.published || false,
                 authorId: user.id,
                 publishedAt: validatedData.published ? new Date() : null,
             },
         });
 
+        // If MARKDOWN format was selected, update using raw SQL (workaround for Prisma enum issue)
+        if (validatedData.contentFormat === "MARKDOWN") {
+            await prisma.$executeRaw`UPDATE "Post" SET "contentFormat" = 'MARKDOWN'::"ContentFormat" WHERE id = ${post.id}`;
+            // Return the post with the correct contentFormat
+            return NextResponse.json({ ...post, contentFormat: "MARKDOWN" });
+        }
+
         return NextResponse.json(post);
     } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+        console.error("Post creation error:", error);
+        if (error instanceof z.ZodError) {
+            console.error("Validation errors:", error.issues);
+            return NextResponse.json({ error: "Validation failed", details: error.issues }, { status: 400 });
+        }
+        // Return detailed error for debugging
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        console.error("Full error details:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+        return NextResponse.json({ error: "Invalid request", details: errorMessage }, { status: 400 });
     }
 }
 

@@ -12,6 +12,7 @@ const updatePostSchema = z.object({
     featuredImg: z.string().optional(),
     tags: z.array(z.string()).optional(),
     published: z.boolean().optional(),
+    contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
 });
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -44,17 +45,29 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         const body = await req.json();
         const validatedData = updatePostSchema.parse(body);
 
+        // Destructure contentFormat from validatedData to handle it separately
+        const { contentFormat: requestedFormat, ...otherFields } = validatedData;
+
         const updatedPost = await prisma.post.update({
             where: { id },
             data: {
-                ...validatedData,
+                ...otherFields,
                 publishedAt: validatedData.published === true ? new Date() : (validatedData.published === false ? null : post.publishedAt),
             },
         });
 
+        // Update contentFormat using raw SQL if a new format was provided (workaround for Prisma enum issue)
+        if (requestedFormat) {
+            const formatValue = requestedFormat === "MARKDOWN" ? "MARKDOWN" : "HTML";
+            await prisma.$executeRaw`UPDATE "Post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${id}`;
+            return NextResponse.json({ ...updatedPost, contentFormat: formatValue });
+        }
+
         return NextResponse.json(updatedPost);
     } catch (error) {
-        return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        console.error("Post update error:", errorMessage);
+        return NextResponse.json({ error: "Invalid request", details: errorMessage }, { status: 400 });
     }
 }
 

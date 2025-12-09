@@ -4,53 +4,58 @@ import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
-export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
+export default async function EditPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-    if (!session) {
-        redirect("/login");
-    }
+  if (!session) {
+    redirect("/login");
+  }
 
-    const user = session.user;
+  const user = session.user;
 
-    const dbUser = await prisma.user.findUnique({
-        where: { id: user.id },
-        select: { role: true }
-    });
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { role: true },
+  });
 
-    const role = dbUser?.role;
+  const role = dbUser?.role;
 
-    if (role !== "CREATOR" && role !== "ADMIN") {
-        redirect("/dashboard");
-    }
+  if (role !== "CREATOR" && role !== "ADMIN") {
+    redirect("/dashboard");
+  }
 
-    const { id } = await params;
+  const { id } = await params;
 
-    const post = await prisma.post.findUnique({
-        where: { id },
-    });
+  const post = await prisma.post.findUnique({
+    where: { id },
+  });
 
-    if (!post) {
-        notFound();
-    }
+  if (!post) {
+    notFound();
+  }
 
-    // @ts-ignore
-    if (post.authorId !== user.id && user.role !== "ADMIN") {
-        redirect("/dashboard");
-    }
+  // @ts-ignore
+  if (post.authorId !== user.id && user.role !== "ADMIN") {
+    redirect("/dashboard");
+  }
 
-    return (
-        <div className="container mx-auto">
-            <PostEditor
-                initialData={{
-                    ...post,
-                    tags: post.tags,
-                    excerpt: post.excerpt || undefined,
-                    featuredImg: post.featuredImg || undefined,
-                }}
-            />
-        </div>
-    );
+  return (
+    <div className="container mx-auto">
+      <PostEditor
+        initialData={{
+          ...post,
+          tags: post.tags,
+          excerpt: post.excerpt || undefined,
+          featuredImg: post.featuredImg || undefined,
+          contentFormat: post.contentFormat,
+        }}
+      />
+    </div>
+  );
 }
