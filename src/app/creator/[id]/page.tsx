@@ -10,6 +10,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  featuredImg: string | null;
+  tags: string[];
+  createdAt: Date;
+}
+
 export default async function CreatorProfilePage({
   params,
 }: {
@@ -55,7 +66,7 @@ export default async function CreatorProfilePage({
 
         <h2 className="text-2xl font-bold mb-6">Posts by {user.name}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {user.posts.map((post) => (
+          {user.posts.map((post: Post) => (
             <Link
               href={`/blogs/${post.slug}`}
               key={post.id}
