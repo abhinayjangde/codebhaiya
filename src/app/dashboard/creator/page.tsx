@@ -14,6 +14,14 @@ import {
 } from "@/components/ui/table";
 import PostActions from "@/components/dashboard/post-actions";
 
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  published: boolean;
+  createdAt: Date;
+}
+
 export default async function CreatorDashboard() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -68,7 +76,7 @@ export default async function CreatorDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {posts.map((post) => (
+              {posts.map((post: Post) => (
                 <TableRow key={post.id}>
                   <TableCell className="font-medium">{post.title}</TableCell>
                   <TableCell>
