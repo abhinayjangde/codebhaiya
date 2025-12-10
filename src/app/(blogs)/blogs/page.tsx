@@ -8,6 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { Post } from "@prisma/client";
+
+type PostWithAuthor = Post & {
+  author: {
+    name: string | null;
+    image: string | null;
+  };
+};
 
 export const metadata = {
   title: "Blogs - CodeBhaiya",
@@ -36,7 +44,7 @@ export default async function BlogsPage() {
     <div className="flex flex-col justify-center items-center sm:h-full w-full min-h-screen dark:bg-background bg-white ">
       <h1 className="text-4xl font-bold mb-8 text-center mt-4">Latest Blogs</h1>
       <div className="md:container md:w-[90rem] sm:p-4">
-        {posts.map((post) => (
+        {posts.map((post: PostWithAuthor) => (
           <div
             key={post.id}
             className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
