@@ -96,7 +96,7 @@ export default async function CreatorProfilePage({
                   </p>
                 </CardContent>
                 <CardFooter className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
+                  {post.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-xs"

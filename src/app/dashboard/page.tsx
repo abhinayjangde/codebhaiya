@@ -5,6 +5,16 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface LikeWithPost {
+  id: string;
+  createdAt: Date;
+  post: {
+    slug: string;
+    title: string;
+    excerpt: string | null;
+  };
+}
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -63,7 +73,7 @@ export default async function DashboardPage() {
               </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {userData?.likes.map((like) => (
+                {userData?.likes.map((like: LikeWithPost) => (
                   <Link
                     href={`/blog/${like.post.slug}`}
                     key={like.id}

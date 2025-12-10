@@ -11,6 +11,20 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
+interface PostWithAuthor {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  featuredImg: string | null;
+  createdAt: Date;
+  author: {
+    name: string | null;
+    image: string | null;
+  };
+}
+
 export default async function LatestBlogs() {
   const posts = await prisma.post.findMany({
     where: {
@@ -49,7 +63,7 @@ export default async function LatestBlogs() {
         </div>
 
         <div className="md:container md:w-[90rem] sm:p-4">
-          {posts.map((post) => (
+          {posts.map((post: PostWithAuthor) => (
             <div
               key={post.id}
               className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
