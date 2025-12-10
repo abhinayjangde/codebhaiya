@@ -192,7 +192,7 @@ const Navbar: React.FC = () => {
                     </li>
                     <li>
                       <Link
-                        href="/dashboard"
+                        href={`/dashboard/creator/${session?.user?.id}`}
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-black dark:hover:text-white"
                       >
                         Dashboard
