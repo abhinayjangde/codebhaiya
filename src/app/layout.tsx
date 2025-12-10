@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Nooter";
+import Footer from "@/components/Footer";
 import "./globals.css";
 import "@/styles/code-highlight.css";
 
