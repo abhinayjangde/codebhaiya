@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/providers/theme-provider";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Nooter";
 import "./globals.css";
 import "@/styles/code-highlight.css";
 
