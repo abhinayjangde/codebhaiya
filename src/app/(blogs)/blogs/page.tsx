@@ -8,14 +8,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { Post } from "@prisma/client";
-
-type PostWithAuthor = Post & {
+interface PostWithAuthor {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  featuredImg: string | null;
+  createdAt: Date;
   author: {
     name: string | null;
     image: string | null;
   };
-};
+}
 
 export const metadata = {
   title: "Blogs - CodeBhaiya",
