@@ -29,7 +29,7 @@ export default function ChatInterface({ postId }: ChatInterfaceProps) {
     },
   });
 
-  const isLoading = status === "streaming" || status === "pending";
+  const isLoading = status === "submitted";
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -81,10 +81,11 @@ export default function ChatInterface({ postId }: ChatInterfaceProps) {
             className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[85%] overflow-y-auto rounded-lg p-3 ${m.role === "user"
+              className={`max-w-[85%] overflow-y-auto rounded-lg p-3 ${
+                m.role === "user"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm"
-                }`}
+              }`}
             >
               {m.parts.map((part, i) => {
                 if (part.type === "text") {
