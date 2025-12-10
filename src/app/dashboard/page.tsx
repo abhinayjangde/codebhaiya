@@ -57,7 +57,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen dark:bg-background py-5 bg-gray-50 md:p-4 lg:p-12">
-      <div className="max-w-screen-lg mx-auto bg-white dark:bg-black/[0.3] rounded-lg shadow-md p-6 lg:p-10 z-0 relative">
+      <div className="max-w-5xl mx-auto bg-white dark:bg-black/30 rounded-lg shadow-md p-6 lg:p-10 z-0 relative">
         <h1 className="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex border-b pb-2">
           Dashboard
         </h1>

@@ -1,5 +1,5 @@
 const _config = {
-  baseUrl: process.env.BASE_URL || "http://localhost:3000",
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
   databaseUrl:
     process.env.DATABASE_URL ||
     "postgresql://user:password@localhost:5432/dbname",
