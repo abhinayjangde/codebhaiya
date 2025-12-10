@@ -97,7 +97,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <div
       ref={containerRef}
-      className="leading-relaxed text-dark dark:text-gray-100 prose prose-lg dark:prose-invert max-w-none"
+      className="leading-relaxed text-dark dark:text-gray-100 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none prose-img:rounded-lg prose-headings:scroll-mt-20"
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}

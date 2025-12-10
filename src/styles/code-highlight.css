@@ -143,11 +143,39 @@
   border-radius: 0.25rem;
   font-size: 0.875em;
   color: #e06c75;
+  word-break: break-word;
 }
 
 /* Dark mode adjustments */
 .dark .prose code:not(pre code) {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile responsive code blocks */
+@media (max-width: 640px) {
+  .prose pre {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 0;
+  }
+
+  .prose pre code {
+    font-size: 0.75rem;
+  }
+
+  .code-block-wrapper .copy-button {
+    opacity: 1;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.65rem;
+  }
+
+  .code-block-wrapper .language-label {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
 }
 
 /* Tiptap code block styling in editor */

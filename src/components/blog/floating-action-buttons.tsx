@@ -57,9 +57,8 @@ export default function FloatingActionButtons({
       <AiOutlineLike
         onClick={handleLike}
         title="I like this"
-        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${
-          isLiked ? "text-blue-500" : ""
-        }`}
+        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${isLiked ? "text-blue-500" : ""
+          }`}
       />
       <PiShareFat
         onClick={handleShare}

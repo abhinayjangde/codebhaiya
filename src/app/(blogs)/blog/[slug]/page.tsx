@@ -69,10 +69,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       },
       likes: session?.user
         ? {
-            where: {
-              userId: session.user.id,
-            },
-          }
+          where: {
+            userId: session.user.id,
+          },
+        }
         : false,
     },
   });
@@ -91,12 +91,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const readingTime = calculateReadingTime(post.content);
 
   return (
-    <div className="dark:bg-background relative flex justify-center py-5 bg-gray-50 md:p-4 lg:p-12 md:flex">
-      <div>
+    <div className="dark:bg-background relative flex justify-center py-3 px-2 sm:py-5 sm:px-4 bg-gray-50 md:p-4 lg:p-12 md:flex">
+      <div className="w-full max-w-5xl">
         <BlogPostWrapper postId={post.id}>
-          <div className="bg-white dark:bg-black rounded-lg shadow-md p-6 lg:p-10 z-20 relative">
+          <div className="bg-white dark:bg-black rounded-lg shadow-md p-4 sm:p-6 lg:p-10 z-20 relative">
             {/* Post Title  */}
-            <h1 className="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex">
+            <h1 className="text-center text-lg sm:text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex leading-tight">
               {post.title}
             </h1>
 
@@ -150,7 +150,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
 
             {post.featuredImg && (
-              <div className="w-full h-[400px] overflow-hidden rounded-xl mb-8">
+              <div className="w-full h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-lg sm:rounded-xl mb-4 sm:mb-8">
                 <Image
                   src={post.featuredImg}
                   alt={post.title}
@@ -168,12 +168,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <CodeBlockRenderer htmlContent={post.content} />
             )}
 
-            {/* Floating Action Buttons - Desktop Only */}
+            {/* Floating Action Buttons - Desktop sidebar + Mobile bottom bar */}
             <FloatingActionButtons postId={post.id} isLiked={isLiked} />
           </div>
           {/* Thank You Section */}
-          <div className="dark:bg-background py-5 bg-gray-50">
-            <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 lg:p-10">
+          <div className="dark:bg-background py-3 sm:py-5 bg-gray-50">
+            <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-4 sm:p-6 lg:p-10">
               <p>Thank you for reading our blog!</p>
               <p>
                 We have a{" "}
@@ -190,9 +190,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           {/* Comments Section */}
-          <div className="dark:bg-background py-5 bg-gray-50">
-            <div className="max-w-5xl mx-auto bg-white dark:bg-black rounded-lg shadow-md p-6 lg:p-10">
-              <h2 className="text-2xl font-bold mb-6">
+          <div className="dark:bg-background py-3 sm:py-5 bg-gray-50">
+            <div className="max-w-5xl mx-auto bg-white dark:bg-black rounded-lg shadow-md p-4 sm:p-6 lg:p-10">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
                 Comments ({post._count.comments})
               </h2>
               <CommentSection postId={post.id} />
