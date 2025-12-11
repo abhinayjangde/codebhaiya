@@ -109,7 +109,7 @@ export default function PostActions({
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href={`/blogs/${postSlug}`}
+              href={`/blog/${postSlug}`}
               target="_blank"
               className="flex items-center cursor-pointer"
             >

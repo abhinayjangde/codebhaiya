@@ -89,7 +89,7 @@ export default function CodeBlockRenderer({
   return (
     <div
       ref={containerRef}
-      className="leading-relaxed text-dark dark:text-gray-100 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none prose-img:rounded-lg prose-headings:scroll-mt-20"
+      className="leading-relaxed text-dark dark:text-gray-100 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none prose-img:rounded-lg prose-headings:scroll-mt-20 prose-headings:font-bold prose-h1:text-3xl sm:prose-h1:text-4xl prose-h2:text-2xl sm:prose-h2:text-3xl prose-h3:text-xl sm:prose-h3:text-2xl prose-h4:text-lg sm:prose-h4:text-xl prose-p:my-4 prose-p:leading-7 prose-li:my-1"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );

@@ -86,18 +86,116 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
   // Custom components for ReactMarkdown
   const components: Components = {
+    // Headings with explicit bold and size styling
+    h1: ({ children, ...props }) => (
+      <h1
+        className="text-3xl sm:text-4xl font-bold mt-8 mb-4 text-foreground"
+        {...props}
+      >
+        {children}
+      </h1>
+    ),
+    h2: ({ children, ...props }) => (
+      <h2
+        className="text-2xl sm:text-3xl font-bold mt-6 mb-3 text-foreground"
+        {...props}
+      >
+        {children}
+      </h2>
+    ),
+    h3: ({ children, ...props }) => (
+      <h3
+        className="text-xl sm:text-2xl font-bold mt-5 mb-2 text-foreground"
+        {...props}
+      >
+        {children}
+      </h3>
+    ),
+    h4: ({ children, ...props }) => (
+      <h4
+        className="text-lg sm:text-xl font-bold mt-4 mb-2 text-foreground"
+        {...props}
+      >
+        {children}
+      </h4>
+    ),
+    h5: ({ children, ...props }) => (
+      <h5
+        className="text-base sm:text-lg font-bold mt-3 mb-1 text-foreground"
+        {...props}
+      >
+        {children}
+      </h5>
+    ),
+    h6: ({ children, ...props }) => (
+      <h6
+        className="text-sm sm:text-base font-bold mt-2 mb-1 text-foreground"
+        {...props}
+      >
+        {children}
+      </h6>
+    ),
+    // Paragraphs with proper spacing
+    p: ({ children, ...props }) => (
+      <p className="my-4 leading-7" {...props}>
+        {children}
+      </p>
+    ),
+    // Lists with proper spacing
+    ul: ({ children, ...props }) => (
+      <ul className="list-disc list-inside my-4 space-y-2" {...props}>
+        {children}
+      </ul>
+    ),
+    ol: ({ children, ...props }) => (
+      <ol className="list-decimal list-inside my-4 space-y-2" {...props}>
+        {children}
+      </ol>
+    ),
+    li: ({ children, ...props }) => (
+      <li className="my-1" {...props}>
+        {children}
+      </li>
+    ),
+    // Blockquotes
+    blockquote: ({ children, ...props }) => (
+      <blockquote
+        className="border-l-4 border-primary pl-4 my-4 italic text-muted-foreground"
+        {...props}
+      >
+        {children}
+      </blockquote>
+    ),
     // Add target="_blank" to links
     a: ({ href, children, ...props }) => (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary underline hover:text-primary/80"
+        {...props}
+      >
         {children}
       </a>
+    ),
+    // Strong/Bold text
+    strong: ({ children, ...props }) => (
+      <strong className="font-bold" {...props}>
+        {children}
+      </strong>
+    ),
+    // Emphasis/Italic text
+    em: ({ children, ...props }) => (
+      <em className="italic" {...props}>
+        {children}
+      </em>
     ),
   };
 
   return (
     <div
       ref={containerRef}
-      className="leading-relaxed text-dark dark:text-gray-100 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none prose-img:rounded-lg prose-headings:scroll-mt-20"
+      className="leading-relaxed text-dark dark:text-gray-100 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none prose-img:rounded-lg prose-headings:scroll-mt-20 prose-headings:font-bold prose-h1:text-3xl sm:prose-h1:text-4xl prose-h2:text-2xl sm:prose-h2:text-3xl prose-h3:text-xl sm:prose-h3:text-2xl prose-h4:text-lg sm:prose-h4:text-xl prose-p:my-4 prose-p:leading-7 prose-li:my-1"
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}

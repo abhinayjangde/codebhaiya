@@ -68,7 +68,7 @@ export default async function CreatorProfilePage({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {user.posts.map((post: Post) => (
             <Link
-              href={`/blogs/${post.slug}`}
+              href={`/blog/${post.slug}`}
               key={post.id}
               className="hover:no-underline"
             >

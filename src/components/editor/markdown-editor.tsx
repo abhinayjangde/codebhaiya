@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import { Button } from "@/components/ui/button";
+import MarkdownRenderer from "@/components/blog/markdown-renderer";
 import {
   Bold,
   Italic,
@@ -183,13 +181,12 @@ export default function MarkdownEditor({
       {/* Editor / Preview Area */}
       <div className="min-h-[400px] bg-background">
         {showPreview ? (
-          <div className="p-4 prose prose-sm sm:prose lg:prose-lg dark:prose-invert max-w-none min-h-[400px]">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
-            >
-              {content || "*No content yet. Start writing some markdown!*"}
-            </ReactMarkdown>
+          <div className="p-4 min-h-[400px]">
+            <MarkdownRenderer
+              content={
+                content || "*No content yet. Start writing some markdown!*"
+              }
+            />
           </div>
         ) : (
           <textarea

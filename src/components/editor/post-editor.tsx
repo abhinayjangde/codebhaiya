@@ -149,7 +149,7 @@ export default function PostEditor({ initialData }: PostEditorProps) {
 
       const post = await res.json();
       toast.success("Post saved successfully");
-      router.push(`/blogs/${post.slug}`);
+      router.push(`/blog/${post.slug}`);
       router.refresh();
     } catch (error) {
       console.error("Error:", error);
