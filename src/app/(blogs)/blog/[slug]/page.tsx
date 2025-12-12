@@ -69,10 +69,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       },
       likes: session?.user
         ? {
-          where: {
-            userId: session.user.id,
-          },
-        }
+            where: {
+              userId: session.user.id,
+            },
+          }
         : false,
     },
   });
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     data: { views: { increment: 1 } },
   });
 
-  const isLiked = post.likes.length > 0;
+  const isLiked = Array.isArray(post.likes) && post.likes.length > 0;
   const readingTime = calculateReadingTime(post.content);
 
   return (
