@@ -49,30 +49,29 @@ export default async function LatestBlogs() {
   }
 
   return (
-    <section className="py-16 bg-muted/30">
+    <section className="py-4 md:py-16 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-3xl font-bold tracking-tight">
+        <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
+          <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
             Latest from the Blog
           </h2>
-          <Link href="/blogs">
-            <Button variant="ghost" className="gap-2">
-              View all <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+          <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">
+            Blogs are a great way to share your knowledge and experiences with
+            others.
+          </h6>
         </div>
 
-        <div className="md:container md:w-[90rem] sm:p-4">
+        <div className="md:container md:w-360] sm:p-4">
           {posts.map((post: PostWithAuthor) => (
             <div
               key={post.id}
-              className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
+              className="my-2 border-b md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
             >
               <div className="">
                 <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
                   {post.featuredImg && (
                     <Image
-                      className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
+                      className="object-contain rounded-md w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
                       src={post.featuredImg}
                       alt={post.title}
                       width={1280}
@@ -81,7 +80,7 @@ export default async function LatestBlogs() {
                   )}
                   <Link
                     href={`blog/${post.slug}`}
-                    className="md:flex-grow mx-3 md:px-3"
+                    className="md:grow mx-3 md:px-3"
                   >
                     <div className="flex flex-row mr-4 text-sm">
                       <span className="hidden md:block dark:text-gray-300 text-black underline ">
@@ -93,7 +92,7 @@ export default async function LatestBlogs() {
                         })}
                       </span>
                     </div>
-                    <h2 className="sm:text-2xl mx-4 md:mx-auto font-semibold text-xl dark:text-white text-black title-font mb-2">
+                    <h2 className="sm:text-2xl md:text-xl md:mx-auto font-semibold text-xl dark:text-white text-black title-font mb-2">
                       {post.title}
                     </h2>
                     <p className="hidden md:block leading-relaxed dark:text-gray-300 text-black">
@@ -101,18 +100,11 @@ export default async function LatestBlogs() {
                         post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) +
                           "..."}
                     </p>
+                    <span className="md:hidden mx-1 dark:text-gray-300 text-black">
+                      By {post.author.name}
+                    </span>
                   </Link>
                 </div>
-                {/* <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-xs"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div> */}
               </div>
             </div>
           ))}

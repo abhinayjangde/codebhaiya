@@ -48,17 +48,17 @@ export default async function BlogsPage() {
   return (
     <div className="flex flex-col justify-center items-center sm:h-full w-full min-h-screen dark:bg-background bg-white ">
       <h1 className="text-4xl font-bold mb-8 text-center mt-4">Latest Blogs</h1>
-      <div className="md:container md:w-[90rem] sm:p-4">
+      <div className="md:container md:w-360 sm:p-4">
         {posts.map((post: PostWithAuthor) => (
           <div
             key={post.id}
-            className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4"
+            className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4 border-b"
           >
             <div className="">
               <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
                 {post.featuredImg && (
                   <Image
-                    className="object-contain w-80 sm:w-full object-center md:rounded-l-lg md:w-60"
+                    className="object-contain w-80 sm:w-full object-center rounded-md md:rounded-l-lg md:w-60"
                     src={post.featuredImg}
                     alt={post.title}
                     width={1280}
@@ -67,7 +67,7 @@ export default async function BlogsPage() {
                 )}
                 <Link
                   href={`blog/${post.slug}`}
-                  className="md:flex-grow mx-3 md:px-3"
+                  className="md:grow mx-3 md:px-3"
                 >
                   <div className="flex flex-row mr-4 text-sm">
                     <span className="hidden md:block dark:text-gray-300 text-black underline ">
@@ -87,6 +87,9 @@ export default async function BlogsPage() {
                       post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) +
                         "..."}
                   </p>
+                  <span className="md:hidden mx-4 dark:text-gray-300 text-black">
+                    By {post.author.name}
+                  </span>
                 </Link>
               </div>
               {/* <div className="flex flex-wrap gap-2">

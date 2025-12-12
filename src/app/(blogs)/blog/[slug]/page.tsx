@@ -111,10 +111,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   >
                     <Image
                       alt={post.author.name}
-                      src={
-                        post.author.image ||
-                        "https://avatars.githubusercontent.com/u/64852930?v=4"
-                      }
+                      src={post.author.image || "/images/avatar.png"}
                       className="w-full h-full object-cover"
                       width={100}
                       height={100}
