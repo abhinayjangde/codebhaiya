@@ -92,7 +92,7 @@ export default async function CreatorProfilePage({
                   <p className="text-muted-foreground line-clamp-3">
                     {post.excerpt ||
                       post.content.replace(/<[^>]*>?/gm, "").slice(0, 150) +
-                        "..."}
+                      "..."}
                   </p>
                 </CardContent>
                 <CardFooter className="flex flex-wrap gap-2">

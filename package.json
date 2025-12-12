@@ -12,6 +12,7 @@
     "db:push": "pnpm dlx prisma db push",
     "db:studio": "pnpm dlx prisma studio"
   },
+  "author": "Abhinay Jangde <abhinayjangde@gmail.com>",
   "dependencies": {
     "@ai-sdk/google": "^2.0.45",
     "@ai-sdk/react": "^2.0.109",

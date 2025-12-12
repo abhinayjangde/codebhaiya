@@ -143,10 +143,7 @@ const Navbar: React.FC = () => {
                 >
                   <Image
                     alt="avatar"
-                    src={
-                      session?.user?.image ||
-                      "https://avatars.githubusercontent.com/u/64852930?v=4"
-                    }
+                    src={session?.user?.image || "/images/avatar.png"}
                     width={100}
                     height={100}
                     decoding="async"
