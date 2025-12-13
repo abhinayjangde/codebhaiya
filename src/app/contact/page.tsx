@@ -8,7 +8,6 @@ import { FaYoutube } from "react-icons/fa";
 import { FaSquareInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
-import { BackgroundLines } from "@/components/ui/background-lines";
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -78,7 +77,7 @@ const Contact: React.FC = () => {
 
   return (
     <>
-      <BackgroundLines className="min-h-screen pt-10 md:pt-24">
+      <div className="min-h-screen pt-10 md:pt-24">
         <div className="sm:mt-20 max-w-7xl px-4 md:px-8 lg:px-12 xl:px-26 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg dark:bg-background dark:text-white">
           <div className="flex flex-col justify-center items-center">
             <div>
@@ -114,8 +113,8 @@ const Contact: React.FC = () => {
             ))}
           </div>
         </div>
-      </BackgroundLines>
-      <section className="sm:h-[50rem] text-gray-600 dark:text-white dark:bg-dark body-font relative">
+      </div>
+      {/* <section className="sm:h-200 text-gray-600 dark:text-white dark:bg-dark body-font relative">
         <div className="container px-5 py-24 mx-auto">
           <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
             <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
@@ -206,7 +205,7 @@ const Contact: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };
