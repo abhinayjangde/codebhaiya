@@ -53,6 +53,8 @@ export default async function EditPostPage({
           tags: post.tags,
           excerpt: post.excerpt || undefined,
           featuredImg: post.featuredImg || undefined,
+          video: post.video || undefined,
+          category: post.category || undefined,
           contentFormat: post.contentFormat,
         }}
       />
