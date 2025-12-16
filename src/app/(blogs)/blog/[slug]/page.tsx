@@ -146,16 +146,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
             </div>
 
-            {post.featuredImg && (
-              <div className="w-full h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-lg sm:rounded-xl mb-4 sm:mb-8">
-                <Image
-                  src={post.featuredImg}
-                  alt={post.title}
-                  className="w-full h-full object-cover"
-                  width={1200}
-                  height={400}
-                />
-              </div>
+            {post.video && (
+              <iframe
+                className="hidden md:block mt-2"
+                width="940"
+                height="540"
+                src={post.video}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
             )}
 
             {/* Content Rendering - Conditional based on format */}
@@ -166,7 +168,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
 
             {/* Floating Action Buttons - Desktop sidebar + Mobile bottom bar */}
-            <FloatingActionButtons postId={post.id} isLiked={isLiked} />
+            <FloatingActionButtons
+              postId={post.id}
+              video={post.video}
+              isLiked={isLiked}
+            />
           </div>
           {/* Thank You Section */}
           <div className="dark:bg-background py-3 sm:py-5 bg-gray-50">

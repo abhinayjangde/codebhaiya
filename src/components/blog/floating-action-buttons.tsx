@@ -6,16 +6,21 @@ import { MdPictureAsPdf } from "react-icons/md";
 import { PiChatTeardropBold } from "react-icons/pi";
 import { toast } from "sonner";
 import { useChat } from "./chat-context";
+import { FaYoutube } from "react-icons/fa6";
+import Link from "next/link";
 
 interface FloatingActionButtonsProps {
   postId: string;
   isLiked: boolean;
+  video: string | null;
 }
 
 export default function FloatingActionButtons({
   postId,
   isLiked,
+  video,
 }: FloatingActionButtonsProps) {
+  // handle like count
   const handleLike = async () => {
     try {
       const res = await fetch(`/api/posts/${postId}/like`, {
@@ -29,6 +34,7 @@ export default function FloatingActionButtons({
     }
   };
 
+  // handle share
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -38,10 +44,13 @@ export default function FloatingActionButtons({
     }
   };
 
+  // hanlde download pdf
   const handleDownloadPdf = () => {
+    // TODO: i have to implement this functionality
     toast("PDF download coming soon!");
   };
 
+  // hanlde toggle chat
   const { toggleChat } = useChat();
 
   const toggleChatComponent = () => {
@@ -57,8 +66,9 @@ export default function FloatingActionButtons({
       <AiOutlineLike
         onClick={handleLike}
         title="I like this"
-        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${isLiked ? "text-blue-500" : ""
-          }`}
+        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${
+          isLiked ? "text-blue-500" : ""
+        }`}
       />
       <PiShareFat
         onClick={handleShare}
@@ -70,6 +80,14 @@ export default function FloatingActionButtons({
         title="Download PDF"
         className="text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors"
       />
+      {video !== null && (
+        <Link href={video} target="_blank">
+          <FaYoutube
+            title="Watch Video"
+            className="text-2xl my-4 cursor-pointer"
+          />
+        </Link>
+      )}
     </div>
   );
 }

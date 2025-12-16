@@ -1,15 +1,6 @@
 import prisma from "@/lib/prisma";
-import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface PostWithAuthor {
   id: string;

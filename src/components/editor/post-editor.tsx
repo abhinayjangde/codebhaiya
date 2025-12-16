@@ -22,6 +22,8 @@ const postSchema = z.object({
   excerpt: z.string().optional(),
   content: z.string().min(1, "Content is required"),
   featuredImg: z.string().optional(),
+  video: z.string().optional(),
+  category: z.string().optional(),
   tags: z.string().optional(), // Comma separated string for input
   published: z.boolean().optional(),
   contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
@@ -37,6 +39,8 @@ interface PostEditorProps {
     excerpt?: string;
     content?: string;
     featuredImg?: string;
+    video?: string;
+    category?: string;
     tags?: string[];
     published?: boolean;
     contentFormat?: "HTML" | "MARKDOWN";
@@ -66,6 +70,8 @@ export default function PostEditor({ initialData }: PostEditorProps) {
       excerpt: initialData?.excerpt || "",
       content: initialData?.content || "",
       featuredImg: initialData?.featuredImg || "",
+      video: initialData?.video || "",
+      category: initialData?.category || "",
       tags: initialData?.tags?.join(", ") || "",
       published: initialData?.published || false,
       contentFormat: initialData?.contentFormat || "HTML",
@@ -119,6 +125,8 @@ export default function PostEditor({ initialData }: PostEditorProps) {
               .map((t) => t.trim())
               .filter((t) => t.length > 0)
           : [],
+        video: data.video || null,
+        category: data.category || null,
         contentFormat: editorMode === "markdown" ? "MARKDOWN" : "HTML",
       };
 
@@ -226,6 +234,24 @@ export default function PostEditor({ initialData }: PostEditorProps) {
             onChange={(url) => setValue("featuredImg", url)}
             onRemove={() => setValue("featuredImg", "")}
             disabled={isSubmitting}
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="video">Video Link (YouTube/Vimeo)</Label>
+          <Input
+            id="video"
+            {...register("video")}
+            placeholder="https://youtube.com/watch?v=..."
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="category">Category</Label>
+          <Input
+            id="category"
+            {...register("category")}
+            placeholder="Technology, Lifestyle, Tutorial..."
           />
         </div>
 

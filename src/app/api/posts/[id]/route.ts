@@ -11,6 +11,8 @@ const updatePostSchema = z.object({
     slug: z.string().min(1).optional(),
     excerpt: z.string().optional(),
     featuredImg: z.string().optional(),
+    video: z.string().nullable().optional(),
+    category: z.string().nullable().optional(),
     tags: z.array(z.string()).optional(),
     published: z.boolean().optional(),
     contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
