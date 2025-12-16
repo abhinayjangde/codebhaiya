@@ -49,7 +49,9 @@ interface PostEditorProps {
 
 export default function PostEditor({ initialData }: PostEditorProps) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittingAction, setSubmittingAction] = useState<
+    "draft" | "publish" | null
+  >(null);
 
   // Determine initial editor mode based on content format
   const initialMode: EditorMode =
@@ -115,7 +117,8 @@ export default function PostEditor({ initialData }: PostEditorProps) {
   };
 
   const onSubmit = async (data: PostFormData) => {
-    setIsSubmitting(true);
+    const action = data.published ? "publish" : "draft";
+    setSubmittingAction(action);
     try {
       const formattedData = {
         ...data,
@@ -165,7 +168,7 @@ export default function PostEditor({ initialData }: PostEditorProps) {
         error instanceof Error ? error.message : "Something went wrong"
       );
     } finally {
-      setIsSubmitting(false);
+      setSubmittingAction(null);
     }
   };
 
@@ -183,16 +186,16 @@ export default function PostEditor({ initialData }: PostEditorProps) {
             type="submit"
             variant="outline"
             onClick={() => setValue("published", false)}
-            disabled={isSubmitting}
+            disabled={submittingAction !== null}
           >
-            {isSubmitting ? "Saving..." : "Save Draft"}
+            {submittingAction === "draft" ? "Saving..." : "Save Draft"}
           </Button>
           <Button
             type="submit"
             onClick={() => setValue("published", true)}
-            disabled={isSubmitting}
+            disabled={submittingAction !== null}
           >
-            {isSubmitting ? "Publishing..." : "Publish"}
+            {submittingAction === "publish" ? "Publishing..." : "Publish"}
           </Button>
         </div>
       </div>
@@ -233,7 +236,7 @@ export default function PostEditor({ initialData }: PostEditorProps) {
             value={watch("featuredImg") || ""}
             onChange={(url) => setValue("featuredImg", url)}
             onRemove={() => setValue("featuredImg", "")}
-            disabled={isSubmitting}
+            disabled={submittingAction !== null}
           />
         </div>
 
