@@ -60,7 +60,6 @@ const Login = () => {
                   { duration: 6000 }
                 );
               } catch (emailError) {
-                console.error("Failed to send verification email:", emailError);
                 toast.error(
                   "Email not verified. Please check your inbox or try again later.",
                   { duration: 6000 }
@@ -73,7 +72,6 @@ const Login = () => {
         }
       );
     } catch (err) {
-      console.error("Unexpected error:", err);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);

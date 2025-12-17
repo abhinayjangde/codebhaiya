@@ -25,11 +25,6 @@ interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, text, html }: SendEmailOptions) {
   if (!transporter) {
-    console.warn(
-      "[Email] SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS environment variables."
-    );
-    console.log("[Email] Would have sent email to:", to);
-    console.log("[Email] Subject:", subject);
     return null;
   }
 
@@ -49,9 +44,6 @@ export async function sendVerificationEmail(
   url: string,
   userName: string
 ) {
-  console.log("[Email] sendVerificationEmail called");
-  console.log("[Email] Recipient:", to);
-  console.log("[Email] SMTP configured:", isSmtpConfigured);
   const html = `
     <!DOCTYPE html>
     <html>
