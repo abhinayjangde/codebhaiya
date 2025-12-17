@@ -61,9 +61,9 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="min-h-screen dark:bg-background py-5 bg-gray-50 md:p-4 lg:p-12">
-      <div className="max-w-5xl mx-auto bg-white dark:bg-black/30 rounded-lg shadow-md p-6 lg:p-10 z-0 relative">
-        <h1 className="text-center text-xl md:text-3xl justify-center lg:text-4xl font-semibold text-gray-800 dark:text-white mb-1 flex border-b pb-2">
+    <div className="min-h-screen dark:bg-background py-5 bg-gray-50 p-4 lg:py-8">
+      <div className="max-w-full bg-white dark:bg-black/30 rounded-lg shadow-md p-6 lg:p-8 z-0 relative">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 dark:text-white mb-6 border-b pb-4">
           Admin Dashboard
         </h1>
 
