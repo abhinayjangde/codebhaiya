@@ -1,6 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
+import { sendVerificationEmail } from "./email";
+import env from "@/config/env";
 
 interface SessionUser {
   id: string;
@@ -17,16 +19,38 @@ interface SessionData {
 }
 
 export const auth = betterAuth({
-  secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  secret: env.betterAuthSecret,
+  baseURL: env.betterAuthUrl,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false, // Require email verification before login
+    requireEmailVerification: true, // Block login if email not verified, auto-sends new verification email
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      console.log("[Auth] Sending verification email to:", user.email);
+      console.log("[Auth] Verification URL:", url);
+      try {
+        await sendVerificationEmail(user.email, url, user.name);
+        console.log("[Auth] Verification email sent successfully");
+      } catch (error) {
+        console.error("[Auth] Failed to send verification email:", error);
+      }
+    },
+    sendOnSignUp: true, // Automatically send verification email on signup
+    autoVerify: false, // Don't auto-verify - require clicking the email link
   },
   callbacks: {
-    session: async ({ session, user }: { session: SessionData; user: SessionUser }) => {
+    session: async ({
+      session,
+      user,
+    }: {
+      session: SessionData;
+      user: SessionUser;
+    }) => {
       return {
         ...session,
         user: {
