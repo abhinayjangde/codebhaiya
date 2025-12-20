@@ -35,7 +35,7 @@ const sidebarItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
-
+  console.log(pathname);
   return (
     <div className="min-h-screen dark:bg-background py-5 bg-gray-50 p-4 lg:py-8">
       <div className="max-w-full bg-white dark:bg-black/30 rounded-lg shadow-md p-6 lg:p-8 z-0 relative">
