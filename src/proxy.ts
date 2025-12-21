@@ -16,6 +16,13 @@ export default function proxy(request: NextRequest) {
   if (!sessionCookie && request.nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+  if (
+    sessionCookie &&
+    (request.nextUrl.pathname.startsWith("/forgot-password") ||
+      request.nextUrl.pathname.startsWith("/reset-password"))
+  ) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
   // Redirect logged-in users away from auth pages
   const authPages = ["/login", "/register"];

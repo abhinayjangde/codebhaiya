@@ -147,3 +147,112 @@ export async function sendVerificationEmail(
     html,
   });
 }
+
+export async function sendPasswordResetEmail(
+  to: string,
+  url: string,
+  userName: string
+) {
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reset Your Password - CodeBhaiya</title>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table role="presentation" style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td align="center" style="padding: 40px 20px;">
+              <table role="presentation" style="max-width: 480px; width: 100%; border-collapse: collapse; background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); border-radius: 16px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                <!-- Header -->
+                <tr>
+                  <td style="padding: 40px 40px 20px; text-align: center;">
+                    <div style="display: inline-block; padding: 16px; background: rgba(239, 68, 68, 0.1); border-radius: 16px; margin-bottom: 20px;">
+                      <span style="font-size: 32px;">🔐</span>
+                    </div>
+                    <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">
+                      CodeBhaiya
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 20px 40px;">
+                    <h2 style="margin: 0 0 16px; font-size: 22px; font-weight: 600; color: #ffffff;">
+                      Reset Your Password
+                    </h2>
+                    <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.6; color: #a0aec0;">
+                      Hey ${userName}! 👋
+                    </p>
+                    <p style="margin: 0 0 32px; font-size: 16px; line-height: 1.6; color: #a0aec0;">
+                      We received a request to reset your password. Click the button below to create a new password.
+                    </p>
+                    
+                    <!-- CTA Button -->
+                    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                      <tr>
+                        <td align="center">
+                          <a href="${url}" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 12px; box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.4);">
+                            Reset Password
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <p style="margin: 32px 0 0; font-size: 14px; line-height: 1.6; color: #718096;">
+                      If the button doesn't work, copy and paste this link into your browser:
+                    </p>
+                    <p style="margin: 8px 0 0; font-size: 12px; color: #ef4444; word-break: break-all;">
+                      ${url}
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px 40px; background: rgba(0, 0, 0, 0.2);">
+                    <p style="margin: 0 0 8px; font-size: 14px; color: #ef4444; text-align: center; font-weight: 600;">
+                      ⚠️ This link will expire in 10 minutes.
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #4a5568; text-align: center;">
+                      If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Footer branding -->
+              <p style="margin: 24px 0 0; font-size: 12px; color: #4a5568;">
+                © ${new Date().getFullYear()} CodeBhaiya. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `;
+
+  const text = `
+    Reset Your Password - CodeBhaiya
+    
+    Hey ${userName}!
+    
+    We received a request to reset your password. Click the link below to create a new password:
+    
+    ${url}
+    
+    This link will expire in 10 minutes.
+    
+    If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
+  `;
+
+  return sendEmail({
+    to,
+    subject: "Reset Your Password - CodeBhaiya",
+    text,
+    html,
+  });
+}

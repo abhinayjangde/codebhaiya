@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
-import { sendVerificationEmail } from "./email";
+import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
 import env from "@/config/env";
 
 interface SessionUser {
@@ -28,6 +28,14 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: false, // Require email verification before login
     requireEmailVerification: true, // Block login if email not verified, auto-sends new verification email
+    sendResetPassword: async ({ user, url }) => {
+      try {
+        await sendPasswordResetEmail(user.email, url, user.name);
+      } catch (error) {
+        console.error("[Auth] Failed to send password reset email:", error);
+      }
+    },
+    resetPasswordTokenExpiresIn: 600, // 10 minutes in seconds
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
