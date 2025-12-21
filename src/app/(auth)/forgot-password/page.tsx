@@ -134,15 +134,10 @@ const ForgotPassword = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-center mb-8"
         >
-          <motion.div
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-destructive/10 mb-4"
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <KeyRound className="w-8 h-8 text-destructive" />
-          </motion.div>
-          <h1 className="text-2xl font-bold text-foreground">CodeBhaiya</h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <h1 className="sm:text-4xl text-2xl font-medium title-font uppercase">
+            CodeBhaiya
+          </h1>
+          <p className="font-semibold text-sm md:text-lg text-center opacity-75">
             Reset your password
           </p>
         </motion.div>
