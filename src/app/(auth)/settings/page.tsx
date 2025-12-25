@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import SettingsForm from "./settings-form";
 import DeleteAccountDialog from "./delete-account-dialog";
+import ChangePasswordDialog from "./change-password-dialog";
 
 export default async function SettingsPage() {
   const session = await auth.api.getSession({
@@ -33,6 +34,15 @@ export default async function SettingsPage() {
         <div className="bg-card border rounded-lg p-6 shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
           <SettingsForm user={user} />
+        </div>
+
+        {/* Security Section */}
+        <div className="mt-8 bg-card border rounded-lg p-6 shadow-sm">
+          <h2 className="text-xl font-semibold mb-2">Security</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Manage your account security settings.
+          </p>
+          <ChangePasswordDialog />
         </div>
 
         {/* Danger Zone */}

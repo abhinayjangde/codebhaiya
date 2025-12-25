@@ -47,7 +47,7 @@ export function LoginForm({
         },
         {
           onSuccess: () => {
-            toast.success(`Welcome back!`);
+            toast.success(`Welcome back! ${email}`);
             router.push("/dashboard");
           },
           onError: async (ctx) => {
@@ -138,7 +138,7 @@ export function LoginForm({
 
               <FieldDescription className="text-center">
                 Don&apos;t have an account?{" "}
-                <Link href="/register">Sign up</Link>
+                <Link href="/register">Register</Link>
               </FieldDescription>
             </FieldGroup>
           </form>
