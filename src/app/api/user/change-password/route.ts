@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     const validationResult = changePasswordSchema.safeParse(body);
 
     if (!validationResult.success) {
-      const errors = validationResult.error.errors;
+      const errors = validationResult.error.issues;
       return NextResponse.json({ error: errors[0].message }, { status: 422 });
     }
 

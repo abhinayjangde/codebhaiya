@@ -4,6 +4,7 @@ import { VscColorMode } from "react-icons/vsc";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useTheme } from "next-themes";
 
@@ -11,6 +12,7 @@ const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = authClient.useSession();
+  const router = useRouter();
   const { setTheme } = useTheme();
   const [mode, setMode] = useState("dark");
   const [mounted, setMounted] = useState(false);
@@ -206,8 +208,9 @@ const Navbar: React.FC = () => {
                   </ul>
                   <div className="border-t">
                     <button
-                      onClick={() => {
-                        authClient.signOut();
+                      onClick={async () => {
+                        await authClient.signOut();
+                        router.push("/");
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-black dark:text-gray-200 dark:hover:text-white"
                     >
