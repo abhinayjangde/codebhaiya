@@ -6,10 +6,10 @@
                 {
                     "type": "header",
                     "key": "host",
-                    "value": "www.codebhaiya.com"
+                    "value": "codebhaiya.com"
                 }
             ],
-            "destination": "https://codebhaiya.com/:path*",
+            "destination": "https://www.codebhaiya.com/:path*",
             "permanent": true
         }
     ]
