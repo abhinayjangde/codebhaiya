@@ -1,0 +1,16 @@
+{
+    "redirects": [
+        {
+            "source": "/:path*",
+            "has": [
+                {
+                    "type": "header",
+                    "key": "host",
+                    "value": "www.codebhaiya.com"
+                }
+            ],
+            "destination": "https://codebhaiya.com/:path*",
+            "permanent": true
+        }
+    ]
+}
