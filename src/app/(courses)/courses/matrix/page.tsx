@@ -46,11 +46,11 @@ const MatrixCourse = () => {
   return (
     <>
       <div className="min-h-screen w-full dark:bg-background bg-white dark:bg-grid-white/[0.1] bg-grid-black/[0.1] pb-10">
-        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-background bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_100%,black)]"></div>
+        <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-background bg-white mask-[radial-gradient(ellipse_at_center,transparent_100%,black)]"></div>
 
         {/* Top Course Thumbnail */}
         <div className="pt-10 sm:pt-28 flex flex-col lg:flex-row items-center justify-center gap-6 sm:gap-10 px-4 sm:px-6">
-          <div className="flex flex-col justify-center items-start gap-4 w-full lg:w-[40rem] dark:text-white">
+          <div className="flex flex-col justify-center items-start gap-4 w-full lg:w-160 dark:text-white">
             <p className="text-sm sm:text-xl text-white dark:bg-gray-800 rounded-full bg-gray-800 px-3 sm:px-4 py-2 w-fit uppercase">
               Build Real World Applications 🚀
             </p>
