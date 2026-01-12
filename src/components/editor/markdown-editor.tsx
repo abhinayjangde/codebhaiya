@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import MarkdownRenderer from "@/components/blog/markdown-renderer";
 import {
@@ -17,24 +17,107 @@ import {
   Heading3,
   Eye,
   Edit3,
+  Loader2,
+  Upload,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface MarkdownEditorProps {
   content: string;
   onChange: (content: string) => void;
+  userId?: string;
+  postId?: string;
 }
 
 export default function MarkdownEditor({
   content,
   onChange,
+  userId,
+  postId,
 }: MarkdownEditorProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadImage = useCallback(
+    async (file: File): Promise<string | null> => {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed");
+        return null;
+      }
+
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        toast.error("File size must be less than 5MB");
+        return null;
+      }
+
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const url = postId
+          ? `/api/upload/post-image?postId=${postId}`
+          : `/api/upload/post-image`;
+
+        const response = await fetch(url, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Upload failed");
+        }
+
+        const data = await response.json();
+        toast.success("Image uploaded successfully");
+        return data.url;
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error(
+          error instanceof Error ? error.message : "Failed to upload image"
+        );
+        return null;
+      } finally {
+        setIsUploading(false);
+      }
+    },
+    [postId]
+  );
+
+  const insertAtCursor = useCallback(
+    (text: string) => {
+      const textarea = textareaRef.current;
+      if (!textarea) {
+        onChange(content + text);
+        return;
+      }
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const newContent =
+        content.substring(0, start) + text + content.substring(end);
+
+      onChange(newContent);
+
+      // Set cursor position after insertion
+      setTimeout(() => {
+        textarea.focus();
+        const newCursorPos = start + text.length;
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+      }, 0);
+    },
+    [content, onChange]
+  );
 
   const insertMarkdown = useCallback(
     (before: string, after: string = "", placeholder: string = "") => {
-      const textarea = document.getElementById(
-        "markdown-textarea"
-      ) as HTMLTextAreaElement;
+      const textarea = textareaRef.current;
       if (!textarea) return;
 
       const start = textarea.selectionStart;
@@ -61,6 +144,88 @@ export default function MarkdownEditor({
     },
     [content, onChange]
   );
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+
+      const files = e.dataTransfer?.files;
+      if (!files || files.length === 0) return;
+
+      const imageFile = Array.from(files).find((file) =>
+        file.type.startsWith("image/")
+      );
+      if (!imageFile) {
+        toast.error("Please drop an image file");
+        return;
+      }
+
+      const url = await uploadImage(imageFile);
+      if (url) {
+        insertAtCursor(`\n![Image](${url})\n`);
+      }
+    },
+    [uploadImage, insertAtCursor]
+  );
+
+  const handlePaste = useCallback(
+    async (e: React.ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      const imageItem = Array.from(items).find(
+        (item) => item.type.indexOf("image") !== -1
+      );
+      if (!imageItem) return;
+
+      const file = imageItem.getAsFile();
+      if (!file) return;
+
+      e.preventDefault();
+
+      const url = await uploadImage(file);
+      if (url) {
+        insertAtCursor(`![Image](${url})`);
+      }
+    },
+    [uploadImage, insertAtCursor]
+  );
+
+  const handleFileSelect = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const url = await uploadImage(file);
+      if (url) {
+        insertAtCursor(`\n![Image](${url})\n`);
+      }
+
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    },
+    [uploadImage, insertAtCursor]
+  );
+
+  const triggerFileUpload = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
 
   const toolbarButtons = [
     {
@@ -118,13 +283,16 @@ export default function MarkdownEditor({
     },
     {
       icon: ImageIcon,
-      action: () => insertMarkdown("![", "](image-url)", "alt text"),
-      title: "Image",
+      action: triggerFileUpload,
+      title: "Upload Image (or drag & drop)",
+      loading: isUploading,
     },
   ];
 
   return (
-    <div className="w-full border border-input rounded-md overflow-hidden">
+    <div
+      className={`w-full border border-input rounded-md overflow-hidden relative ${isDragging ? "ring-2 ring-primary ring-offset-2" : ""}`}
+    >
       {/* Toolbar */}
       <div className="bg-muted/50 border-b border-input p-2 flex flex-wrap gap-1 items-center">
         {toolbarButtons.map((button, index) =>
@@ -139,8 +307,13 @@ export default function MarkdownEditor({
               onClick={button.action}
               title={button.title}
               className="h-8 w-8 p-0"
+              disabled={button.loading}
             >
-              {button.icon && <button.icon className="h-4 w-4" />}
+              {button.loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                button.icon && <button.icon className="h-4 w-4" />
+              )}
             </Button>
           )
         )}
@@ -159,7 +332,7 @@ export default function MarkdownEditor({
           {"</>"}
         </Button>
 
-        <div className="flex-grow" />
+        <div className="grow" />
 
         {/* Preview Toggle */}
         <Button
@@ -179,7 +352,12 @@ export default function MarkdownEditor({
       </div>
 
       {/* Editor / Preview Area */}
-      <div className="min-h-[400px] bg-background">
+      <div
+        className="min-h-[400px] bg-background relative"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         {showPreview ? (
           <div className="p-4 min-h-[400px]">
             <MarkdownRenderer
@@ -190,10 +368,14 @@ export default function MarkdownEditor({
           </div>
         ) : (
           <textarea
+            ref={textareaRef}
             id="markdown-textarea"
             value={content}
             onChange={(e) => onChange(e.target.value)}
+            onPaste={handlePaste}
             placeholder="Write your markdown content here...
+
+Drag & drop images directly into this editor, or paste from clipboard!
 
 # Example Heading
 
@@ -216,7 +398,38 @@ function hello() {
             className="w-full min-h-[400px] p-4 bg-background text-foreground font-mono text-sm resize-none focus:outline-none"
           />
         )}
+
+        {/* Drag overlay */}
+        {isDragging && (
+          <div className="absolute inset-0 bg-primary/10 border-2 border-dashed border-primary rounded-md flex items-center justify-center pointer-events-none z-10">
+            <div className="bg-background/90 px-4 py-2 rounded-md shadow-lg flex items-center gap-2">
+              <Upload className="h-4 w-4 text-primary" />
+              <p className="text-sm font-medium text-primary">
+                Drop image here to upload
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Upload loading overlay */}
+        {isUploading && (
+          <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-md z-20">
+            <div className="flex items-center gap-2 bg-background px-4 py-2 rounded-md shadow-lg">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span className="text-sm">Uploading image...</span>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
     </div>
   );
 }

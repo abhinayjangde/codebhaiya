@@ -45,9 +45,10 @@ interface PostEditorProps {
     published?: boolean;
     contentFormat?: "HTML" | "MARKDOWN";
   };
+  userId?: string;
 }
 
-export default function PostEditor({ initialData }: PostEditorProps) {
+export default function PostEditor({ initialData, userId }: PostEditorProps) {
   const router = useRouter();
   const [submittingAction, setSubmittingAction] = useState<
     "draft" | "publish" | null
@@ -300,11 +301,15 @@ export default function PostEditor({ initialData }: PostEditorProps) {
             <RichTextEditor
               content={content}
               onChange={(value) => setValue("content", value)}
+              userId={userId}
+              postId={initialData?.id}
             />
           ) : (
             <MarkdownEditor
               content={content}
               onChange={(value) => setValue("content", value)}
+              userId={userId}
+              postId={initialData?.id}
             />
           )}
           {errors.content && (
