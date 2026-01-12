@@ -310,6 +310,7 @@ const MatrixCourse = () => {
                     <ul className="ml-2">
                       <li>- BabuBhaiya (Clone of CodeBhaiya)</li>
                       <li>- HeapOver Flow (Clone of StackOver Flow)</li>
+                      <li>- Spread (Clone of X (Formerly Twitter))</li>
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
