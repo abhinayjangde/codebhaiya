@@ -32,14 +32,6 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       pre.style.position = "relative";
       pre.classList.add("code-block-wrapper");
 
-      // Create language label
-      if (language) {
-        const languageLabel = document.createElement("span");
-        languageLabel.className = "language-label";
-        languageLabel.textContent = language;
-        pre.insertBefore(languageLabel, pre.firstChild);
-      }
-
       // Create copy button
       const copyButton = document.createElement("button");
       copyButton.className = "copy-button";
