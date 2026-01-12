@@ -179,7 +179,7 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
       className="space-y-8 max-w-4xl mx-auto py-10"
     >
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">
+        <h1 className="md:text-3xl font-bold">
           {initialData?.id ? "Edit Post" : "Create New Post"}
         </h1>
         <div className="flex gap-4">

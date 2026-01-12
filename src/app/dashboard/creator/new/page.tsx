@@ -28,7 +28,7 @@ export default async function NewPostPage() {
   }
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <PostEditor userId={user.id} />
     </div>
   );
