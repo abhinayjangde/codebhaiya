@@ -1,6 +1,6 @@
 /* Code Block Syntax Highlighting - One Dark Theme */
 .prose pre {
-  background-color: #282c34;
+  background-color: #252525;
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
@@ -99,7 +99,7 @@
   padding: 0.25rem 0.5rem;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.25rem;
+  border-radius: 0.20rem;
   color: #abb2bf;
   font-size: 0.75rem;
   cursor: pointer;
@@ -140,7 +140,7 @@
 .prose code:not(pre code) {
   background-color: rgba(135, 131, 120, 0.15);
   padding: 0.2em 0.4em;
-  border-radius: 0.25rem;
+  border-radius: 0.20rem;
   font-size: 0.875em;
   color: #e06c75;
   word-break: break-word;

@@ -119,21 +119,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </Link>
                 </div>
                 <Link
-                  href={`/author/${post.author.id}`}
+                  href={`/creator/${post.author.id}`}
                   className="text-sm text-slate-900 dark:text-white transition ease-in-out duration-150 mx-2"
                 >
                   {post.author.name}
                 </Link>
               </div>
-              <div className="rest flex mt-3 md:mt-0">
+              <div className="rest justify-center items-center flex mt-3 md:mt-0">
                 <span className="mx-1 hidden font-bold dark:text-gray-400 text-slate-500 md:block">
                   ·
                 </span>
+
                 <span className="text-sm dark:text-gray-400 text-gray-500 mx-2">
-                  {new Date(post.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
+                  Last Updated{" "}
+                  {new Date(post.updatedAt).toLocaleDateString("en-US", {
+                    month: "short",
                     day: "numeric",
+                    year: "numeric",
                   })}
                 </span>
                 <span className="mx-1 hidden font-bold dark:text-gray-400 text-slate-500 md:block">

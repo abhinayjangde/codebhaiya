@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -21,8 +21,10 @@ import {
   Image as ImageIcon,
   Code,
   FileCode,
+  Loader2,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
+import { toast } from "sonner";
 
 // Create lowlight instance with common languages
 const lowlight = createLowlight(common);
@@ -31,6 +33,8 @@ interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
   editable?: boolean;
+  userId?: string;
+  postId?: string;
 }
 
 // Language selection dropdown for code blocks
@@ -58,14 +62,20 @@ const LANGUAGES = [
   { value: "markdown", label: "Markdown" },
 ];
 
-const Toolbar = ({ editor }: { editor: any }) => {
+interface ToolbarProps {
+  editor: Editor | null;
+  onImageUpload: () => void;
+  isUploading: boolean;
+}
+
+const Toolbar = ({ editor, onImageUpload, isUploading }: ToolbarProps) => {
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
   if (!editor) {
     return null;
   }
 
-  const addImage = useCallback(() => {
+  const addImageByUrl = useCallback(() => {
     const url = window.prompt("Image URL");
 
     if (url) {
@@ -220,10 +230,31 @@ const Toolbar = ({ editor }: { editor: any }) => {
       >
         <LinkIcon className="h-4 w-4" />
       </Button>
-      <Button type="button" variant="ghost" size="sm" onClick={addImage}>
-        <ImageIcon className="h-4 w-4" />
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={onImageUpload}
+        disabled={isUploading}
+        title="Upload Image (or drag & drop)"
+      >
+        {isUploading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <ImageIcon className="h-4 w-4" />
+        )}
       </Button>
-      <div className="flex-grow" />
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={addImageByUrl}
+        title="Insert Image URL"
+        className="text-xs px-2"
+      >
+        URL
+      </Button>
+      <div className="grow" />
       <Button
         type="button"
         variant="ghost"
@@ -250,7 +281,61 @@ export default function RichTextEditor({
   content,
   onChange,
   editable = true,
+  userId,
+  postId,
 }: RichTextEditorProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadImage = useCallback(
+    async (file: File): Promise<string | null> => {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed");
+        return null;
+      }
+
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        toast.error("File size must be less than 5MB");
+        return null;
+      }
+
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const url = postId
+          ? `/api/upload/post-image?postId=${postId}`
+          : `/api/upload/post-image`;
+
+        const response = await fetch(url, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Upload failed");
+        }
+
+        const data = await response.json();
+        toast.success("Image uploaded successfully");
+        return data.url;
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error(
+          error instanceof Error ? error.message : "Failed to upload image"
+        );
+        return null;
+      } finally {
+        setIsUploading(false);
+      }
+    },
+    [postId]
+  );
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -261,7 +346,7 @@ export default function RichTextEditor({
       }),
       Image,
       Placeholder.configure({
-        placeholder: "Write something amazing...",
+        placeholder: "Write something amazing... (drag & drop images here)",
       }),
       CodeBlockLowlight.configure({
         lowlight,
@@ -279,13 +364,151 @@ export default function RichTextEditor({
         class:
           "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4 border border-t-0 border-input rounded-b-md bg-background",
       },
+      handleDrop: (view, event, slice, moved) => {
+        if (moved) return false;
+
+        const files = event.dataTransfer?.files;
+        if (!files || files.length === 0) return false;
+
+        const imageFile = Array.from(files).find((file) =>
+          file.type.startsWith("image/")
+        );
+        if (!imageFile) return false;
+
+        event.preventDefault();
+
+        uploadImage(imageFile).then((url) => {
+          if (url && editor) {
+            // Get drop position
+            const coordinates = view.posAtCoords({
+              left: event.clientX,
+              top: event.clientY,
+            });
+
+            if (coordinates) {
+              editor
+                .chain()
+                .focus()
+                .insertContentAt(coordinates.pos, {
+                  type: "image",
+                  attrs: { src: url },
+                })
+                .run();
+            } else {
+              editor.chain().focus().setImage({ src: url }).run();
+            }
+          }
+        });
+
+        return true;
+      },
+      handlePaste: (view, event) => {
+        const items = event.clipboardData?.items;
+        if (!items) return false;
+
+        const imageItem = Array.from(items).find(
+          (item) => item.type.indexOf("image") !== -1
+        );
+        if (!imageItem) return false;
+
+        const file = imageItem.getAsFile();
+        if (!file) return false;
+
+        event.preventDefault();
+
+        uploadImage(file).then((url) => {
+          if (url && editor) {
+            editor.chain().focus().setImage({ src: url }).run();
+          }
+        });
+
+        return true;
+      },
     },
   });
 
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  }, []);
+
+  const handleFileSelect = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const url = await uploadImage(file);
+      if (url && editor) {
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    },
+    [editor, uploadImage]
+  );
+
+  const triggerFileUpload = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
   return (
-    <div className="w-full">
-      {editable && <Toolbar editor={editor} />}
+    <div
+      className={`w-full relative ${isDragging ? "ring-2 ring-primary ring-offset-2 rounded-md" : ""}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {editable && (
+        <Toolbar
+          editor={editor}
+          onImageUpload={triggerFileUpload}
+          isUploading={isUploading}
+        />
+      )}
       <EditorContent editor={editor} />
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
+
+      {/* Drag overlay */}
+      {isDragging && (
+        <div className="absolute inset-0 bg-primary/10 border-2 border-dashed border-primary rounded-md flex items-center justify-center pointer-events-none z-10">
+          <div className="bg-background/90 px-4 py-2 rounded-md shadow-lg">
+            <p className="text-sm font-medium text-primary">
+              Drop image here to upload
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Upload loading overlay */}
+      {isUploading && (
+        <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-md z-20">
+          <div className="flex items-center gap-2 bg-background px-4 py-2 rounded-md shadow-lg">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="text-sm">Uploading image...</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

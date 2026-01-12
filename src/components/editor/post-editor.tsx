@@ -45,9 +45,10 @@ interface PostEditorProps {
     published?: boolean;
     contentFormat?: "HTML" | "MARKDOWN";
   };
+  userId?: string;
 }
 
-export default function PostEditor({ initialData }: PostEditorProps) {
+export default function PostEditor({ initialData, userId }: PostEditorProps) {
   const router = useRouter();
   const [submittingAction, setSubmittingAction] = useState<
     "draft" | "publish" | null
@@ -178,7 +179,7 @@ export default function PostEditor({ initialData }: PostEditorProps) {
       className="space-y-8 max-w-4xl mx-auto py-10"
     >
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">
+        <h1 className="md:text-3xl font-bold">
           {initialData?.id ? "Edit Post" : "Create New Post"}
         </h1>
         <div className="flex gap-4">
@@ -300,11 +301,15 @@ export default function PostEditor({ initialData }: PostEditorProps) {
             <RichTextEditor
               content={content}
               onChange={(value) => setValue("content", value)}
+              userId={userId}
+              postId={initialData?.id}
             />
           ) : (
             <MarkdownEditor
               content={content}
               onChange={(value) => setValue("content", value)}
+              userId={userId}
+              postId={initialData?.id}
             />
           )}
           {errors.content && (

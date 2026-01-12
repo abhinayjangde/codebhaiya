@@ -57,6 +57,7 @@ export default async function EditPostPage({
           category: post.category || undefined,
           contentFormat: post.contentFormat,
         }}
+        userId={user.id}
       />
     </div>
   );
