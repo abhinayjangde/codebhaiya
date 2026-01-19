@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { handles } from "@/helpers/handles";
 
-export default function proxy(request: NextRequest) {
+export default function proxy(request: NextRequest, response: NextResponse) {
   // handling social redirects
   const url = request.nextUrl.pathname.slice(1);
   if (url in handles) {
@@ -29,7 +29,6 @@ export default function proxy(request: NextRequest) {
   if (sessionCookie && authPages.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
-
   return NextResponse.next();
 }
 
