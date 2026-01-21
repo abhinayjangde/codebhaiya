@@ -57,7 +57,7 @@ const Courses: React.FC = () => {
                   src={course.imageUrl}
                   width={384}
                   height={216}
-                  alt="Image"
+                  alt={course.title}
                 />
                 <div className="px-6 md:my-11 lg:my-0 md:h-72 lg:h-64 lg:py-4 xl:h-52">
                   <span className="tracking-widest text-xs title-font font-medium mb-1 dark:text-gray-400">

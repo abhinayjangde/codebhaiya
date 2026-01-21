@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
               className="flex title-font font-medium items-center text-gray-900"
             >
               <Image
-                alt="logo"
+                alt="CodeBhaiya Logo"
                 src="https://avatars.githubusercontent.com/u/166032907?v=4"
                 width={100}
                 height={100}
@@ -144,7 +144,7 @@ const Navbar: React.FC = () => {
                   type="button"
                 >
                   <Image
-                    alt="avatar"
+                    alt="User Profile Avatar"
                     src={session?.user?.image || "/images/avatar.png"}
                     width={100}
                     height={100}

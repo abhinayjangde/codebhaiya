@@ -169,7 +169,7 @@ export function SignupForm({
           <div className="bg-muted relative hidden md:block">
             <Image
               src="https://avatars.githubusercontent.com/u/64852930?v=4"
-              alt="CodeBhaiya"
+              alt="CodeBhaiya - Create your account"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.6] dark:grayscale"
               width={600}
               height={600}

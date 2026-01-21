@@ -68,7 +68,12 @@ export default function ImageUpload({
               <Trash className="h-4 w-4" />
             </Button>
           </div>
-          <Image fill className="object-cover" alt="Image" src={value} />
+          <Image
+            fill
+            className="object-cover"
+            alt="Uploaded Image Preview"
+            src={value}
+          />
         </div>
       ) : (
         <div className="flex items-center justify-center w-full">

@@ -90,7 +90,7 @@ const Contact: React.FC = () => {
                 </h6>
               </div>
               <Image
-                alt="contact"
+                alt="Abhinay Jangde - Contact"
                 width={160}
                 height={100}
                 className="rounded-[50%] my-5 mx-auto py-2"

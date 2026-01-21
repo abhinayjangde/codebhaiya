@@ -45,7 +45,7 @@ const WhoAmI: React.FC = () => {
               <div className="flex items-center justify-center">
                 <Image
                   src="https://avatars.githubusercontent.com/u/64852930?v=4"
-                  alt="abhinay"
+                  alt="Abhinay Jangde - Software Engineer"
                   loading="lazy"
                   width={950}
                   height={950}
