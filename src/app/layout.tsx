@@ -7,8 +7,41 @@ import "./globals.css";
 import "@/styles/code-highlight.css";
 
 export const metadata: Metadata = {
-  title: "The right way to learn coding",
-  description: "The right way to learn coding",
+  metadataBase: new URL("https://www.codebhaiya.com"),
+  title: {
+    default: "CodeBhaiya - The right way to learn coding",
+    template: "%s | CodeBhaiya",
+  },
+  description:
+    "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+  alternates: {
+    canonical: "./",
+  },
+  openGraph: {
+    title: "CodeBhaiya - The right way to learn coding",
+    description:
+      "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+    url: "https://www.codebhaiya.com",
+    siteName: "CodeBhaiya",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 800,
+        height: 600,
+        alt: "CodeBhaiya Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CodeBhaiya - The right way to learn coding",
+    description:
+      "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+    images: ["/images/logo.png"],
+    creator: "@AbhinayJangde",
+  },
 };
 
 export default function RootLayout({
