@@ -8,6 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { BlogSearch } from "@/components/blog/blog-search";
+import { Suspense } from "react";
+
 interface PostWithAuthor {
   id: string;
   title: string;
@@ -27,10 +30,24 @@ export const metadata = {
   description: "Read the latest articles on web development, tech, and more.",
 };
 
-export default async function BlogsPage() {
+interface BlogsPageProps {
+  searchParams: Promise<{ search?: string }>;
+}
+
+export default async function BlogsPage({ searchParams }: BlogsPageProps) {
+  const { search } = await searchParams;
+  const searchQuery = search || "";
+
   const posts = await prisma.post.findMany({
     where: {
       published: true,
+      ...(searchQuery && {
+        OR: [
+          { title: { contains: searchQuery, mode: "insensitive" } },
+          { content: { contains: searchQuery, mode: "insensitive" } },
+          { excerpt: { contains: searchQuery, mode: "insensitive" } },
+        ],
+      }),
     },
     orderBy: {
       createdAt: "desc",
@@ -48,6 +65,24 @@ export default async function BlogsPage() {
   return (
     <div className="flex flex-col justify-center items-center sm:h-full w-full min-h-screen dark:bg-background bg-white ">
       <h1 className="text-4xl font-bold mb-8 text-center mt-4">Latest Blogs</h1>
+
+      <Suspense
+        fallback={
+          <div className="w-full max-w-md h-11 bg-muted/50 rounded-md animate-pulse mx-auto mb-8" />
+        }
+      >
+        <BlogSearch />
+      </Suspense>
+
+      {searchQuery && (
+        <p className="text-muted-foreground mb-4">
+          Showing results for:{" "}
+          <span className="font-semibold text-foreground">
+            &quot;{searchQuery}&quot;
+          </span>
+        </p>
+      )}
+
       <div className="md:container md:w-360 sm:p-4">
         {posts.map((post: PostWithAuthor) => (
           <div
@@ -107,7 +142,11 @@ export default async function BlogsPage() {
         ))}
         {posts.length === 0 && (
           <div className="col-span-full text-center py-20">
-            <p className="text-xl text-muted-foreground">No posts found yet.</p>
+            <p className="text-xl text-muted-foreground">
+              {searchQuery
+                ? `No blogs found matching "${searchQuery}". Try a different search term.`
+                : "No posts found yet."}
+            </p>
           </div>
         )}
       </div>
