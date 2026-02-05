@@ -3,20 +3,45 @@ import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
 export default function BlogsLoading() {
   return (
     <div className="flex flex-col justify-center items-center sm:h-full w-full min-h-screen dark:bg-background bg-white">
-      <Skeleton className="h-10 w-48 mb-8 mt-4" />
-      <div className="md:container md:w-360 sm:p-4">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className="my-2 md:my-4 md:dark:bg-gray-950 md:bg-gray-50 dark:border-gray-800 md:border md:rounded-md md:pl-4 border-b"
-          >
-            <div className="py-2 md:py-4 flex flex-wrap justify-center items-center md:justify-center md:items-center md:flex-nowrap gap-2">
-              <Skeleton className="h-40 w-80 sm:w-full md:w-60 rounded-md" />
-              <div className="md:grow mx-3 md:px-3 space-y-3 flex-1">
-                <Skeleton className="hidden md:block h-4 w-48" />
-                <Skeleton className="h-6 w-3/4" />
-                <SkeletonText lines={2} className="hidden md:block" />
-                <Skeleton className="h-4 w-32 md:hidden" />
+      {/* Header Skeleton */}
+      <Skeleton className="h-8 w-48 mt-6" />
+      <Skeleton className="h-4 w-72 mt-2 mb-4" />
+
+      {/* Search Skeleton */}
+      <div className="w-full max-w-md mx-auto mb-8 px-4">
+        <Skeleton className="h-11 w-full rounded-md" />
+      </div>
+
+      <div className="w-full px-4 md:container md:w-360 md:p-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i}>
+            {/* Mobile Card Skeleton */}
+            <div className="md:hidden mb-4">
+              <div className="bg-card dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-lg border border-border/50">
+                <Skeleton className="w-full aspect-video" />
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-3 w-20" />
+                    <Skeleton className="h-3 w-3 rounded-full" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-3/4" />
+                  <SkeletonText lines={2} />
+                  <Skeleton className="h-4 w-24 mt-2" />
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Card Skeleton */}
+            <div className="hidden md:block my-4 dark:bg-gray-950 bg-gray-50 dark:border-gray-800 border rounded-md pl-4">
+              <div className="py-4 flex justify-center items-center gap-2">
+                <Skeleton className="h-36 w-60 rounded-l-lg" />
+                <div className="grow px-3 space-y-3">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-6 w-3/4" />
+                  <SkeletonText lines={2} />
+                </div>
               </div>
             </div>
           </div>
