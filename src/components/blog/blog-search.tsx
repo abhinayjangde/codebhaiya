@@ -18,12 +18,15 @@ export function BlogSearch() {
       setSearchValue(term);
       startTransition(() => {
         const params = new URLSearchParams(searchParams.toString());
+        // Always reset to page 1 when search changes
+        params.delete("page");
         if (term) {
           params.set("search", term);
         } else {
           params.delete("search");
         }
-        router.push(`/blogs?${params.toString()}`);
+        const queryString = params.toString();
+        router.push(queryString ? `/blogs?${queryString}` : "/blogs");
       });
     },
     [router, searchParams]
