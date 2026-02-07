@@ -52,6 +52,7 @@ model Post {
   content       String
   contentFormat ContentFormat @default(HTML)
   excerpt       String?
+  summary       String? // AI-generated TL;DR summary (cached)
   published     Boolean       @default(false)
   publishedAt   DateTime?
   authorId      String

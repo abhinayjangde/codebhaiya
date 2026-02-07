@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineRead } from "react-icons/ai";
 import BlogPostWrapper from "@/components/blog/blog-post-wrapper";
+import TldrChips from "@/components/blog/tldr-chips";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -147,6 +148,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </span>
               </div>
             </div>
+
+            {/* TL;DR and Explain Code Chips */}
+            <TldrChips postId={post.id} existingSummary={post.summary} />
 
             {post.video && (
               <iframe
