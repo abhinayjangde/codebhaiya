@@ -29,21 +29,13 @@ export const auth = betterAuth({
     autoSignIn: false, // Require email verification before login
     requireEmailVerification: true, // Block login if email not verified, auto-sends new verification email
     sendResetPassword: async ({ user, url }) => {
-      try {
-        await sendPasswordResetEmail(user.email, url, user.name);
-      } catch (error) {
-        console.error("[Auth] Failed to send password reset email:", error);
-      }
+      await sendPasswordResetEmail(user.email, url, user.name ?? "there");
     },
     resetPasswordTokenExpiresIn: 600, // 10 minutes in seconds
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
-      try {
-        await sendVerificationEmail(user.email, url, user.name);
-      } catch (error) {
-        console.error("[Auth] Failed to send verification email:", error);
-      }
+      await sendVerificationEmail(user.email, url, user.name ?? "there");
     },
     sendOnSignUp: true, // Automatically send verification email on signup
     autoVerify: false, // Don't auto-verify - require clicking the email link

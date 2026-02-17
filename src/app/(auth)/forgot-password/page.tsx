@@ -4,7 +4,8 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Mail, Loader2, KeyRound, ArrowLeft, CheckCircle } from "lucide-react";
+import { Mail, Loader2, ArrowLeft, CheckCircle } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,19 +35,18 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/request-password-reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, redirectTo: "/reset-password" }),
+      const { error } = await authClient.requestPasswordReset({
+        email,
+        redirectTo: "/reset-password",
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (!error) {
         setEmailSent(true);
-        toast.success("Password reset link sent! Check your email.");
+        toast.success(
+          "If an account exists for this email, a reset link has been sent."
+        );
       } else {
-        toast.error(data.message || "Failed to send reset link");
+        toast.error(error.message || "Failed to send reset link");
       }
     } catch (err) {
       console.error("Password reset error:", err);
@@ -263,8 +263,10 @@ const ForgotPassword = () => {
                     Check your email
                   </CardTitle>
                   <CardDescription className="text-base">
-                    We&apos;ve sent a password reset link to{" "}
+                    For security, we can&apos;t confirm account existence. If an
+                    account matches{" "}
                     <span className="font-medium text-foreground">{email}</span>
+                    , you&apos;ll receive a reset link.
                   </CardDescription>
                 </CardHeader>
 

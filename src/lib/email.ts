@@ -2,7 +2,16 @@ import nodemailer from "nodemailer";
 import env from "@/config/env";
 
 // Check if SMTP credentials are configured
-const isSmtpConfigured = Boolean(env.smtp.user && env.smtp.pass);
+const missingSmtpKeys: string[] = [];
+if (!env.smtp.user) {
+  missingSmtpKeys.push("SMTP_USER (or MAIL_USER)");
+}
+if (!env.smtp.pass) {
+  missingSmtpKeys.push("SMTP_PASS (or MAIL_PASSWORD)");
+}
+
+const isSmtpConfigured = missingSmtpKeys.length === 0;
+const isMailtrapSandbox = env.smtp.host.includes("sandbox.smtp.mailtrap.io");
 
 const transporter = isSmtpConfigured
   ? nodemailer.createTransport({
@@ -25,7 +34,17 @@ interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, text, html }: SendEmailOptions) {
   if (!transporter) {
-    return null;
+    throw new Error(
+      `[Email] SMTP is not configured correctly. Missing: ${missingSmtpKeys.join(
+        ", "
+      )}`
+    );
+  }
+
+  if (isMailtrapSandbox) {
+    console.warn(
+      "[Email] SMTP host is Mailtrap sandbox. Emails are captured in Mailtrap inbox and are not delivered to real inboxes."
+    );
   }
 
   const mailOptions = {

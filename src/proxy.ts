@@ -1,8 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { handles } from "@/helpers/handles";
+import { csrfErrorResponse, isStateChangingMethod, isValidCsrfRequest } from "@/lib/api-security";
 
-export default function proxy(request: NextRequest, response: NextResponse) {
+export default function proxy(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/api")) {
+    const isAuthApi = request.nextUrl.pathname.startsWith("/api/auth");
+
+    if (
+      !isAuthApi &&
+      isStateChangingMethod(request.method) &&
+      !isValidCsrfRequest(request)
+    ) {
+      return csrfErrorResponse();
+    }
+
+    return NextResponse.next();
+  }
+
   // handling social redirects
   const url = request.nextUrl.pathname.slice(1);
   if (url in handles) {
@@ -33,5 +48,5 @@ export default function proxy(request: NextRequest, response: NextResponse) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/api/:path*", "/((?!_next/static|_next/image|favicon.ico).*)"],
 };
