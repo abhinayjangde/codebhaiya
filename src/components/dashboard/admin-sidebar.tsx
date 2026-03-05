@@ -27,8 +27,8 @@ const sidebarItems = [
     icon: FileText,
   },
   {
-    name: "Comments",
-    href: "/dashboard/admin/comments",
+    name: "Messages",
+    href: "/dashboard/admin/messages",
     icon: MessageSquare,
   },
 ];

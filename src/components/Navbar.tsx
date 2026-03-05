@@ -90,6 +90,27 @@ const Navbar: React.FC = () => {
             >
               Contact
             </Link>
+            <a
+              href="https://chat.codebhaiya.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative inline-flex items-center gap-1.5 ml-1 px-3 py-1 rounded-full text-white text-[13px] font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              style={{
+                background: "#000000",
+                boxShadow: "0 0 12px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              ✨ Try CodeBhaiyaAI
+              <span
+                className="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide"
+                style={{
+                  background: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                beta
+              </span>
+            </a>
           </nav>
 
           {/* Right Section - Auth & Theme */}
@@ -265,6 +286,28 @@ const Navbar: React.FC = () => {
             >
               Contact
             </Link>
+            <a
+              href="https://chat.codebhaiya.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeNavbar}
+              className="inline-flex items-center gap-2 mt-2 mb-1 px-4 py-2.5 rounded-full text-white text-[14px] font-semibold shadow-lg transition-all duration-300 active:scale-95"
+              style={{
+                background: "#000000",
+                boxShadow: "0 0 14px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              ✨ Try CodeBhaiyaAI
+              <span
+                className="inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide"
+                style={{
+                  background: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                beta
+              </span>
+            </a>
             {mounted && !session && (
               <>
                 <Link

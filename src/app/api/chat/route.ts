@@ -28,8 +28,10 @@ const chatSchema = z.object({
   messages: z.array(
     z
       .object({
-        role: z.enum(["user", "assistant"]),
-        content: z.string(),
+        // AI SDK v4 UIMessage uses `parts` array; older format uses `content` string
+        role: z.enum(["user", "assistant", "system", "tool"]),
+        content: z.string().optional(),
+        parts: z.array(z.object({ type: z.string() }).passthrough()).optional(),
       })
       .passthrough()
   ),
