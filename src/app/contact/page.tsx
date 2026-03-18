@@ -148,7 +148,8 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
-      <section className="sm:h-200 text-gray-600 dark:text-white dark:bg-dark body-font relative">
+      {/* contact form section */}
+      <section className="sm:h-200 text-gray-600 bg-gray-100 dark:text-white dark:bg-background body-font relative">
         <div className="container px-5 py-24 mx-auto">
           <div className="my-4 md:my-10 flex flex-col md:gap-2 items-center justify-center text-black dark:text-white">
             <h2 className="sm:text-4xl text-2xl font-medium title-font uppercase">
