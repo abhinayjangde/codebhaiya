@@ -3,8 +3,29 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
+function normalizePgConnectionString(connectionString: string): string {
+  try {
+    const parsed = new URL(connectionString);
+    const sslMode = parsed.searchParams.get("sslmode");
+
+    // Preserve current strong TLS behavior and silence pg v8 warnings.
+    if (
+      sslMode === "prefer" ||
+      sslMode === "require" ||
+      sslMode === "verify-ca"
+    ) {
+      parsed.searchParams.set("sslmode", "verify-full");
+      return parsed.toString();
+    }
+
+    return connectionString;
+  } catch {
+    return connectionString;
+  }
+}
+
 const pool = new Pool({
-  connectionString: env.databaseUrl,
+  connectionString: normalizePgConnectionString(env.databaseUrl),
   max: 10,
   idleTimeoutMillis: 60000,
   connectionTimeoutMillis: 10000,
