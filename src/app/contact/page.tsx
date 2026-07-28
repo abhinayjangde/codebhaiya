@@ -78,7 +78,7 @@ const Contact: React.FC = () => {
         // If we got a 500 without JSON, or a generic string error
         throw new Error(
           (typeof data?.error === "string" ? data.error : undefined) ||
-            `Server error (${response.status}). Please try again later.`
+          `Server error (${response.status}). Please try again later.`
         );
       }
 
@@ -246,11 +246,10 @@ const Contact: React.FC = () => {
                   <button
                     onClick={handleSubmit}
                     disabled={isDisabled}
-                    className={`inline-flex items-center text-white rounded-full px-4 py-2 text-sm font-semibold mr-2 my-2 transition-colors ${
-                      isDisabled
-                        ? "bg-gray-400 dark:bg-gray-700 cursor-not-allowed opacity-50"
-                        : "bg-gray-600 dark:bg-black cursor-pointer hover:bg-black dark:hover:bg-gray-800"
-                    }`}
+                    className={`inline-flex items-center text-white rounded-full px-4 py-2 text-sm font-semibold mr-2 my-2 transition-colors ${isDisabled
+                      ? "bg-gray-400 dark:bg-gray-700 cursor-not-allowed opacity-50"
+                      : "bg-gray-600 dark:bg-black cursor-pointer hover:bg-black dark:hover:bg-gray-800"
+                      }`}
                   >
                     SUBMIT
                   </button>
@@ -260,6 +259,9 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </section>
+      <div>
+        <p className="bg-blue-400/30 p-2" >email us - codebhaiya@gmail.com</p>
+      </div>
     </>
   );
 };
