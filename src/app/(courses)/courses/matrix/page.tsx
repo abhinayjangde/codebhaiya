@@ -280,17 +280,41 @@ const MatrixCourse = () => {
                 </AccordionItem>
 
                 <AccordionItem value="item-14">
-                  <AccordionTrigger>Database (MongoDB)</AccordionTrigger>
-                  <AccordionContent>Coming soon...</AccordionContent>
+                  <AccordionTrigger>Database (MongoDB & PostgreSQL)</AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="ml-2">
+                      <li>- What is Database?</li>
+                      <li>- SQL Vs NoSQL</li>
+                      <li>- PostgreSQL</li>
+                      <li>- MongoDB</li>
+                      <li>- ORM vs ODM</li>
+                      <li>- Postgres In Action</li>
+                      <li>- MongoDB In Action</li>
+                    </ul>
+                  </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="item-15">
                   <AccordionTrigger>Security & Authentication</AccordionTrigger>
-                  <AccordionContent>Coming soon...</AccordionContent>
+                  <AccordionContent>
+                    <ul className="ml-2">
+                      <li>- What is Security?</li>
+                      <li>- Authentication</li>
+                      <li>- Authorization</li>
+                      <li>- JWT</li>
+                    </ul>
+                  </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-16">
                   <AccordionTrigger>API Development & Testing</AccordionTrigger>
-                  <AccordionContent>Coming soon...</AccordionContent>
+                  <AccordionContent>
+                    <ul className="ml-2">
+                      <li>- What is an API?</li>
+                      <li>- RESTful APIs</li>
+                      <li>- GraphQL</li>
+                      <li>- API Testing</li>
+                    </ul>
+                  </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-17">
                   <AccordionTrigger>WebSocket & WebRTC</AccordionTrigger>
@@ -301,6 +325,8 @@ const MatrixCourse = () => {
                   <AccordionContent>
                     <ul className="ml-2">
                       <li>- Basics Of Linux</li>
+                      <li>- Docker</li>
+                      <li>- CI/CD</li>
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
@@ -311,6 +337,17 @@ const MatrixCourse = () => {
                       <li>- BabuBhaiya (Clone of CodeBhaiya)</li>
                       <li>- HeapOver Flow (Clone of StackOver Flow)</li>
                       <li>- Spread (Clone of X (Formerly Twitter))</li>
+                      <li>- Chat.Codebhaiya (Clone of Codebhaiya.AI)</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-20">
+                  <AccordionTrigger>Extras</AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="ml-2">
+                      <li>- Go lang</li>
+                      <li>- Python</li>
+                      <li>- GraphQL</li>
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
