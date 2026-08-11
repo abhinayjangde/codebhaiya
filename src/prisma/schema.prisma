@@ -143,3 +143,22 @@ model ContactSubmission {
 
   @@map("contact_submission")
 }
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// FREE = watchable preview
+enum LessonAccess {
+  FREE
+  PAID
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
