@@ -46,6 +46,8 @@ model Profile {
   bio    String?
   userId String  @unique
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profile")
 }
 
 model Post {
@@ -69,6 +71,8 @@ model Post {
   comments      Comment[]
   likes         Like[]
   views         Int           @default(0)
+
+  @@map("post")
 }
 
 model Comment {
@@ -80,6 +84,8 @@ model Comment {
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("comment")
 }
 
 model Like {
@@ -91,6 +97,8 @@ model Like {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
+
+  @@map("like")
 }
 
 model Session {
