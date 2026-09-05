@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { deleteImageFromCloudinary } from "@/lib/cloudinary";
 import {
   apiSuccess,
@@ -76,14 +77,24 @@ export async function PUT(
 
     if (requestedFormat) {
       const formatValue = requestedFormat === "MARKDOWN" ? "MARKDOWN" : "HTML";
-      await prisma.$executeRaw`UPDATE "Post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${id}`;
-      return apiSuccess({ ...updatedPost, contentFormat: formatValue });
+      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${id}`;
+      return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
     }
 
-    return apiSuccess(updatedPost);
+    return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
+    }
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return apiError(
+        "Slug already exists",
+        409,
+        "Choose a different slug for this post."
+      );
     }
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";

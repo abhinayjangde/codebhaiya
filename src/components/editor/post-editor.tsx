@@ -159,7 +159,7 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
         );
       }
 
-      const post = await res.json();
+      const { data: post } = await res.json();
       toast.success("Post saved successfully");
       router.push(`/blog/${post.slug}`);
       router.refresh();

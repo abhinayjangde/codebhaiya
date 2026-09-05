@@ -17,6 +17,30 @@ const postSchema = z.object({
   contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
 });
 
+async function createPostWithUniqueSlug(
+  data: Omit<Prisma.PostCreateInput, "slug">,
+  baseSlug: string
+) {
+  for (let suffix = 1; suffix <= 100; suffix++) {
+    const slug = suffix === 1 ? baseSlug : `${baseSlug}-${suffix}`;
+
+    try {
+      return await prisma.post.create({
+        data: { ...data, slug },
+      });
+    } catch (error) {
+      if (
+        !(error instanceof Prisma.PrismaClientKnownRequestError) ||
+        error.code !== "P2002"
+      ) {
+        throw error;
+      }
+    }
+  }
+
+  throw new Error("Could not generate a unique slug");
+}
+
 export async function POST(req: Request) {
   const { user, error: authError } = await requireCreator();
   if (authError) return authError;
@@ -25,28 +49,28 @@ export async function POST(req: Request) {
     const body = await req.json();
     const validatedData = postSchema.parse(body);
 
-    const post = await prisma.post.create({
-      data: {
+    const post = await createPostWithUniqueSlug(
+      {
         title: validatedData.title,
         content: validatedData.content,
-        slug: validatedData.slug,
         excerpt: validatedData.excerpt || null,
         featuredImg: validatedData.featuredImg || null,
         video: validatedData.video || null,
         category: validatedData.category || null,
         tags: validatedData.tags || [],
         published: validatedData.published || false,
-        authorId: user!.id,
+        author: { connect: { id: user!.id } },
         publishedAt: validatedData.published ? new Date() : null,
       },
-    });
+      validatedData.slug
+    );
 
     if (validatedData.contentFormat === "MARKDOWN") {
-      await prisma.$executeRaw`UPDATE "Post" SET "contentFormat" = 'MARKDOWN'::"ContentFormat" WHERE id = ${post.id}`;
-      return apiSuccess({ ...post, contentFormat: "MARKDOWN" });
+      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = 'MARKDOWN'::"ContentFormat" WHERE id = ${post.id}`;
+      return apiSuccess({ id: post.id, slug: post.slug });
     }
 
-    return apiSuccess(post);
+    return apiSuccess({ id: post.id, slug: post.slug });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
