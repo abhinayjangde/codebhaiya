@@ -29,6 +29,8 @@ const envSchema = z.object({
   MAIL_PASSWORD: z.string().optional(),
   MAIL_FROM: z.string().email().optional(),
   GEMINI_API_KEY: z.string().optional(),
+  RAZORPAY_KEY_ID: z.string().optional(),
+  RAZORPAY_KEY_SECRET: z.string().optional(),
 });
 
 const _env = envSchema.safeParse(process.env);
@@ -71,6 +73,10 @@ const config = {
   },
   gemini: {
     apiKey: parsed.GEMINI_API_KEY || "",
+  },
+  razorpay: {
+    keyId: parsed.RAZORPAY_KEY_ID || "",
+    keySecret: parsed.RAZORPAY_KEY_SECRET || "",
   },
 };
 
