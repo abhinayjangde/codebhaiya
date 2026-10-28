@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { apiSuccess, apiError, validationError } from "@/lib/api-response";
+import { apiSuccess, serverError, validationError } from "@/lib/api-response";
 import { requireCreator } from "@/lib/session";
 import { sanitizeHtml } from "@/lib/html-sanitizer";
 import { z } from "zod";
@@ -79,9 +79,8 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
     }
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    return apiError("Invalid request", 400, errorMessage);
+    console.error("Failed to create post:", error);
+    return serverError("Failed to create post");
   }
 }
 
