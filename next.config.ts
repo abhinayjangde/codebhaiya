@@ -3,13 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   async headers() {
+    const isDevelopment = process.env.NODE_ENV !== "production";
     const contentSecurityPolicy = [
       "default-src 'self'",
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
       "object-src 'none'",
-      "script-src 'self' 'unsafe-inline'",
+      `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://avatars.githubusercontent.com https://codebhaiya.s3.ap-south-1.amazonaws.com https://i.ytimg.com https://drive.google.com https://res.cloudinary.com",
       "font-src 'self' data:",
