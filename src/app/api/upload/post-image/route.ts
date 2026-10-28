@@ -1,9 +1,10 @@
 import cloudinary from "@/lib/cloudinary";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { csrfErrorResponse, isValidCsrfRequest } from "@/lib/api-security";
 import { validateAndReadImageFile } from "@/lib/file-validation";
+import { forbidden, notFound } from "@/lib/api-response";
+import { requireCreator } from "@/lib/session";
 import {
   applyRateLimit,
   buildRateLimitKey,
@@ -21,17 +22,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Verify authentication
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { user, error: authError } = await requireCreator();
+    if (authError) return authError;
 
     const rateLimitResult = applyRateLimit({
-      key: buildRateLimitKey("upload-post-image", req, session.user.id),
+      key: buildRateLimitKey("upload-post-image", req, user!.id),
       maxRequests: POST_IMAGE_UPLOAD_RATE_LIMIT.maxRequests,
       windowMs: POST_IMAGE_UPLOAD_RATE_LIMIT.windowMs,
     });
@@ -43,16 +38,34 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const userId = session.user.id;
+    const userId = user!.id;
 
     // Get postId from query params (optional - will use "drafts" folder if not provided)
     const searchParams = req.nextUrl.searchParams;
-    const postId = searchParams.get("postId");
+    const postId = searchParams.get("postId")?.trim() || null;
+    let folderOwnerId = userId;
+
+    if (postId) {
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+        select: { authorId: true },
+      });
+
+      if (!post) {
+        return notFound("Post not found");
+      }
+
+      if (post.authorId !== userId && user!.role !== "ADMIN") {
+        return forbidden("You do not have permission to upload to this post");
+      }
+
+      folderOwnerId = post.authorId;
+    }
 
     // Determine folder path
     const folder = postId
-      ? `codebhaiya/users/${userId}/posts/${postId}`
-      : `codebhaiya/users/${userId}/drafts`;
+      ? `codebhaiya/users/${folderOwnerId}/posts/${postId}`
+      : `codebhaiya/users/${folderOwnerId}/drafts`;
 
     const formData = await req.formData();
     const file = formData.get("file") as File;
