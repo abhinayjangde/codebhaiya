@@ -29,6 +29,8 @@ const envSchema = z.object({
   MAIL_PASSWORD: z.string().optional(),
   MAIL_FROM: z.string().email().optional(),
   GEMINI_API_KEY: z.string().optional(),
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
   RAZORPAY_KEY_ID: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().optional(),
 });
@@ -73,6 +75,10 @@ const config = {
   },
   gemini: {
     apiKey: parsed.GEMINI_API_KEY || "",
+  },
+  redis: {
+    url: parsed.UPSTASH_REDIS_REST_URL || "",
+    token: parsed.UPSTASH_REDIS_REST_TOKEN || "",
   },
   razorpay: {
     keyId: parsed.RAZORPAY_KEY_ID || "",

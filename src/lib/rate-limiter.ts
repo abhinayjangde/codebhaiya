@@ -1,3 +1,6 @@
+import { Redis } from "@upstash/redis";
+import env from "@/config/env";
+
 interface RateLimitEntry {
   count: number;
   resetAt: number;
@@ -18,6 +21,10 @@ export interface RateLimitResult {
 }
 
 const store = new Map<string, RateLimitEntry>();
+const redis =
+  env.redis.url && env.redis.token
+    ? new Redis({ url: env.redis.url, token: env.redis.token })
+    : null;
 
 function cleanupExpiredEntries(now: number) {
   for (const [key, entry] of store.entries()) {
@@ -101,5 +108,33 @@ export function getRateLimitHeaders(result: RateLimitResult) {
     "X-RateLimit-Remaining": String(result.remaining),
     "X-RateLimit-Reset": String(Math.floor(result.resetAt / 1000)),
     "Retry-After": String(result.retryAfterSeconds),
+  };
+}
+
+export async function applySharedRateLimit({
+  key,
+  maxRequests,
+  windowMs,
+}: RateLimitOptions): Promise<RateLimitResult> {
+  if (!redis) {
+    return applyRateLimit({ key, maxRequests, windowMs });
+  }
+
+  const redisKey = `rate-limit:${key}`;
+  const count = await redis.incr(redisKey);
+
+  if (count === 1) {
+    await redis.expire(redisKey, Math.ceil(windowMs / 1000));
+  }
+
+  const ttlSeconds = Math.max((await redis.ttl(redisKey)) || 1, 1);
+  const resetAt = Date.now() + ttlSeconds * 1000;
+
+  return {
+    allowed: count <= maxRequests,
+    limit: maxRequests,
+    remaining: Math.max(maxRequests - count, 0),
+    resetAt,
+    retryAfterSeconds: ttlSeconds,
   };
 }

@@ -9,15 +9,22 @@ import {
   validationError,
 } from "@/lib/api-response";
 import { csrfErrorResponse, isValidCsrfRequest } from "@/lib/api-security";
-import { applyRateLimit, buildRateLimitKey } from "@/lib/rate-limiter";
+import { applySharedRateLimit, buildRateLimitKey, getRateLimitHeaders } from "@/lib/rate-limiter";
+import { requireAuth } from "@/lib/session";
+import { readRequestBody } from "@/lib/request-body";
 import { z } from "zod";
 
 export const maxDuration = 30;
 
 const SUMMARIZE_RATE_LIMIT = {
-  maxRequests: 20,
+  maxRequests: 10,
   windowMs: 10 * 60 * 1000,
 };
+const SUMMARIZE_IP_RATE_LIMIT = {
+  maxRequests: 30,
+  windowMs: 10 * 60 * 1000,
+};
+const MAX_SUMMARIZE_BODY_BYTES = 1 * 1024;
 
 const summarizeSchema = z.object({
   postId: z.string().min(1, "Post ID is required"),
@@ -28,21 +35,29 @@ export async function POST(req: Request) {
     return csrfErrorResponse();
   }
 
-  const rateLimitResult = applyRateLimit({
-    key: buildRateLimitKey("summarize", req),
+  const { user, error: authError } = await requireAuth();
+  if (authError) return authError;
+
+  const userRateLimitResult = await applySharedRateLimit({
+    key: buildRateLimitKey("summarize", req, user!.id),
     maxRequests: SUMMARIZE_RATE_LIMIT.maxRequests,
     windowMs: SUMMARIZE_RATE_LIMIT.windowMs,
   });
+  const ipRateLimitResult = await applySharedRateLimit({
+    key: buildRateLimitKey("summarize-ip", req),
+    maxRequests: SUMMARIZE_IP_RATE_LIMIT.maxRequests,
+    windowMs: SUMMARIZE_IP_RATE_LIMIT.windowMs,
+  });
 
-  if (!rateLimitResult.allowed) {
-    return apiError(
-      "Too many summarize requests. Please try again later.",
-      429
+  if (!userRateLimitResult.allowed || !ipRateLimitResult.allowed) {
+    return new Response(
+      JSON.stringify({ error: "Too many summarize requests. Please try again later." }),
+      { status: 429, headers: { "Content-Type": "application/json", ...getRateLimitHeaders(userRateLimitResult) } }
     );
   }
 
   try {
-    const body = await req.json();
+    const body = JSON.parse(await readRequestBody(req, MAX_SUMMARIZE_BODY_BYTES));
     const { postId } = summarizeSchema.parse(body);
 
     const post = await prisma.post.findUnique({
@@ -102,6 +117,9 @@ Provide ONLY the summary, no prefixes like "TL;DR:" or "Summary:".`,
       200
     );
   } catch (error) {
+    if (error instanceof Error && error.message === "REQUEST_BODY_TOO_LARGE") {
+      return apiError("Request body is too large", 413);
+    }
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
     }

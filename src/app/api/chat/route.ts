@@ -11,10 +11,11 @@ import {
 } from "@/lib/api-response";
 import { csrfErrorResponse, isValidCsrfRequest } from "@/lib/api-security";
 import {
-  applyRateLimit,
+  applySharedRateLimit,
   buildRateLimitKey,
   getRateLimitHeaders,
 } from "@/lib/rate-limiter";
+import { readRequestBody } from "@/lib/request-body";
 import { z } from "zod";
 
 export const maxDuration = 30;
@@ -23,6 +24,13 @@ const CHAT_RATE_LIMIT = {
   maxRequests: 40,
   windowMs: 5 * 60 * 1000,
 };
+const CHAT_IP_RATE_LIMIT = {
+  maxRequests: 120,
+  windowMs: 5 * 60 * 1000,
+};
+const MAX_CHAT_BODY_BYTES = 64 * 1024;
+const MAX_CHAT_MESSAGES = 20;
+const MAX_MESSAGE_CONTENT_LENGTH = 4_000;
 
 const chatSchema = z.object({
   messages: z.array(
@@ -30,12 +38,15 @@ const chatSchema = z.object({
       .object({
         // AI SDK v4 UIMessage uses `parts` array; older format uses `content` string
         role: z.enum(["user", "assistant", "system", "tool"]),
-        content: z.string().optional(),
-        parts: z.array(z.object({ type: z.string() }).passthrough()).optional(),
+        content: z.string().max(MAX_MESSAGE_CONTENT_LENGTH).optional(),
+        parts: z
+          .array(z.object({ type: z.string() }).passthrough())
+          .max(20)
+          .optional(),
       })
       .passthrough()
-  ),
-  postId: z.string().optional(),
+  ).max(MAX_CHAT_MESSAGES),
+  postId: z.string().max(100).optional(),
 });
 
 export async function POST(req: Request) {
@@ -51,18 +62,23 @@ export async function POST(req: Request) {
     return unauthorized();
   }
 
-  const rateLimitResult = applyRateLimit({
+  const userRateLimitResult = await applySharedRateLimit({
     key: buildRateLimitKey("chat", req, session.user.id),
     maxRequests: CHAT_RATE_LIMIT.maxRequests,
     windowMs: CHAT_RATE_LIMIT.windowMs,
   });
+  const ipRateLimitResult = await applySharedRateLimit({
+    key: buildRateLimitKey("chat-ip", req),
+    maxRequests: CHAT_IP_RATE_LIMIT.maxRequests,
+    windowMs: CHAT_IP_RATE_LIMIT.windowMs,
+  });
 
-  if (!rateLimitResult.allowed) {
+  if (!userRateLimitResult.allowed || !ipRateLimitResult.allowed) {
     return apiError("Too many chat requests. Please try again later.", 429);
   }
 
   try {
-    const body = await req.json();
+    const body = JSON.parse(await readRequestBody(req, MAX_CHAT_BODY_BYTES));
     const { messages, postId } = chatSchema.parse(body);
 
     let systemMessage = `You are a helpful assistant that can answer questions about blog posts and help users understand the content.`;
@@ -90,9 +106,12 @@ export async function POST(req: Request) {
     });
 
     return result.toUIMessageStreamResponse({
-      headers: getRateLimitHeaders(rateLimitResult),
+      headers: getRateLimitHeaders(userRateLimitResult),
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "REQUEST_BODY_TOO_LARGE") {
+      return apiError("Request body is too large", 413);
+    }
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
     }

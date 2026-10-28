@@ -10,12 +10,17 @@ import { FaSquareInstagram } from "react-icons/fa6";
 import { BsDiscord } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 
+interface ContactResponse {
+  error?: unknown;
+}
+
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
+    website: "",
   });
 
   const handleChange = (
@@ -43,7 +48,7 @@ const Contact: React.FC = () => {
           },
           body: JSON.stringify(formData),
         });
-      } catch (networkError) {
+      } catch {
         // This catches offline or DNS issues before a response is even received
         throw new Error(
           "Network error. Please check your internet connection and try again."
@@ -51,13 +56,13 @@ const Contact: React.FC = () => {
       }
 
       // Safely parse JSON if available, otherwise data is null
-      let data = null;
+      let data: ContactResponse | null = null;
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         try {
-          data = await response.json();
-        } catch (jsonError) {
-          console.error("Failed to parse JSON response:", jsonError);
+          data = (await response.json()) as ContactResponse;
+        } catch {
+          console.error("Failed to parse JSON response");
         }
       }
 
@@ -65,10 +70,19 @@ const Contact: React.FC = () => {
         // If the error is a structured validation error from Zod API
         if (data?.error && typeof data.error === "object") {
           // Extract the first validation message from the object
-          const firstErrorMsg = Object.values<
-            { _errors?: string[] } | string[]
-          >(data.error as Record<string, any>)
-            .flat()
+          const firstErrorMsg = Object.values(
+            data.error as Record<string, unknown>
+          )
+            .flatMap((value) =>
+              Array.isArray(value)
+                ? value
+                : value &&
+                    typeof value === "object" &&
+                    "_errors" in value &&
+                    Array.isArray(value._errors)
+                  ? value._errors
+                  : []
+            )
             .find((msg) => typeof msg === "string");
           throw new Error(
             firstErrorMsg || "Validation failed. Please check your inputs."
@@ -83,9 +97,11 @@ const Contact: React.FC = () => {
       }
 
       toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-    } catch (error: any) {
-      toast.error(error.message || "Failed to send message");
+      setFormData({ name: "", email: "", message: "", website: "" });
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to send message"
+      );
     } finally {
       setLoading(false);
     }
@@ -196,6 +212,22 @@ const Contact: React.FC = () => {
                     className="w-full bg-transparent bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white dark:focus:bg-transparent focus:ring-2 dark:text-white focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                   />
                 </div>
+              </div>
+              <div className="p-2 w-full">
+                <label htmlFor="website" className="sr-only">
+                  Website
+                </label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="absolute -left-[9999px] h-px w-px opacity-0"
+                  aria-hidden="true"
+                />
               </div>
               <div className="p-2 w-full">
                 <div className="relative">

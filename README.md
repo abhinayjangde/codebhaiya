@@ -175,6 +175,9 @@ Create a `.env` file based on `.env.example`. Below is a reference for all requi
 | `CLOUDINARY_API_KEY` | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret |
 | `GOOGLE_GENERATIVE_AI_API_KEY` | Google AI API key (for AI features) |
+| `GEMINI_API_KEY` | Gemini API key used by the chat and summarization endpoints |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST URL for shared AI rate limiting |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST token for shared AI rate limiting |
 | `OPENAI_API_KEY` | OpenAI API key (optional) |
 | `PERPLEXITY_API_KEY` | Perplexity API key (optional) |
 | `GROQ_API_KEY` | Groq API key (optional) |
