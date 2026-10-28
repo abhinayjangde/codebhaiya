@@ -1,12 +1,32 @@
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatDistanceToNow } from "date-fns";
+import { headers } from "next/headers";
 import { Mail, Calendar, User } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Admin - Messages | CodeBhaiya",
 };
 
 export default async function AdminMessagesPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+
+  if (user?.role !== "ADMIN") {
+    redirect("/dashboard");
+  }
+
   const messages = await prisma.contactSubmission.findMany({
     orderBy: {
       createdAt: "desc",
