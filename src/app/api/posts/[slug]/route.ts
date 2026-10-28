@@ -10,6 +10,7 @@ import {
   notFound,
 } from "@/lib/api-response";
 import { getAuthenticatedUserWithRole } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/html-sanitizer";
 import { z } from "zod";
 
 const updatePostSchema = z.object({
@@ -27,17 +28,17 @@ const updatePostSchema = z.object({
 
 export async function PUT(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const session = await getAuthenticatedUserWithRole();
   if (!session) {
     return unauthorized();
   }
 
-  const { id } = await params;
+  const { slug } = await params;
 
   const post = await prisma.post.findUnique({
-    where: { id },
+    where: { slug },
   });
 
   if (!post) {
@@ -53,6 +54,7 @@ export async function PUT(
     const validatedData = updatePostSchema.parse(body);
 
     const { contentFormat: requestedFormat, ...otherFields } = validatedData;
+    const contentFormat = requestedFormat ?? post.contentFormat;
 
     if (
       otherFields.featuredImg &&
@@ -63,9 +65,17 @@ export async function PUT(
     }
 
     const updatedPost = await prisma.post.update({
-      where: { id },
+      where: { slug },
       data: {
         ...otherFields,
+        ...(otherFields.content
+          ? {
+              content:
+                contentFormat === "MARKDOWN"
+                  ? otherFields.content
+                  : sanitizeHtml(otherFields.content),
+            }
+          : {}),
         publishedAt:
           validatedData.published === true
             ? new Date()
@@ -77,7 +87,7 @@ export async function PUT(
 
     if (requestedFormat) {
       const formatValue = requestedFormat === "MARKDOWN" ? "MARKDOWN" : "HTML";
-      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${id}`;
+      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE slug = ${slug}`;
       return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
     }
 
@@ -104,17 +114,17 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const session = await getAuthenticatedUserWithRole();
   if (!session) {
     return unauthorized();
   }
 
-  const { id } = await params;
+  const { slug } = await params;
 
   const post = await prisma.post.findUnique({
-    where: { id },
+    where: { slug },
   });
 
   if (!post) {
@@ -126,7 +136,7 @@ export async function DELETE(
   }
 
   await prisma.post.delete({
-    where: { id },
+    where: { slug },
   });
 
   return apiSuccess({ success: true });
@@ -134,12 +144,12 @@ export async function DELETE(
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { id } = await params;
+  const { slug } = await params;
 
-  const post = await prisma.post.findUnique({
-    where: { id },
+  const post = await prisma.post.findFirst({
+    where: { slug, published: true },
     include: {
       author: {
         select: {

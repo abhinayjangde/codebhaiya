@@ -22,7 +22,7 @@ export async function generateMetadata({
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await prisma.post.findUnique({
-    where: { slug },
+    where: { slug, published: true },
   });
 
   if (!post) {
@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   });
 
   const post = await prisma.post.findUnique({
-    where: { slug },
+    where: { slug, published: true },
     include: {
       author: {
         select: {

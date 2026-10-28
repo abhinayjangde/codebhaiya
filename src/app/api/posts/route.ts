@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { apiSuccess, apiError, validationError } from "@/lib/api-response";
 import { requireCreator } from "@/lib/session";
+import { sanitizeHtml } from "@/lib/html-sanitizer";
 import { z } from "zod";
 
 const postSchema = z.object({
@@ -52,7 +53,10 @@ export async function POST(req: Request) {
     const post = await createPostWithUniqueSlug(
       {
         title: validatedData.title,
-        content: validatedData.content,
+        content:
+          validatedData.contentFormat === "MARKDOWN"
+            ? validatedData.content
+            : sanitizeHtml(validatedData.content),
         excerpt: validatedData.excerpt || null,
         featuredImg: validatedData.featuredImg || null,
         video: validatedData.video || null,

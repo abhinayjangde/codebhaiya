@@ -4,15 +4,15 @@ import { requireAuth } from "@/lib/session";
 
 export async function POST(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const { user, error: authError } = await requireAuth();
   if (authError) return authError;
 
-  const { id: postId } = await params;
+  const { slug: postId } = await params;
 
   const post = await prisma.post.findUnique({
-    where: { id: postId },
+    where: { id: postId, published: true },
   });
 
   if (!post) {

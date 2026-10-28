@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
     if (postId) {
       const post = await prisma.post.findUnique({
-        where: { id: postId },
+        where: { id: postId, published: true },
         select: { title: true, content: true },
       });
 

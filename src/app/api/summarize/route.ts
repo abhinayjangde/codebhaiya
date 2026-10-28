@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const { postId } = summarizeSchema.parse(body);
 
     const post = await prisma.post.findUnique({
-      where: { id: postId },
+      where: { id: postId, published: true },
       select: { id: true, title: true, content: true, summary: true },
     });
 
