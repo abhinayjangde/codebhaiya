@@ -9,13 +9,14 @@ export async function POST(
   const { user, error: authError } = await requireAuth();
   if (authError) return authError;
 
-  const { slug: postId } = await params;
+  const { slug: postSlug } = await params;
 
   const post = await prisma.post.findUnique({
-    where: { id: postId, published: true },
+    where: { slug: postSlug },
+    select: { id: true, published: true },
   });
 
-  if (!post) {
+  if (!post || !post.published) {
     return notFound("Post not found");
   }
 
@@ -23,7 +24,7 @@ export async function POST(
     where: {
       userId_postId: {
         userId: user!.id,
-        postId,
+        postId: post.id,
       },
     },
   });
@@ -39,7 +40,7 @@ export async function POST(
     await prisma.like.create({
       data: {
         userId: user!.id,
-        postId,
+        postId: post.id,
       },
     });
     return apiSuccess({ liked: true });

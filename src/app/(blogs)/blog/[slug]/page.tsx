@@ -22,10 +22,10 @@ export async function generateMetadata({
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await prisma.post.findUnique({
-    where: { slug, published: true },
+    where: { slug },
   });
 
-  if (!post) {
+  if (!post || !post.published) {
     return {
       title: "Post Not Found",
     };
@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   });
 
   const post = await prisma.post.findUnique({
-    where: { slug, published: true },
+    where: { slug },
     include: {
       author: {
         select: {
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     },
   });
 
-  if (!post) {
+  if (!post || !post.published) {
     notFound();
   }
 
