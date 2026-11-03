@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { FiZap, FiCode, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useChat } from "./chat-context";
 
@@ -35,6 +36,11 @@ export default function TldrChips({ postId, existingSummary }: TldrChipsProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postId }),
       });
+
+      if (response.status === 401) {
+        toast.error("Please login to generate an AI summary");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Failed to generate summary");

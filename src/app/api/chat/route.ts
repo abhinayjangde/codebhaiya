@@ -1,4 +1,5 @@
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import env from "@/config/env";
 import { streamText, convertToModelMessages } from "ai";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -19,6 +20,10 @@ import { readRequestBody } from "@/lib/request-body";
 import { z } from "zod";
 
 export const maxDuration = 30;
+
+const google = createGoogleGenerativeAI({
+  apiKey: env.gemini.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+});
 
 const CHAT_RATE_LIMIT = {
   maxRequests: 40,

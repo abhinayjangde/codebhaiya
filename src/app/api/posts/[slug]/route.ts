@@ -37,8 +37,10 @@ export async function PUT(
 
   const { slug } = await params;
 
-  const post = await prisma.post.findUnique({
-    where: { slug },
+  const post = await prisma.post.findFirst({
+    where: {
+      OR: [{ id: slug }, { slug }],
+    },
   });
 
   if (!post) {
@@ -65,7 +67,7 @@ export async function PUT(
     }
 
     const updatedPost = await prisma.post.update({
-      where: { slug },
+      where: { id: post.id },
       data: {
         ...otherFields,
         ...(otherFields.content
@@ -87,7 +89,7 @@ export async function PUT(
 
     if (requestedFormat) {
       const formatValue = requestedFormat === "MARKDOWN" ? "MARKDOWN" : "HTML";
-      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE slug = ${slug}`;
+      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${updatedPost.id}`;
       return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
     }
 
@@ -123,8 +125,10 @@ export async function DELETE(
 
   const { slug } = await params;
 
-  const post = await prisma.post.findUnique({
-    where: { slug },
+  const post = await prisma.post.findFirst({
+    where: {
+      OR: [{ id: slug }, { slug }],
+    },
   });
 
   if (!post) {
@@ -136,7 +140,7 @@ export async function DELETE(
   }
 
   await prisma.post.delete({
-    where: { slug },
+    where: { id: post.id },
   });
 
   return apiSuccess({ success: true });
@@ -149,7 +153,10 @@ export async function GET(
   const { slug } = await params;
 
   const post = await prisma.post.findFirst({
-    where: { slug, published: true },
+    where: {
+      published: true,
+      OR: [{ id: slug }, { slug }],
+    },
     include: {
       author: {
         select: {

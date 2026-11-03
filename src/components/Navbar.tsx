@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { VscColorMode } from "react-icons/vsc";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import Link from "next/link";
@@ -7,20 +7,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useTheme } from "next-themes";
+import { useMounted } from "@/hooks/use-mounted";
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = authClient.useSession();
   const router = useRouter();
-  const { setTheme } = useTheme();
-  const [mode, setMode] = useState("dark");
-  const [mounted, setMounted] = useState(false);
-
-  // Fix hydration mismatch by only rendering session-dependent UI after mount
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { setTheme, resolvedTheme } = useTheme();
+  const mounted = useMounted();
 
   // Toggle Navbar
   const toggleNavbar = () => {
@@ -136,16 +131,21 @@ const Navbar: React.FC = () => {
             {/* Toggle Theme */}
             <div className="flex items-center">
               <VscColorMode
+
                 onClick={() => {
-                  if (mode === "dark") {
-                    setTheme("light");
-                    setMode("light");
-                  } else {
-                    setTheme("dark");
-                    setMode("dark");
-                  }
+
+                  if (!mounted) return;
+
+                  setTheme(resolvedTheme === "dark" ? "light" : "dark");
+
                 }}
+
                 className="text-3xl cursor-pointer"
+
+                role="button"
+
+                aria-label="Toggle theme"
+
               />
             </div>
 

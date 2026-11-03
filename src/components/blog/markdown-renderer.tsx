@@ -25,8 +25,6 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
       // Get language from code element class
       const codeElement = pre.querySelector("code");
-      const languageMatch = codeElement?.className.match(/language-(\w+)/);
-      const language = languageMatch ? languageMatch[1] : "";
 
       // Style the pre element as wrapper
       pre.style.position = "relative";

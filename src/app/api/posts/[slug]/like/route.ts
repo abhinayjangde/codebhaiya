@@ -11,8 +11,11 @@ export async function POST(
 
   const { slug: postSlug } = await params;
 
-  const post = await prisma.post.findUnique({
-    where: { slug: postSlug },
+  const post = await prisma.post.findFirst({
+    where: {
+      published: true,
+      OR: [{ id: postSlug }, { slug: postSlug }],
+    },
     select: { id: true, published: true },
   });
 

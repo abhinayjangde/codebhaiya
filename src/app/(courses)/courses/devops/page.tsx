@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const DevOpsCourse = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [course, setCourse] = useState("DevOps-Course-In-Hindi");
+  const courseName = "DevOps-Course-In-Hindi";
 
   // Send alert for course
   const sendAlertForCourse = async (e: React.MouseEvent) => {
@@ -22,7 +22,7 @@ const DevOpsCourse = () => {
       setLoading(true);
       const data = {
         email: email,
-        courseName: course,
+        courseName,
       };
       if (email.length <= 0 || email === "") {
         toast("Please enter your email.");
@@ -35,12 +35,16 @@ const DevOpsCourse = () => {
           },
           body: JSON.stringify(data),
         });
-        toast.success("Message sent successfully");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Failed to register alert");
+        }
+        toast.success("Alert registered successfully");
         setEmail("");
         setLoading(false);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to send alert");
       setLoading(false);
     }
   };

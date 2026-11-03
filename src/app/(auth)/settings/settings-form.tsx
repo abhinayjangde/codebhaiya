@@ -20,7 +20,13 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface SettingsFormProps {
-  user: any; // Using any for simplicity, ideally should be typed
+  user: {
+    name?: string | null;
+    image?: string | null;
+    profile?: {
+      bio?: string | null;
+    } | null;
+  };
 }
 
 export default function SettingsForm({ user }: SettingsFormProps) {

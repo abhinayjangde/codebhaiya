@@ -7,7 +7,7 @@ const Referrals: React.FC = () => {
         Referrals
       </h2>
       <h6 className="font-semibold text-sm md:text-lg text-center opacity-75">
-        User our referral to support us!
+        Use our referral to support us!
       </h6>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {referrals.map((referral) => (

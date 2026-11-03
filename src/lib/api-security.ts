@@ -35,12 +35,16 @@ export function isValidCsrfRequest(req: Request) {
   const allowedOrigins = new Set<string>();
   const baseOrigin = safeGetOrigin(env.baseUrl);
   const authOrigin = safeGetOrigin(env.betterAuthUrl);
+  const requestOrigin = safeGetOrigin(req.url);
 
   if (baseOrigin) {
     allowedOrigins.add(baseOrigin);
   }
   if (authOrigin) {
     allowedOrigins.add(authOrigin);
+  }
+  if (requestOrigin) {
+    allowedOrigins.add(requestOrigin);
   }
 
   return allowedOrigins.has(sourceOrigin);

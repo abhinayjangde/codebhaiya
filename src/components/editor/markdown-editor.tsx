@@ -32,7 +32,6 @@ interface MarkdownEditorProps {
 export default function MarkdownEditor({
   content,
   onChange,
-  userId,
   postId,
 }: MarkdownEditorProps) {
   const [showPreview, setShowPreview] = useState(false);

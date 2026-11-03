@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { AiOutlineLike } from "react-icons/ai";
 import { PiShareFat } from "react-icons/pi";
 import { MdPictureAsPdf } from "react-icons/md";
@@ -20,16 +22,27 @@ export default function FloatingActionButtons({
   isLiked,
   video,
 }: FloatingActionButtonsProps) {
+  const [liked, setLiked] = useState(isLiked);
+
   // handle like count
   const handleLike = async () => {
     try {
       const res = await fetch(`/api/posts/${postId}/like`, {
         method: "POST",
       });
-      if (res.ok) {
-        toast.success("Post liked!");
+      if (res.status === 401) {
+        toast.error("Please login to like posts");
+        return;
       }
-    } catch (error) {
+      if (res.ok) {
+        const body = await res.json();
+        const nowLiked = body.data?.liked ?? !liked;
+        setLiked(nowLiked);
+        toast.success(nowLiked ? "Post liked!" : "Post unliked!");
+      } else {
+        toast.error("Failed to like post");
+      }
+    } catch {
       toast.error("Failed to like post");
     }
   };
@@ -39,7 +52,7 @@ export default function FloatingActionButtons({
     try {
       await navigator.clipboard.writeText(window.location.href);
       toast.success("Link copied to clipboard!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to copy link");
     }
   };
@@ -67,7 +80,7 @@ export default function FloatingActionButtons({
         onClick={handleLike}
         title="I like this"
         className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${
-          isLiked ? "text-blue-500" : ""
+          liked ? "text-blue-500" : ""
         }`}
       />
       <PiShareFat

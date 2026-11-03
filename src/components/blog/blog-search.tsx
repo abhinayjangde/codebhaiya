@@ -3,7 +3,8 @@
 import { Input } from "@/components/ui/input";
 import { FiSearch, FiX } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export function BlogSearch() {
   const router = useRouter();
@@ -13,27 +14,36 @@ export function BlogSearch() {
     searchParams.get("search") || ""
   );
 
-  const handleSearch = useCallback(
-    (term: string) => {
-      setSearchValue(term);
-      startTransition(() => {
-        const params = new URLSearchParams(searchParams.toString());
-        // Always reset to page 1 when search changes
-        params.delete("page");
-        if (term) {
-          params.set("search", term);
-        } else {
-          params.delete("search");
-        }
-        const queryString = params.toString();
-        router.push(queryString ? `/blogs?${queryString}` : "/blogs");
-      });
-    },
-    [router, searchParams]
-  );
+  const debouncedSearch = useDebounce(searchValue, 300);
+
+  useEffect(() => {
+    const currentQuery = searchParams.get("search") || "";
+    if (debouncedSearch.trim() === currentQuery) return;
+
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      // Always reset to page 1 when search changes
+      params.delete("page");
+      const trimmed = debouncedSearch.trim();
+      if (trimmed) {
+        params.set("search", trimmed);
+      } else {
+        params.delete("search");
+      }
+      const queryString = params.toString();
+      router.push(queryString ? `/blogs?${queryString}` : "/blogs");
+    });
+  }, [debouncedSearch, router, searchParams]);
 
   const clearSearch = () => {
-    handleSearch("");
+    setSearchValue("");
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("page");
+      params.delete("search");
+      const queryString = params.toString();
+      router.push(queryString ? `/blogs?${queryString}` : "/blogs");
+    });
   };
 
   return (
@@ -44,7 +54,7 @@ export function BlogSearch() {
           type="text"
           placeholder="Search blogs by title or content..."
           value={searchValue}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
           className="pl-10 pr-10 h-11 bg-background border-muted-foreground/30 focus:border-primary transition-all duration-300"
         />
         {searchValue && (

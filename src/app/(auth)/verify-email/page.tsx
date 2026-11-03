@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -18,26 +18,14 @@ import {
 
 const VerifyEmailContent = () => {
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
-  const [errorMessage, setErrorMessage] = useState("");
-
-  useEffect(() => {
-    const error = searchParams.get("error");
-
-    if (error) {
-      setStatus("error");
-      if (error === "invalid_token") {
-        setErrorMessage("The verification link is invalid or has expired.");
-      } else {
-        setErrorMessage("An error occurred while verifying your email.");
-      }
-    } else {
-      // If no error, the verification was successful
-      setStatus("success");
-    }
-  }, [searchParams]);
+  const error = searchParams.get("error");
+  const status: "success" | "error" = error ? "error" : "success";
+  const errorMessage =
+    error === "invalid_token"
+      ? "The verification link is invalid or has expired."
+      : error
+        ? "An error occurred while verifying your email."
+        : "";
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-muted/50 px-4 py-12">
@@ -99,16 +87,7 @@ const VerifyEmailContent = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 w-full max-w-md"
       >
-        {status === "loading" ? (
-          <Card className="backdrop-blur-xl bg-card/80 border-border/50 shadow-2xl">
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <Loader2 className="w-12 h-12 text-primary animate-spin" />
-              <p className="mt-4 text-muted-foreground">
-                Verifying your email...
-              </p>
-            </CardContent>
-          </Card>
-        ) : status === "success" ? (
+        {status === "success" ? (
           <>
             {/* Success Icon */}
             <motion.div

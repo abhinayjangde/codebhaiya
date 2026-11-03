@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { sanitizeHtml } from "@/lib/html-sanitizer";
 
 interface CodeBlockRendererProps {

@@ -20,8 +20,13 @@ export default function proxy(request: NextRequest) {
 
   // handling social redirects
   const url = request.nextUrl.pathname.slice(1);
-  if (url in handles) {
-    return NextResponse.redirect(new URL(handles[url as keyof typeof handles]));
+  const target = handles[url as keyof typeof handles];
+  if (target) {
+    try {
+      return NextResponse.redirect(new URL(target));
+    } catch {
+      // Ignore invalid or empty URL configuration
+    }
   }
 
   // Auth protection for dashboard

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,22 +27,21 @@ export default function CommentSection({ postId }: CommentSectionProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchComments();
-  }, [postId]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const res = await fetch(`/api/posts/${postId}/comments`);
       if (res.ok) {
         const data = await res.json();
-        // Normalize: handle both plain arrays and wrapped objects like { comments: [] }
         setComments(Array.isArray(data) ? data : (data.comments ?? []));
       }
     } catch (error) {
       console.error("Failed to fetch comments", error);
     }
-  };
+  }, [postId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,10 +67,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         throw new Error("Failed to post comment");
       }
 
-      const comment = await res.json();
-      // Optimistically add comment (or just refetch)
-      // Since we need author details which might not be fully in response if we just return the created comment object from prisma create
-      // We'll just refetch for simplicity or append if the API returns included author
+      await res.json();
       fetchComments();
       setNewComment("");
       toast.success("Comment posted");
@@ -99,9 +95,12 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         </div>
       </form>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {comments.map((comment) => (
-          <div key={comment.id} className="flex gap-4">
+          <div
+            key={comment.id}
+            className="flex items-start space-x-4 p-4 rounded-lg bg-muted/50"
+          >
             <Avatar>
               <AvatarImage src={comment.author.image || ""} />
               <AvatarFallback>{comment.author.name[0]}</AvatarFallback>

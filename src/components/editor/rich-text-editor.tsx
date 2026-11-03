@@ -71,11 +71,8 @@ interface ToolbarProps {
 const Toolbar = ({ editor, onImageUpload, isUploading }: ToolbarProps) => {
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
-  if (!editor) {
-    return null;
-  }
-
   const addImageByUrl = useCallback(() => {
+    if (!editor) return;
     const url = window.prompt("Image URL");
 
     if (url) {
@@ -84,6 +81,7 @@ const Toolbar = ({ editor, onImageUpload, isUploading }: ToolbarProps) => {
   }, [editor]);
 
   const setLink = useCallback(() => {
+    if (!editor) return;
     const previousUrl = editor.getAttributes("link").href;
     const url = window.prompt("URL", previousUrl);
 
@@ -105,11 +103,16 @@ const Toolbar = ({ editor, onImageUpload, isUploading }: ToolbarProps) => {
 
   const insertCodeBlock = useCallback(
     (language: string) => {
+      if (!editor) return;
       editor.chain().focus().toggleCodeBlock({ language }).run();
       setShowLanguageMenu(false);
     },
     [editor]
   );
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div className="border border-input bg-transparent rounded-t-md p-2 flex flex-wrap gap-2 items-center">
@@ -281,7 +284,6 @@ export default function RichTextEditor({
   content,
   onChange,
   editable = true,
-  userId,
   postId,
 }: RichTextEditorProps) {
   const [isUploading, setIsUploading] = useState(false);

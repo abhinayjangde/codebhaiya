@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -60,6 +61,7 @@ export default function PostActions({
         throw new Error("Failed to update post");
       }
 
+      toast.success(isPublished ? "Post unpublished" : "Post published");
       router.refresh();
     } catch (error) {
       console.error("Error toggling publish status:", error);
@@ -79,6 +81,7 @@ export default function PostActions({
         throw new Error("Failed to delete post");
       }
 
+      toast.success("Post deleted successfully");
       router.refresh();
     } catch (error) {
       console.error("Error deleting post:", error);

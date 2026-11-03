@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useMounted } from "@/hooks/use-mounted";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { ShootingStars } from "@/components/ui/shooting-stars";
@@ -74,12 +75,7 @@ const CodeEditor = () => {
   const [displayedCode, setDisplayedCode] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const mounted = useMounted();
   const isDark = mounted && resolvedTheme === "dark";
 
   useEffect(() => {
@@ -195,12 +191,7 @@ const CodeEditor = () => {
 
 const HeroSection = () => {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  const mounted = useMounted();
   const isDark = mounted && resolvedTheme === "dark";
 
   return (

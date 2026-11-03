@@ -69,7 +69,7 @@ export default async function DashboardPage() {
             <h2 className="text-2xl font-semibold mb-4">Liked Posts</h2>
             {userData?.likes.length === 0 ? (
               <p className="text-muted-foreground">
-                You haven't liked any posts yet.
+                You haven&apos;t liked any posts yet.
               </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

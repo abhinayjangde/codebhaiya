@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const PythonCourse = () => {
@@ -27,12 +26,16 @@ const PythonCourse = () => {
           },
           body: JSON.stringify(data),
         });
-        toast.success("Feedback send successfully");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Failed to submit feedback");
+        }
+        toast.success("Feedback submitted successfully");
         setFeedback("");
         setLoading(false);
       }
-    } catch (error: any) {
-      toast.error("Please enter your feedback.");
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to submit feedback");
       setLoading(false);
     }
   };
@@ -59,7 +62,7 @@ const PythonCourse = () => {
         reviewData.email.length <= 0 ||
         reviewData.message.length <= 0
       ) {
-        toast("All field are required.");
+        toast("All fields are required.");
         setLoading(false);
       } else {
         const res = await fetch("/api/coursereview", {
@@ -69,7 +72,11 @@ const PythonCourse = () => {
           },
           body: JSON.stringify(data),
         });
-        toast.success("Review message send successfully");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Failed to submit review");
+        }
+        toast.success("Review submitted successfully");
         setReviewData({
           name: "",
           email: "",
@@ -78,8 +85,8 @@ const PythonCourse = () => {
         });
         setLoading(false);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to send review");
       setLoading(false);
     }
   };

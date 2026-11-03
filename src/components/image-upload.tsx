@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ImagePlus, Trash, X } from "lucide-react";
+import { ImagePlus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";

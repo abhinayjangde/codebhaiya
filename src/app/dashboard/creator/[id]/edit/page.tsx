@@ -40,7 +40,6 @@ export default async function EditPostPage({
     notFound();
   }
 
-  // @ts-ignore
   if (post.authorId !== user.id && user.role !== "ADMIN") {
     redirect("/dashboard");
   }

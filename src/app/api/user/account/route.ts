@@ -3,29 +3,11 @@ import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { scrypt, timingSafeEqual } from "crypto";
-import { promisify } from "util";
-
-const scryptAsync = promisify(scrypt);
+import { verifyPassword } from "better-auth/crypto";
 
 const deleteAccountSchema = z.object({
     password: z.string().min(1, "Password is required"),
 });
-
-// Better Auth uses scrypt with this format: salt:hash
-async function verifyPassword(storedPassword: string, inputPassword: string): Promise<boolean> {
-    try {
-        const [salt, hash] = storedPassword.split(":");
-        if (!salt || !hash) return false;
-        
-        const hashBuffer = Buffer.from(hash, "hex");
-        const derivedKey = await scryptAsync(inputPassword, salt, 64) as Buffer;
-        
-        return timingSafeEqual(hashBuffer, derivedKey);
-    } catch {
-        return false;
-    }
-}
 
 export async function DELETE(req: Request) {
     try {
@@ -56,7 +38,7 @@ export async function DELETE(req: Request) {
         }
 
         // Verify password
-        const isValidPassword = await verifyPassword(account.password, password);
+        const isValidPassword = await verifyPassword({ hash: account.password, password });
 
         if (!isValidPassword) {
             return NextResponse.json(

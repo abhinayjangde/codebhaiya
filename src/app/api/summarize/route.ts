@@ -1,4 +1,5 @@
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import env from "@/config/env";
 import { generateText } from "ai";
 import { prisma } from "@/lib/prisma";
 import {
@@ -15,6 +16,10 @@ import { readRequestBody } from "@/lib/request-body";
 import { z } from "zod";
 
 export const maxDuration = 30;
+
+const google = createGoogleGenerativeAI({
+  apiKey: env.gemini.apiKey || process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+});
 
 const SUMMARIZE_RATE_LIMIT = {
   maxRequests: 10,
@@ -33,27 +38,6 @@ const summarizeSchema = z.object({
 export async function POST(req: Request) {
   if (!isValidCsrfRequest(req)) {
     return csrfErrorResponse();
-  }
-
-  const { user, error: authError } = await requireAuth();
-  if (authError) return authError;
-
-  const userRateLimitResult = await applySharedRateLimit({
-    key: buildRateLimitKey("summarize", req, user!.id),
-    maxRequests: SUMMARIZE_RATE_LIMIT.maxRequests,
-    windowMs: SUMMARIZE_RATE_LIMIT.windowMs,
-  });
-  const ipRateLimitResult = await applySharedRateLimit({
-    key: buildRateLimitKey("summarize-ip", req),
-    maxRequests: SUMMARIZE_IP_RATE_LIMIT.maxRequests,
-    windowMs: SUMMARIZE_IP_RATE_LIMIT.windowMs,
-  });
-
-  if (!userRateLimitResult.allowed || !ipRateLimitResult.allowed) {
-    return new Response(
-      JSON.stringify({ error: "Too many summarize requests. Please try again later." }),
-      { status: 429, headers: { "Content-Type": "application/json", ...getRateLimitHeaders(userRateLimitResult) } }
-    );
   }
 
   try {
@@ -76,6 +60,27 @@ export async function POST(req: Request) {
           cached: true,
         },
         200
+      );
+    }
+
+    const { user, error: authError } = await requireAuth();
+    if (authError) return authError;
+
+    const userRateLimitResult = await applySharedRateLimit({
+      key: buildRateLimitKey("summarize", req, user!.id),
+      maxRequests: SUMMARIZE_RATE_LIMIT.maxRequests,
+      windowMs: SUMMARIZE_RATE_LIMIT.windowMs,
+    });
+    const ipRateLimitResult = await applySharedRateLimit({
+      key: buildRateLimitKey("summarize-ip", req),
+      maxRequests: SUMMARIZE_IP_RATE_LIMIT.maxRequests,
+      windowMs: SUMMARIZE_IP_RATE_LIMIT.windowMs,
+    });
+
+    if (!userRateLimitResult.allowed || !ipRateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many summarize requests. Please try again later." }),
+        { status: 429, headers: { "Content-Type": "application/json", ...getRateLimitHeaders(userRateLimitResult) } }
       );
     }
 

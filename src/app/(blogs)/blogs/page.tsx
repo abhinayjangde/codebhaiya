@@ -5,7 +5,7 @@ import { BlogSearch } from "@/components/blog/blog-search";
 import { Pagination } from "@/components/ui/pagination";
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const POSTS_PER_PAGE = 10;
 
@@ -144,7 +144,7 @@ export default async function BlogsPage({ searchParams }: BlogsPageProps) {
         <ul className="list-none p-0 m-0" role="list" aria-label="Blog posts">
           {posts.map((post: PostWithAuthor) => (
             <li key={post.id}>
-              <Link href={`blog/${post.slug}`} className="block">
+              <Link href={`/blog/${post.slug}`} className="block">
                 {/* Mobile Card Design */}
                 <article className="md:hidden mb-4">
                   <div className="bg-card dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-lg border border-border/50 hover:shadow-xl hover:border-primary/30 transition-all duration-300">

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -75,9 +76,11 @@ export default async function CreatorProfilePage({
               <Card className="h-full hover:shadow-lg transition-shadow duration-200 flex flex-col">
                 {post.featuredImg && (
                   <div className="w-full h-48 overflow-hidden rounded-t-xl">
-                    <img
+                    <Image
                       src={post.featuredImg}
                       alt={post.title}
+                      width={400}
+                      height={200}
                       className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
                     />
                   </div>
@@ -111,7 +114,7 @@ export default async function CreatorProfilePage({
           {user.posts.length === 0 && (
             <div className="col-span-full text-center py-10">
               <p className="text-muted-foreground">
-                This user hasn't published any posts yet.
+                This user hasn&apos;t published any posts yet.
               </p>
             </div>
           )}

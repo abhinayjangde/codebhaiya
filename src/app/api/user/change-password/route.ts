@@ -3,10 +3,7 @@ import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
-
-const scryptAsync = promisify(scrypt);
+import { verifyPassword, hashPassword } from "better-auth/crypto";
 
 const changePasswordSchema = z
   .object({
@@ -20,31 +17,6 @@ const changePasswordSchema = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
-
-// Better Auth uses scrypt with this format: salt:hash
-async function verifyPassword(
-  storedPassword: string,
-  inputPassword: string
-): Promise<boolean> {
-  try {
-    const [salt, hash] = storedPassword.split(":");
-    if (!salt || !hash) return false;
-
-    const hashBuffer = Buffer.from(hash, "hex");
-    const derivedKey = (await scryptAsync(inputPassword, salt, 64)) as Buffer;
-
-    return timingSafeEqual(hashBuffer, derivedKey);
-  } catch {
-    return false;
-  }
-}
-
-// Hash password using the same format as Better Auth
-async function hashPassword(password: string): Promise<string> {
-  const salt = randomBytes(16).toString("hex");
-  const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${salt}:${derivedKey.toString("hex")}`;
-}
 
 export async function POST(req: Request) {
   try {
@@ -82,10 +54,10 @@ export async function POST(req: Request) {
     }
 
     // Verify current password
-    const isValidPassword = await verifyPassword(
-      account.password,
-      currentPassword
-    );
+    const isValidPassword = await verifyPassword({
+      hash: account.password,
+      password: currentPassword,
+    });
 
     if (!isValidPassword) {
       return NextResponse.json(

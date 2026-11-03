@@ -54,7 +54,7 @@ export default async function LatestBlogs() {
 
         <div className="w-full md:container md:w-360 md:p-4">
           {posts.map((post: PostWithAuthor) => (
-            <Link key={post.id} href={`blog/${post.slug}`} className="block">
+            <Link key={post.id} href={`/blog/${post.slug}`} className="block">
               {/* Mobile Card Design */}
               <div className="md:hidden mb-4">
                 <div className="bg-card dark:bg-gray-900/50 rounded-xl overflow-hidden shadow-lg border border-border/50 hover:shadow-xl hover:border-primary/30 transition-all duration-300">

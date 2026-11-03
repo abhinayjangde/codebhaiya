@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const MatrixCourse = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [course, setCourse] = useState("Matrix-Web-Dev-Course-In-Hindi");
+  const courseName = "Matrix-Web-Dev-Course-In-Hindi";
   // Send alert for course
   const sendAlertForCourse = async (e: React.MouseEvent) => {
     try {
@@ -21,7 +21,7 @@ const MatrixCourse = () => {
       setLoading(true);
       const data = {
         email: email,
-        courseName: course,
+        courseName,
       };
       if (email.length <= 0 || email === "") {
         toast("Please enter your email.");
@@ -34,12 +34,16 @@ const MatrixCourse = () => {
           },
           body: JSON.stringify(data),
         });
-        toast.success("Message send successfully");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Failed to register alert");
+        }
+        toast.success("Alert registered successfully");
         setEmail("");
         setLoading(false);
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to send alert");
       setLoading(false);
     }
   };

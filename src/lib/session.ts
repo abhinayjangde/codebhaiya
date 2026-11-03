@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
-import { apiError, unauthorized, forbidden } from "@/lib/api-response";
+import { unauthorized, forbidden } from "@/lib/api-response";
 
 export type Role = "USER" | "CREATOR" | "ADMIN";
 
