@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useChat } from "./chat-context";
 import { FaYoutube } from "react-icons/fa6";
 import Link from "next/link";
+import Image from 'next/image'
 
 interface FloatingActionButtonsProps {
   postId: string;
@@ -71,17 +72,26 @@ export default function FloatingActionButtons({
   };
   return (
     <div className="hidden md:block absolute top-0 -right-14 px-2 mx-2 bg-white text-black dark:text-white dark:bg-gray-900 rounded-lg shadow-md">
-      <PiChatTeardropBold
+     
+
+      <Image
+        src="https://avatars.githubusercontent.com/u/166032907?v=4"
+        decoding="async"
+        data-nimg={1}
+        width={100}
+        height={100}
+        className="w-6 mt-4 rounded-full cursor-pointer"
+        loading="lazy"
+        style={{ color: "transparent" }}
+        alt="Chat with codebhaiya"
         onClick={toggleChatComponent}
-        title="Chat with post"
-        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors`}
+        title="Chat with AI"
       />
       <AiOutlineLike
         onClick={handleLike}
         title="I like this"
-        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${
-          liked ? "text-blue-500" : ""
-        }`}
+        className={`text-2xl my-4 cursor-pointer hover:text-blue-500 transition-colors ${liked ? "text-blue-500" : ""
+          }`}
       />
       <PiShareFat
         onClick={handleShare}

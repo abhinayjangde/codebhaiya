@@ -31,8 +31,10 @@ export default function CommentSection({ postId }: CommentSectionProps) {
     try {
       const res = await fetch(`/api/posts/${postId}/comments`);
       if (res.ok) {
-        const data = await res.json();
-        setComments(Array.isArray(data) ? data : (data.comments ?? []));
+        const response = await res.json();
+        // API responses use { data, meta }; tolerate the legacy raw-array shape too.
+        const data = response?.data ?? response;
+        setComments(Array.isArray(data) ? data : (data?.comments ?? []));
       }
     } catch (error) {
       console.error("Failed to fetch comments", error);
@@ -68,7 +70,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       }
 
       await res.json();
-      fetchComments();
+      await fetchComments();
       setNewComment("");
       toast.success("Comment posted");
     } catch (error) {

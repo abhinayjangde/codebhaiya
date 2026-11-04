@@ -364,7 +364,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[300px] p-4 border border-t-0 border-input rounded-b-md bg-background",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl !max-w-none w-full min-w-full focus:outline-none min-h-[300px] p-4 border border-t-0 border-input rounded-b-md bg-background",
       },
       handleDrop: (view, event, slice, moved) => {
         if (moved) return false;

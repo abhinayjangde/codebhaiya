@@ -56,7 +56,7 @@ export default function ChatInterface({ postId }: ChatInterfaceProps) {
   return (
     <div className="flex flex-col h-full text-sm p-4 md:p-0">
       <div className="flex bg-black/60 dark:bg-white/20 p-4 rounded-t-lg -mx-4 -mt-4 md:-mx-2 md:-mt-2 lg:-mx-4 lg:-mt-4 mb-4 items-center justify-between">
-        <h3 className="text-white font-semibold text-lg">Chat with Post</h3>
+        <h3 className="text-white font-semibold text-lg underline">chat.codebhaiya.com</h3>
         <button
           onClick={toggleChat}
           className="md:hidden text-white hover:text-gray-300 transition-colors p-1"

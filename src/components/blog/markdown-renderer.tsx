@@ -12,6 +12,17 @@ interface MarkdownRendererProps {
 
 export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const imageSizes = new Map<string, { width?: number; height?: number }>();
+  const markdownContent = content.replace(
+    /!\[([^\]]*)\]\((\S+?)(?:\s+=(\d{1,4})?x(\d{1,4})?)?\)/g,
+    (match, alt: string, src: string, widthText?: string, heightText?: string) => {
+      if (!widthText && !heightText) return match;
+      const width = widthText ? Math.min(Number(widthText), 1600) : undefined;
+      const height = heightText ? Math.min(Number(heightText), 1600) : undefined;
+      imageSizes.set(src, { width, height });
+      return `![${alt}](${src})`;
+    }
+  );
 
   // Add copy buttons to code blocks after render
   useEffect(() => {
@@ -181,6 +192,12 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         src={src}
         alt={alt || "Blog content image"}
         className="rounded-lg max-w-full h-auto my-4 mx-auto block"
+        style={{
+          width: imageSizes.get(String(src))?.width,
+          height: imageSizes.get(String(src))?.height,
+          maxWidth: "100%",
+          objectFit: "contain",
+        }}
         loading="lazy"
         {...props}
       />
@@ -203,7 +220,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         rehypePlugins={[rehypeHighlight]}
         components={components}
       >
-        {content}
+        {markdownContent}
       </ReactMarkdown>
     </div>
   );

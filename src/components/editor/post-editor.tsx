@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,6 +13,8 @@ import MarkdownEditor from "./markdown-editor";
 import { toast } from "sonner";
 import { FileText, Code2 } from "lucide-react";
 import ImageUpload from "../image-upload";
+import MarkdownRenderer from "@/components/blog/markdown-renderer";
+import { Textarea } from "@/components/ui/textarea";
 
 type EditorMode = "richtext" | "markdown";
 
@@ -58,6 +60,10 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
   const initialMode: EditorMode =
     initialData?.contentFormat === "MARKDOWN" ? "markdown" : "richtext";
   const [editorMode, setEditorMode] = useState<EditorMode>(initialMode);
+  const [preview, setPreview] = useState(false);
+  const [saveState, setSaveState] = useState("Unsaved changes");
+  const [slugEdited, setSlugEdited] = useState(Boolean(initialData?.slug));
+  const savedRef = useRef("");
 
   const {
     register,
@@ -83,46 +89,60 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
 
   const content = watch("content");
   const title = watch("title");
+  const slug = watch("slug");
+  const excerpt = watch("excerpt") || "";
+  const snapshot = watch();
+  const snapshotKey = JSON.stringify(snapshot);
+
+  useEffect(() => {
+    const draftKey = `post-draft:${initialData?.id || "new"}`;
+    const timer = window.setTimeout(() => {
+      try {
+        localStorage.setItem(draftKey, snapshotKey);
+        if (snapshotKey !== savedRef.current) setSaveState("Saved locally");
+      } catch { /* Storage may be unavailable. */ }
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [snapshotKey, initialData?.id]);
+
+  useEffect(() => {
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      if (snapshotKey !== savedRef.current && snapshotKey !== JSON.stringify(initialData || {})) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    return () => window.removeEventListener("beforeunload", beforeUnload);
+  }, [snapshotKey, initialData]);
 
   // Auto-generate slug from title if slug is empty
-  const generateSlug = () => {
-    const currentSlug = watch("slug");
-    if (!currentSlug && title) {
-      const slug = title
+  useEffect(() => {
+    if (!slugEdited) {
+      const generated = title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)+/g, "");
-      setValue("slug", slug);
+      setValue("slug", generated, { shouldDirty: true });
     }
-  };
+  }, [title, slugEdited, setValue]);
 
   // Handle editor mode switch
   const handleModeSwitch = (mode: EditorMode) => {
     if (mode === editorMode) return;
 
-    // Warn about content format change if there's content
-    if (content && content.trim().length > 0) {
-      const confirmed = window.confirm(
-        mode === "markdown"
-          ? "Switching to Markdown mode will clear any rich text formatting. Are you sure?"
-          : "Switching to Rich Text mode may not preserve all markdown formatting. Are you sure?"
-      );
-      if (!confirmed) return;
-
-      // Clear content when switching modes to avoid format conflicts
-      setValue("content", "");
-    }
+    if (content.trim()) { toast.error("To avoid losing formatting, choose the current editor mode for this post."); return; }
 
     setEditorMode(mode);
     setValue("contentFormat", mode === "markdown" ? "MARKDOWN" : "HTML");
   };
 
-  const onSubmit = async (data: PostFormData) => {
-    const action = data.published ? "publish" : "draft";
+  const onSubmit = async (data: PostFormData, action: "draft" | "publish") => {
     setSubmittingAction(action);
     try {
       const formattedData = {
         ...data,
+        published: action === "publish",
         tags: data.tags
           ? data.tags
               .split(",")
@@ -134,7 +154,6 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
         contentFormat: editorMode === "markdown" ? "MARKDOWN" : "HTML",
       };
 
-      console.log("Sending data:", formattedData);
 
       const url = initialData?.id
         ? `/api/posts/${initialData.id}`
@@ -171,8 +190,11 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
       }
 
       const { data: post } = await res.json();
-      toast.success("Post saved successfully");
-      router.push(`/blog/${post.slug}`);
+      savedRef.current = JSON.stringify({ ...data, published: action === "publish" });
+      setSaveState("Saved");
+      toast.success(action === "publish" ? "Post published" : "Draft saved");
+      if (action === "publish") router.push(`/blog/${post.slug}`);
+      else if (!initialData?.id) router.replace(`/dashboard/creator/${post.id}/edit`);
       router.refresh();
     } catch (error) {
       console.error("Error:", error);
@@ -186,25 +208,21 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(event) => { event.preventDefault(); void handleSubmit((data) => onSubmit(data, "publish"))(event); }}
       className="space-y-8 max-w-4xl mx-auto py-10"
     >
-      <div className="flex justify-between items-center">
+      <div className="sticky top-0 z-30 flex justify-between items-center gap-3 bg-background/95 py-3 border-b">
         <h1 className="md:text-3xl font-bold">
           {initialData?.id ? "Edit Post" : "Create New Post"}
         </h1>
         <div className="flex gap-4">
-          <Button
-            type="submit"
-            variant="outline"
-            onClick={() => setValue("published", false)}
+          <span className="hidden sm:inline self-center leading-none text-sm text-muted-foreground">{saveState}</span>
+          <Button type="button" variant="outline" onClick={() => void handleSubmit((data) => onSubmit(data, "draft"))()}
             disabled={submittingAction !== null}
           >
             {submittingAction === "draft" ? "Saving..." : "Save Draft"}
           </Button>
-          <Button
-            type="submit"
-            onClick={() => setValue("published", true)}
+          <Button type="button" onClick={() => void handleSubmit((data) => onSubmit(data, "publish"))()}
             disabled={submittingAction !== null}
           >
             {submittingAction === "publish" ? "Publishing..." : "Publish"}
@@ -212,36 +230,37 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
         </div>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="title">Title</Label>
           <Input
             id="title"
             {...register("title")}
             placeholder="Post title"
-            onBlur={generateSlug}
+            maxLength={120}
           />
           {errors.title && (
             <p className="text-red-500 text-sm">{errors.title.message}</p>
           )}
         </div>
+        <p className="text-xs text-muted-foreground">{title.length}/120 characters</p>
         <div className="grid gap-2">
-          <Label htmlFor="slug">Slug</Label>
-          <Input id="slug" {...register("slug")} placeholder="post-url-slug" />
-          {errors.slug && (
-            <p className="text-red-500 text-sm">{errors.slug.message}</p>
-          )}
+          <div className="flex justify-between"><Label htmlFor="excerpt">Short description</Label><span className="text-xs text-muted-foreground">{excerpt.length}/240</span></div>
+          <Textarea id="excerpt" maxLength={240} {...register("excerpt")} placeholder="A short summary shown to readers" />
         </div>
-
         <div className="grid gap-2">
-          <Label htmlFor="excerpt">Excerpt</Label>
-          <Input
-            id="excerpt"
-            {...register("excerpt")}
-            placeholder="Short description"
-          />
+          <div className="flex justify-between items-center"><Label>Write your post</Label><Button type="button" variant="outline" size="sm" onClick={() => setPreview(!preview)}>{preview ? "Continue editing" : "Preview post"}</Button></div>
+          {preview ? <article className="prose dark:prose-invert max-w-none rounded-md border p-6 min-h-[300px]"><h1>{title || "Untitled post"}</h1>{editorMode === "markdown" ? <MarkdownRenderer content={content} /> : <div dangerouslySetInnerHTML={{ __html: content }} />}</article> : editorMode === "richtext" ? <RichTextEditor content={content} onChange={(value) => setValue("content", value)} userId={userId} postId={initialData?.id} /> : <MarkdownEditor content={content} onChange={(value) => setValue("content", value)} userId={userId} postId={initialData?.id} />}
+          {errors.content && <p className="text-red-500 text-sm">{errors.content.message}</p>}
         </div>
-
+        <details className="rounded-md border p-4">
+          <summary className="cursor-pointer font-medium">Post details</summary>
+          <div className="grid gap-4 pt-4">
+        <div className="grid gap-2">
+          <Label htmlFor="slug">URL slug</Label>
+          <Input id="slug" {...register("slug", { onChange: () => setSlugEdited(true) })} placeholder="post-url-slug" />
+          {errors.slug && <p className="text-red-500 text-sm">{errors.slug.message}</p>}
+        </div>
         <div className="grid gap-2">
           <Label htmlFor="featuredImg">Featured Image</Label>
           <ImageUpload
@@ -279,54 +298,13 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
           />
         </div>
 
-        <div className="grid gap-2">
-          {/* Editor Mode Toggle */}
-          <div className="flex items-center justify-between">
-            <Label>Content</Label>
-            <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
-              <Button
-                type="button"
-                variant={editorMode === "richtext" ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => handleModeSwitch("richtext")}
-                className="gap-2 h-8"
-              >
-                <FileText className="h-4 w-4" />
-                Rich Text
-              </Button>
-              <Button
-                type="button"
-                variant={editorMode === "markdown" ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => handleModeSwitch("markdown")}
-                className="gap-2 h-8"
-              >
-                <Code2 className="h-4 w-4" />
-                Markdown
-              </Button>
-            </div>
+        <div className="flex items-center gap-2 border-t pt-4">
+          <span className="text-sm text-muted-foreground">Editor:</span>
+          <Button type="button" variant={editorMode === "richtext" ? "secondary" : "ghost"} size="sm" onClick={() => handleModeSwitch("richtext")}><FileText className="h-4 w-4 mr-2" />Rich Text</Button>
+          <Button type="button" variant={editorMode === "markdown" ? "secondary" : "ghost"} size="sm" onClick={() => handleModeSwitch("markdown")}><Code2 className="h-4 w-4 mr-2" />Markdown</Button>
           </div>
-
-          {/* Conditional Editor Rendering */}
-          {editorMode === "richtext" ? (
-            <RichTextEditor
-              content={content}
-              onChange={(value) => setValue("content", value)}
-              userId={userId}
-              postId={initialData?.id}
-            />
-          ) : (
-            <MarkdownEditor
-              content={content}
-              onChange={(value) => setValue("content", value)}
-              userId={userId}
-              postId={initialData?.id}
-            />
-          )}
-          {errors.content && (
-            <p className="text-red-500 text-sm">{errors.content.message}</p>
-          )}
-        </div>
+          </div>
+        </details>
       </div>
     </form>
   );
