@@ -9,18 +9,18 @@ import "@/styles/code-highlight.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.codebhaiya.com"),
   title: {
-    default: "CodeBhaiya - The right way to learn coding",
+    default: "Learn Coding with Free Courses and Tutorials | CodeBhaiya",
     template: "%s | CodeBhaiya",
   },
   description:
-    "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+    "Learn programming with free coding courses, practical tutorials, and developer guides from CodeBhaiya. Start with Python, web development, and DevOps.",
   alternates: {
     canonical: "./",
   },
   openGraph: {
-    title: "CodeBhaiya - The right way to learn coding",
+    title: "Learn Coding with Free Courses and Tutorials | CodeBhaiya",
     description:
-      "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+      "Learn programming with free coding courses, practical tutorials, and developer guides from CodeBhaiya. Start with Python, web development, and DevOps.",
     url: "https://www.codebhaiya.com",
     siteName: "CodeBhaiya",
     images: [
@@ -31,14 +31,14 @@ export const metadata: Metadata = {
         alt: "CodeBhaiya Logo",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CodeBhaiya - The right way to learn coding",
+    title: "Learn Coding with Free Courses and Tutorials | CodeBhaiya",
     description:
-      "CodeBhaiya is the right way to learn coding. We provide comprehensive courses, tutorials, and mentorship to help you master programming and build your career.",
+      "Learn programming with free coding courses, practical tutorials, and developer guides from CodeBhaiya. Start with Python, web development, and DevOps.",
     images: ["/images/logo.png"],
     creator: "@AbhinayJangde",
   },

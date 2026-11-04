@@ -292,14 +292,14 @@ const HeroSection = () => {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/tutorials">
+              <Link href="/courses">
                 <Button
                   size="lg"
                   variant="outline"
                   className="gap-2 text-base border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 >
                   <Play className="w-4 h-4" />
-                  Watch Tutorials
+                  Browse Courses
                 </Button>
               </Link>
             </motion.div>

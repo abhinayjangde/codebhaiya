@@ -30,7 +30,7 @@ export async function generateMetadata({
   const { search, page } = await searchParams;
   const currentPage = parseInt(page || "1", 10);
 
-  const baseTitle = "Blogs - CodeBhaiya";
+  const baseTitle = "Coding Articles and Developer Guides";
   const title =
     currentPage > 1 ? `${baseTitle} - Page ${currentPage}` : baseTitle;
 
@@ -41,6 +41,7 @@ export async function generateMetadata({
   return {
     title,
     description,
+    ...(search ? { robots: { index: false, follow: true } } : {}),
     // Pagination SEO best practice: canonical URL without page param for page 1
     alternates: {
       canonical: currentPage === 1 ? "/blogs" : `/blogs?page=${currentPage}`,

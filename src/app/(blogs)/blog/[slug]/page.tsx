@@ -27,12 +27,35 @@ export async function generateMetadata({
   if (!post || !post.published) {
     return {
       title: "Post Not Found",
+      robots: { index: false, follow: false },
     };
   }
 
+  const description =
+    post.excerpt?.trim() ||
+    post.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
+  const image = post.featuredImg || "/images/logo.png";
+
   return {
-    title: `${post.title} - CodeBhaiya`,
-    description: post.excerpt,
+    title: post.title,
+    description,
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description,
+      url: `/blog/${post.slug}`,
+      publishedTime: (post.publishedAt || post.createdAt).toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: [`https://www.codebhaiya.com/creator/${post.authorId}`],
+      images: [{ url: image, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -89,9 +112,38 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const isLiked = Array.isArray(post.likes) && post.likes.length > 0;
   const readingTime = calculateReadingTime(post.content);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description:
+      post.excerpt?.trim() ||
+      post.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160),
+    image: post.featuredImg ? [post.featuredImg] : undefined,
+    datePublished: (post.publishedAt || post.createdAt).toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    author: {
+      "@type": "Person",
+      name: post.author.name || "CodeBhaiya",
+      url: `https://www.codebhaiya.com/creator/${post.author.id}`,
+    },
+    mainEntityOfPage: `https://www.codebhaiya.com/blog/${post.slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "CodeBhaiya",
+      url: "https://www.codebhaiya.com",
+      logo: { "@type": "ImageObject", url: "https://www.codebhaiya.com/images/logo.png" },
+    },
+  };
 
   return (
     <div className="dark:bg-background relative flex justify-center py-3 px-2 sm:py-5 sm:px-4 bg-gray-50 md:p-4 lg:p-12 md:flex">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <div className="w-full max-w-5xl">
         <BlogPostWrapper postId={post.id}>
           <div className="bg-white dark:bg-black rounded-lg shadow-md p-4 sm:p-6 lg:p-10 z-20 relative">
@@ -106,7 +158,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="image flex justify-center items-center">
                 <div className="h-8 w-8 mb-1 overflow-hidden rounded-full">
                   <Link
-                    href={`/author/${post.author.id}`}
+                    href={`/creator/${post.author.id}`}
                     className="block w-full h-full"
                   >
                     <Image

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -90,10 +90,6 @@ const PythonCourse = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    document.title = "Python Course - The right way to learn coding";
-  }, []);
-
   return (
     <>
       <div className="min-h-screen w-full dark:bg-background bg-white dark:bg-grid-white/[0.1] bg-grid-black/[0.1] pb-10">
