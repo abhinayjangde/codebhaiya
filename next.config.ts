@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       "object-src 'none'",
       `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://avatars.githubusercontent.com https://codebhaiya.s3.ap-south-1.amazonaws.com https://i.ytimg.com https://drive.google.com https://res.cloudinary.com",
+      `img-src 'self' data: blob: https:${isDevelopment ? " http:" : ""}`,
       "font-src 'self' data:",
       "connect-src 'self'",
       "frame-src https://www.youtube.com https://www.youtube-nocookie.com",

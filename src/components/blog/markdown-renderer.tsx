@@ -174,6 +174,17 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         {children}
       </strong>
     ),
+    // Images with lazy loading and responsive containment
+    img: ({ src, alt, ...props }) => (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt || "Blog content image"}
+        className="rounded-lg max-w-full h-auto my-4 mx-auto block"
+        loading="lazy"
+        {...props}
+      />
+    ),
     // Emphasis/Italic text
     em: ({ children, ...props }) => (
       <em className="italic" {...props}>

@@ -114,6 +114,13 @@ export default function MarkdownEditor({
     [content, onChange]
   );
 
+  const addImageByUrl = useCallback(() => {
+    const url = window.prompt("Image URL");
+    if (url) {
+      insertAtCursor(`\n![Image](${url})\n`);
+    }
+  }, [insertAtCursor]);
+
   const insertMarkdown = useCallback(
     (before: string, after: string = "", placeholder: string = "") => {
       const textarea = textareaRef.current;
@@ -316,6 +323,18 @@ export default function MarkdownEditor({
             </Button>
           )
         )}
+
+        {/* Insert Image URL */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={addImageByUrl}
+          title="Insert Image URL"
+          className="h-8 px-2 text-xs"
+        >
+          URL
+        </Button>
 
         {/* Code Block Insert */}
         <Button
