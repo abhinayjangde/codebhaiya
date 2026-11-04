@@ -150,13 +150,24 @@ export default function PostEditor({ initialData, userId }: PostEditorProps) {
       });
 
       if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error("Server error response:", errorData);
-        throw new Error(
-          errorData.error ||
-            errorData.details?.[0]?.message ||
-            "Failed to save post"
-        );
+        let errorMessage = "Failed to save post";
+        try {
+          const errorData = await res.json();
+          console.error("Server error response:", errorData);
+          errorMessage =
+            errorData.error ||
+            (Array.isArray(errorData.details)
+              ? errorData.details[0]?.message
+              : typeof errorData.details === "string"
+                ? errorData.details
+                : null) ||
+            errorMessage;
+        } catch {
+          const rawText = await res.text().catch(() => "");
+          console.error("Non-JSON server error response:", rawText);
+          errorMessage = rawText || `Server error (${res.status})`;
+        }
+        throw new Error(errorMessage);
       }
 
       const { data: post } = await res.json();

@@ -1,48 +1,52 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
-const ALLOWED_URI_REGEXP = /^(?:(?:https?|mailto):|\/|#)/i;
+const ALLOWED_TAGS = [
+  "a",
+  "blockquote",
+  "br",
+  "code",
+  "del",
+  "em",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "img",
+  "li",
+  "ol",
+  "p",
+  "pre",
+  "s",
+  "span",
+  "strong",
+  "u",
+  "ul",
+  "table",
+  "thead",
+  "tbody",
+  "tr",
+  "th",
+  "td",
+];
 
-export function sanitizeHtml(html: string) {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "a",
-      "blockquote",
-      "br",
-      "code",
-      "del",
-      "em",
-      "h1",
-      "h2",
-      "h3",
-      "h4",
-      "h5",
-      "h6",
-      "hr",
-      "img",
-      "li",
-      "ol",
-      "p",
-      "pre",
-      "s",
-      "span",
-      "strong",
-      "u",
-      "ul",
-    ],
-    ALLOWED_ATTR: [
-      "alt",
-      "class",
-      "height",
-      "href",
-      "rel",
-      "src",
-      "target",
-      "title",
-      "width",
-    ],
-    ALLOW_DATA_ATTR: false,
-    ALLOWED_URI_REGEXP,
-    FORBID_TAGS: ["style", "svg", "math"],
-    FORBID_ATTR: ["style"],
+const ALLOWED_ATTRIBUTES: sanitizeHtmlLib.IOptions["allowedAttributes"] = {
+  a: ["href", "name", "target", "rel", "title"],
+  img: ["src", "alt", "title", "width", "height", "class"],
+  "*": ["class"],
+};
+
+export function sanitizeHtml(html: string): string {
+  if (!html) return "";
+  return sanitizeHtmlLib(html, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: ALLOWED_ATTRIBUTES,
+    allowedSchemes: ["http", "https", "mailto"],
+    allowedSchemesByTag: {
+      img: ["http", "https", "data"],
+    },
+    disallowedTagsMode: "discard",
   });
 }

@@ -1,22 +1,34 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { apiSuccess, serverError, validationError } from "@/lib/api-response";
+import { apiError, apiSuccess, serverError, validationError } from "@/lib/api-response";
 import { requireCreator } from "@/lib/session";
 import { sanitizeHtml } from "@/lib/html-sanitizer";
 import { z } from "zod";
 
 const postSchema = z.object({
-  title: z.string().min(1),
-  content: z.string().min(1),
-  slug: z.string().min(1),
-  excerpt: z.string().optional(),
-  featuredImg: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  slug: z.string().min(1, "Slug is required"),
+  excerpt: z.string().nullable().optional(),
+  featuredImg: z.string().nullable().optional(),
   video: z.string().nullable().optional(),
   category: z.string().nullable().optional(),
   tags: z.array(z.string()).optional(),
   published: z.boolean().optional(),
   contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
 });
+
+function isPrismaUniqueConstraintError(error: unknown): boolean {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    return error.code === "P2002";
+  }
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code: string }).code === "P2002"
+  );
+}
 
 async function createPostWithUniqueSlug(
   data: Omit<Prisma.PostCreateInput, "slug">,
@@ -30,10 +42,7 @@ async function createPostWithUniqueSlug(
         data: { ...data, slug },
       });
     } catch (error) {
-      if (
-        !(error instanceof Prisma.PrismaClientKnownRequestError) ||
-        error.code !== "P2002"
-      ) {
+      if (!isPrismaUniqueConstraintError(error)) {
         throw error;
       }
     }
@@ -43,10 +52,10 @@ async function createPostWithUniqueSlug(
 }
 
 export async function POST(req: Request) {
-  const { user, error: authError } = await requireCreator();
-  if (authError) return authError;
-
   try {
+    const { user, error: authError } = await requireCreator();
+    if (authError) return authError;
+
     const body = await req.json();
     const validatedData = postSchema.parse(body);
 
@@ -57,6 +66,7 @@ export async function POST(req: Request) {
           validatedData.contentFormat === "MARKDOWN"
             ? validatedData.content
             : sanitizeHtml(validatedData.content),
+        contentFormat: validatedData.contentFormat || "HTML",
         excerpt: validatedData.excerpt || null,
         featuredImg: validatedData.featuredImg || null,
         video: validatedData.video || null,
@@ -69,15 +79,17 @@ export async function POST(req: Request) {
       validatedData.slug
     );
 
-    if (validatedData.contentFormat === "MARKDOWN") {
-      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = 'MARKDOWN'::"ContentFormat" WHERE id = ${post.id}`;
-      return apiSuccess({ id: post.id, slug: post.slug });
-    }
-
     return apiSuccess({ id: post.id, slug: post.slug });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
+    }
+    if (isPrismaUniqueConstraintError(error)) {
+      return apiError(
+        "Slug already exists",
+        409,
+        "Choose a different slug for this post."
+      );
     }
     console.error("Failed to create post:", error);
     return serverError("Failed to create post");

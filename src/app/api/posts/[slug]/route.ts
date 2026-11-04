@@ -17,14 +17,26 @@ const updatePostSchema = z.object({
   title: z.string().min(1).optional(),
   content: z.string().min(1).optional(),
   slug: z.string().min(1).optional(),
-  excerpt: z.string().optional(),
-  featuredImg: z.string().optional(),
+  excerpt: z.string().nullable().optional(),
+  featuredImg: z.string().nullable().optional(),
   video: z.string().nullable().optional(),
   category: z.string().nullable().optional(),
   tags: z.array(z.string()).optional(),
   published: z.boolean().optional(),
   contentFormat: z.enum(["HTML", "MARKDOWN"]).optional(),
 });
+
+function isPrismaUniqueConstraintError(error: unknown): boolean {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    return error.code === "P2002";
+  }
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code: string }).code === "P2002"
+  );
+}
 
 export async function PUT(
   req: Request,
@@ -70,6 +82,7 @@ export async function PUT(
       where: { id: post.id },
       data: {
         ...otherFields,
+        contentFormat,
         ...(otherFields.content
           ? {
               content:
@@ -87,21 +100,12 @@ export async function PUT(
       },
     });
 
-    if (requestedFormat) {
-      const formatValue = requestedFormat === "MARKDOWN" ? "MARKDOWN" : "HTML";
-      await prisma.$executeRaw`UPDATE "post" SET "contentFormat" = ${formatValue}::"ContentFormat" WHERE id = ${updatedPost.id}`;
-      return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
-    }
-
     return apiSuccess({ id: updatedPost.id, slug: updatedPost.slug });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return validationError(error.issues);
     }
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
+    if (isPrismaUniqueConstraintError(error)) {
       return apiError(
         "Slug already exists",
         409,
